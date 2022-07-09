@@ -37,7 +37,7 @@ search:
 		files: [*/DB/*Repository.php]
 	graphql:
 		in: %appDir%
-		files: [Types/*Query.php, Types/*Mutation.php, Outputs/*Output.php, Inputs/*Input.php]
+		files: [Types/*Query.php, Types/*Mutation.php]
 
 services:
 	pages.pageRepository: \Web\DB\PageRepository
@@ -48,7 +48,7 @@ services:
 			- "$onMutationChange[]" = [@storm.default, 'setMutation']
 
 	security.passwords: Security\LegacyPasswords('sha1','rE42xxxlzphy55')
-	- App\GraphQLite
+	- App\GraphQL
 
 session:
 	name: %projectName%
