@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Exceptions\NotFoundException;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Nette\DI\Container;
@@ -53,7 +54,11 @@ abstract class CrudQuery extends ObjectType implements IQuery
 							[$rootValue, $args] = $this->onBeforeGetOne($rootValue, $args);
 						}
 
-						return $repository->one($args[IType::ID_NAME]);
+						try {
+							return $repository->one($args[IType::ID_NAME], true);
+						} catch (\Throwable $e) {
+							throw new NotFoundException($args[IType::ID_NAME]);
+						}
 					},
 				],
 				"get{$baseName}s" => [
