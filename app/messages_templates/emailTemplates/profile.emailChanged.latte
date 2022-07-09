@@ -1,0 +1,21 @@
+{do $message->uuid = 'profile.emailChanged'}
+{do $message->name = 'Změna e-mailu'}
+{do $message->subject = ['en' => 'Email changed', 'cs'=> 'Email byl změněn']}
+{do $message->type = 'outgoing'}
+{do $message->email = 'todo@lqd.cz'}
+{do $message->alias = 'TODO'}
+{do $message->layout = 'lqd'}
+{do $message->html = [
+'en' => 'Hello, <br>
+<br>
+Your email was changed. Click on this link to confirm email address:<br>
+{$link}
+<br>
+{include footer_en}',
+'cs'=> 'Dobrý den, <br>
+<br>
+Váš email byl změněn. Klikněte na tento odkaz pro potvrzení emailové adresy:<br>
+{$link}
+<br>
+{include footer_cs}'
+]}

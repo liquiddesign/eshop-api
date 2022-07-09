@@ -1,0 +1,20 @@
+{do $message->uuid = 'administrator.register.success'}
+{do $message->name = 'Potvrzení registrace správce'}
+{do $message->subject = ['en' => 'Registration confirmation', 'cs'=> 'Potvrzení registrace']}
+{do $message->type = 'outgoing'}
+{do $message->email = 'info@roiwell.cz'}
+{do $message->alias = 'Roiwell.cz'}
+{do $message->layout = 'lqd'}
+{do $message->html = [
+'en' => 'Hello, <br>
+<br>
+Your account was created. Click on this link to confirm email address:<br>
+{$link}
+<br>
+{include footer_en}',
+'cs'=> 'Dobrý den, <br><br>
+byl pro Vás vytvořen nový administrátorský účet: {$login}<br>
+<a href="{$link}">{$link}</a>
+<br><br><br>
+{include footer_cs}'
+]}

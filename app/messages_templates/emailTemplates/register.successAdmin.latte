@@ -1,0 +1,21 @@
+{do $message->uuid = 'register.successAdmin'}
+{do $message->name = 'Nová registrace zákazníka administrátorem'}
+{do $message->subject = ['en' => 'Registration', 'cs'=> 'Registrace']}
+{do $message->type = 'outgoing'}
+{do $message->email = 'todo@lqd.cz'}
+{do $message->alias = 'TODO'}
+{do $message->layout = 'lqd'}
+{do $message->html = [
+'en' => 'Hello, <br>
+<br>
+Your account was created.<br>
+Login: {$login} <br>
+Password: {$password} <br>
+{include footer_en}',
+'cs'=> 'Dobrý den, <br>
+<br>
+Váš účet byl úspěšně vytvořen.<br>
+Přihlašovací email: {$email}  <br>
+Heslo: {$password} <br>
+{include footer_cs}'
+]}

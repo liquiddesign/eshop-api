@@ -1,0 +1,25 @@
+{do $message->uuid = 'order.shipped'}
+{do $message->name = 'Objednávka předána přepravci'}
+{do $message->subject = ['en' => 'Order', 'cs'=> 'Objednávka předána přepravci']}
+{do $message->type = 'outgoing'}
+{do $message->email = 'info@roiwell.cz'}
+{do $message->alias = 'Roiwell.cz'}
+{do $message->layout = 'lqd'}
+{do $message->html = [
+'en' =>
+
+'Hello, <br>
+<br>
+Order created.<br>
+
+
+{include footer_en}',
+
+'cs'=>
+
+'Dobrý den,<br><br>
+objednávka č: {$orderCode} byla předána dopravci.
+<br><br><br>
+
+{include footer_cs}
+']}

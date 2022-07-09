@@ -1,0 +1,31 @@
+{do $message->uuid = 'account.created'}
+{do $message->name = 'Vytvořen účet'}
+{do $message->subject = ['en' => 'New account', 'cs'=> 'Nový účet']}
+{do $message->type = 'outgoing'}
+{do $message->email = 'todo@lqd.cz'}
+{do $message->alias = 'TODO'}
+{do $message->layout = 'lqd'}
+{do $message->html = [
+'en' => '
+Hello,
+<br><br>
+for email address: {$email} was created new account.<br>
+<br>
+New credentials:<br>
+Login:&nbsp;{login}<br>
+Password:&nbsp;{password}<br>
+<br><br>
+
+{include footer_en}',
+'cs'=> '
+Dobrý den,
+<br><br>
+pro emailovou adresu: {$email} byl vytvořen nový účet.<br>
+    <br>
+    Nové přihlašovací údaje:<br>
+    Login:&nbsp;{$login}<br>
+    Heslo:&nbsp;{$password}<br>
+<br><br>
+
+{include footer_cs}'
+]}

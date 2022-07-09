@@ -1,0 +1,11 @@
+parameters:
+	access:
+		debug:
+			- 37.235.102.170
+		trusted:
+	environment:
+		devel:
+			- localhost
+		test:
+			- vas-server.cz
+			- masterinter.net

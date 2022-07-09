@@ -1,0 +1,129 @@
+{varType Eshop\DB\DiscountCoupon $discountCoupon}
+{varType Eshop\DB\Order $order}
+
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, target-densitydpi=device-dpi, initial-scale=1">
+    <style type="text/css">
+        a { color: #d35a22;}
+        hr { border: 0px solid silver; height: 1px; background-color: gray;}
+    </style>
+
+</head>
+<body>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff">
+    <tbody>
+    <tr>
+        <td align="left" bgcolor="#ffffff">
+            <table width="640" cellpading="0" cellspacing="0" border="0">
+                <tbody>
+                <tr>
+                    <td>
+                        <table width="100%;" style=" border-bottom: 1px solid #d35a22; margin-bottom:10px;">
+                            <tr>
+                                <td align="left">
+                                    <div style="font-size: 1.9em; font-weight:bold;"><img src="{$baseUrl}public/img/email-logo.png" height="40" alt="MC Profi"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        <br>
+                        {include email_co}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</body>
+</html>
+
+
+{define footer_cs}
+    <br><br>
+    Liquid design s.r.o.<br>
+    info@roiwell.cz<br>
+    +420 777 123 456
+{/define}
+{define footer_en}
+    <br><br>
+    Liquid design s.r.o.<br>
+    info@roiwell.cz<br>
+    +420 777 123 456
+{/define}
+{define order_items_table_cs}
+    <table border="1" cellspacing="0" cellpadding="2">
+        <tbody>
+        <tr>
+            <th>Kód</th>
+            <th>Položka</th>
+            <th>Mn.</th>
+            <th>Celkem</th>
+        </tr>
+        </tbody>
+        <tbody>
+        {foreach $items as $item}
+        <tr>
+            <td>{$item["fullCode"]}</td>
+            <td>{$item["productName"]["cs"]}</td>
+            <td>{$item["amount"]}</td>
+            <td>{@$item["totalPricePref"]}</td>
+        </tr>
+        {/foreach}
+        {ifset $discountCoupon}
+            <tr>
+                <td>{$discountCoupon->code}</td>
+                <td>{$discountCoupon->discount->name}</td>
+                <td>{$discountCoupon->label}</td>
+                <td>
+                    {if $order->getDiscountPrice() != 0 || $order->getDiscountPriceVat() != 0}
+                        {if $catalogPermission === 'price'}
+                            {if $withVat && $withoutVat}
+                                <div class="text-xl font-bold whitespace-no-wrap">{if $priorityPrices == 'withVat'}{-$order->getDiscountPriceVat()}{else}{-$order->getDiscountPrice()}{/if}</div>
+                                <div class="text-sm text-gray-dark mt-1 lg:text-xs">{if $priorityPrices == 'withVat'}{_'.withoutVat','bez DPH'} {-$order->getDiscountPrice()}{else}{_'.withVat','s DPH'} {-$order->getDiscountPriceVat()}{/if}</div>
+                            {else}
+                                {if $withVat}
+                                    <div class="text-xl font-bold whitespace-no-wrap">{-$order->getDiscountPriceVat()}</div>
+                                {/if}
+                                {if $withoutVat}
+                                    <div class="text-xl font-bold whitespace-no-wrap">{-$order->getDiscountPrice()}</div>
+                                {/if}
+                            {/if}
+                        {/if}
+                    {/if}
+                </td>
+            </tr>
+        {/ifset}
+        </tbody>
+    </table>
+{/define}
+{define order_items_table_en}
+    <table border="1" cellspacing="0" cellpadding="2">
+        <tbody>
+        <tr>
+            <th>Code</th>
+            <th>Item</th>
+            <th>Amount</th>
+            <th>Total</th>
+        </tr>
+        </tbody>
+        <tbody>
+        {foreach $items as $item}
+            <tr>
+                <td>{$item["fullCode"]}</td>
+                <td>{$item["productName"]["cs"]}</td>
+                <td>{$item["amount"]}</td>
+                <td>{$item["totalPrice"]}</td>
+            </tr>
+        {/foreach}
+        </tbody>
+    </table>
+{/define}

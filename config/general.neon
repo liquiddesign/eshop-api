@@ -1,0 +1,165 @@
+parameters:
+	projectName: roiwell
+	mutations: [cs, en]
+	fallbackMutations:
+	    en: cs
+	defaultMutation: Nette\Utils\Arrays::get(%mutations%, 0)
+	flagsMap:
+		cs: cz
+		en: gb
+	userDir: %wwwDir%/::constant(USERFILES_DIR)
+	locales:
+		cs: ['cs_CZ.UTF-8','cs']
+		en: ['en_US.UTF-8','en']
+
+constants:
+	USERFILES_DIR: 'userfiles'
+	PUBLIC_DIR: 'public'
+
+application:
+	errorPresenter: Web:Error
+	catchExceptions: %productionMode%
+	debugger: %debugMode%
+	mapping:
+		*: App\*Presenter
+search:
+	app:
+		in: %appDir%/
+		files: [*/DB/*Repository.php]
+	eshop:
+		in: %appDir%/../vendor/liquiddesign/eshop
+		files: [*/DB/*Repository.php]
+	web:
+		in: %appDir%/../vendor/liquiddesign/web
+		files: [*/DB/*Repository.php]
+	admin:
+		in: %appDir%/../vendor/liquiddesign/admin
+		files: [*/DB/*Repository.php]
+	graphql:
+		in: %appDir%
+		files: [Types/*Query.php, Types/*Mutation.php, Outputs/*Output.php, Inputs/*Input.php]
+
+services:
+	pages.pageRepository: \Web\DB\PageRepository
+	application.application:
+		factory: App\Application(%mutations%, %locales%, %environment%)
+		alteration: true
+		setup:
+			- "$onMutationChange[]" = [@storm.default, 'setMutation']
+
+	security.passwords: Security\LegacyPasswords('sha1','rE42xxxlzphy55')
+	- App\GraphQLite
+
+session:
+	name: %projectName%
+	expiration: 14 days
+	savePath: "%tempDir%/sessions"
+	autoStart: smart
+
+di:
+	export:
+		parameters: yes
+		tags: no
+
+extensions:
+  storm: StORM\Bridges\StormDI
+  migrator: Migrator\Bridges\MigratorDI
+  pages: Pages\Bridges\PagesDI
+  lqdSecurityForms: Forms\Bridges\SecurityDI
+  shopper: Eshop\Bridges\ShopperDI
+  lqdSecurity: Security\Bridges\SecurityDI
+  messages: \Messages\Bridges\MessagesDI
+  translator: Translator\Bridges\TranslatorDI
+  comgate: Contributte\Comgate\DI\ComgateExtension
+
+storm:
+  debug: %debugMode%
+  connections:
+      default:
+          mutations:
+          	cs: '_cs'
+          	en: '_en'
+          primaryKeyGenerator: StORM\DIConnection::generateUuid
+  events:
+      menuAndCategoires:
+          events: ['onUpdate','onCreate','onDelete']
+          repositories:
+          	- \Web\DB\MenuItemRepository
+          	- \Pages\DB\IPageRepository
+          	- \Eshop\DB\PricelistRepository
+          	- \Eshop\DB\ProductRepository
+          	- \Eshop\DB\CategoryRepository
+          callback: [@application.application, cleanCache]
+      prices:
+          events: ['onCreate','onDelete']
+          repositories:
+          	- \Eshop\DB\PriceRepository
+          callback: [@application.application, cleanCache]
+
+
+comgate:
+	merchant: '153724'
+	secret: A9eKLVnHsQDnNZuKGFeVzaCIyo56QqDT
+	test: true
+
+shopper:
+    showVat: true
+    editOrderAfterCreation: false
+
+messages:
+	email: "info@roiwell.cz"
+	alias: "Roiwell"
+	templateMapping:
+		rootPaths:
+			app: 0
+			messages_templates: 1
+		directory: emailTemplates
+		fileMask: %s.latte
+		globalDirectory: globalEmailTemplates
+		globalFileMask: global-%s.latte
+	templates:
+		rootPaths:
+			app: 0
+			messages_templates: 1
+			emailTemplates: 2
+		messages:
+			- contact
+			- contactInfo
+			- order.created.merchantInfo
+			- order.createdAdmin
+			- order.canceled
+			- order.payed
+			- order.changed
+			- order.shipped
+			- lostPassword.changed
+			- lostPassword
+#			- profile.emailChanged
+			- register.adminInfo
+			- register.confirmation
+			- register.success
+			- register.successAdmin
+			- merchant.register.confirmation
+			- merchant.register.success
+			- merchant.register.successAdmin
+			- administrator.register.success
+			- register.merchantInfo
+
+pages:
+   mutations: %mutations%
+   redirects: true
+
+http:
+	headers:
+#		Strict-Transport-Security: 'max-age=31536000; includeSubDomains;'
+#		Referrer-Policy: strict-origin-when-cross-origin
+#		X-Powered-By: MC Profi
+#		X-XSS-Protection: '1; mode=block'
+#	frames: DENY
+
+translator:
+   cache: false
+   createMode: true
+
+includes:
+	- environments.neon
+	- pages.neon

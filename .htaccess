@@ -1,0 +1,69 @@
+# disable directory listing
+Options -Indexes
+
+#<IfModule mod_headers.c>
+#    Header set Content-Security-Policy: "upgrade-insecure-requests;"
+#    Header always set Permissions-Policy "geolocation=(self 'https://www.mcprofi.cz'), microphone=()"
+#    Header always unset "X-Powered-By"
+#    Header unset "X-Powered-By"
+#</IfModule>
+
+# enable cool URL
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+#    ukazka presmerovani vsech aliasu na pozadovanou domenu
+#    RewriteCond %{HTTP_HOST} ^(www\.)?alias\.cz [NC]
+#    RewriteRule ^(.*)$ https://www.domena.cz/$1 [R=301,QSA,L]
+
+#    ukazka presmerovani starsich webu na novy
+#    RewriteCond %{HTTP_HOST} ^kino-luna.cz [OR]
+#    RewriteCond %{HTTP_HOST} ^www.kino-luna.cz [OR]
+#    RewriteCond %{HTTP_HOST} ^kinoluna.cz [OR]
+#    RewriteCond %{HTTP_HOST} ^www.kinoluna.cz
+#    RewriteRule ^(.*)$ https://www.kulturajih.cz/objekty/kino-luna [R=301,L]
+
+#   zapnuti https protokolu
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP_HOST} !^localhost
+    RewriteCond %{HTTP_HOST} !masterinter\.net$
+    RewriteCond %{HTTP_HOST} !vas-server\.cz$
+    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+#   doplneni www
+    RewriteCond %{HTTP_HOST} !^www\.
+    RewriteCond %{HTTP_HOST} !^localhost
+    RewriteCond %{HTTP_HOST} !masterinter\.net$
+    RewriteCond %{HTTP_HOST} !vas-server\.cz$
+    RewriteRule (.*) https://www.%{HTTP_HOST}/$1 [R=301,L]
+
+    RewriteCond %{REQUEST_URI} !^/admin
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{HTTP_HOST} !^localhost
+    RewriteRule ^(.+)/$ /$1 [L,R=301]
+
+#    Na prepis / z konca url na wamp folder treba dodat presnu url ("defaultweb3")
+#    RewriteCond %{REQUEST_FILENAME} !-d
+#    RewriteCond %{HTTP_HOST} ^localhost
+#    RewriteRule ^(.*)/$ /defaultweb3/$1 [R,L]
+
+#   Ukazka Presmerovani domen
+#   na zacatku nesmi byt lomitko
+#   RewriteRule ^cz/page\-program\-kino\-luna/ /program?category%5B0%5D=kino\-luna [L,R=301]
+
+#   Zakazuje souborum, ktere zacinaji bodkou (.) aby je videl prohlizec
+    RewriteRule /\.|^\. - [F]
+
+   # front controller
+   RewriteRule robots.txt index.php [L]
+   RewriteRule !\.(eot|woff|txt|woff2|ttf|php|pdf|js|xls|doc|xlsx|docx|ico|gif|jpg|jpeg|png|JPG|JPEG|PNG|svg|css|rar|zip|mp4|webm|tar\.gz)$ index.php [L]
+</IfModule>
+
+# enable gzip compression
+<IfModule mod_deflate.c>
+   AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/x-javascript text/javascript application/javascript application/json
+</IfModule>
+
+<FilesMatch "\.(jpg|jpeg|png|JPG|JPEG|PNG|svg|gif|swf|ico|flv|js|css|woff2|mp4|webm)$">
+    Header set Cache-Control "max-age=31556952, public"
+</FilesMatch>
