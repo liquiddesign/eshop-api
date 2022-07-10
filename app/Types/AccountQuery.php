@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Types;
 
-use App\BaseOutput;
-use App\CrudQuery;
+use App\Base\BaseOutput;
+use App\Crud\CrudQuery;
 use App\TypeRegistry;
 use Security\DB\AccountRepository;
 

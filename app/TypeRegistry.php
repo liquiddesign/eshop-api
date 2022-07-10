@@ -3,6 +3,7 @@
 namespace App;
 
 use Admin\DB\Role;
+use App\Base\BaseType;
 use App\Inputs\AccountCreateInput;
 use App\Inputs\AccountUpdateInput;
 use App\Outputs\AccountOutput;
@@ -31,13 +32,6 @@ class TypeRegistry extends Type
 	 * @var array<string, mixed>
 	 */
 	public static array $types = [];
-
-	public function __construct()
-	{
-		foreach (static::$outputTypesMap as $typeClass) {
-			$this->get($typeClass);
-		}
-	}
 
 	public static function orderEnum(): OrderEnum
 	{
@@ -106,7 +100,7 @@ class TypeRegistry extends Type
 		$reflection = new \ReflectionClass($class);
 
 		$fields = $includeId ? [
-			IType::ID_NAME => static::nonNull(static::id()),
+			BaseType::ID_NAME => static::nonNull(static::id()),
 		] : [];
 
 		foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {

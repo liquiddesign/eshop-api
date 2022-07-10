@@ -2,9 +2,9 @@
 
 namespace App\Types;
 
-use App\BaseInput;
-use App\BaseOutput;
-use App\CrudMutation;
+use App\Base\BaseInput;
+use App\Base\BaseOutput;
+use App\Crud\CrudMutation;
 use App\TypeRegistry;
 use Eshop\Shopper;
 use Nette;
@@ -27,7 +27,19 @@ class AccountMutation extends CrudMutation
 			return [$rootValues, $args];
 		};
 
-		parent::__construct($container);
+		$config = [
+			'fields' => [
+				'test' => [
+					'type' => TypeRegistry::nonNull(TypeRegistry::string()),
+					'args' => ['text' => TypeRegistry::nonNull(TypeRegistry::string())],
+					'resolve' => function (array $rootValue, array $args): string {
+						return $args['text'];
+					},
+				],
+			],
+		];
+
+		parent::__construct($config, $container);
 	}
 
 	public function getName(): string

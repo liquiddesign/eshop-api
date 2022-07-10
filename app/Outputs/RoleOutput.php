@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Outputs;
 
 use Admin\DB\Role;
-use App\BaseOutput;
+use App\Base\BaseOutput;
 use App\TypeRegistry;
 
 class RoleOutput extends BaseOutput

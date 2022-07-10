@@ -1,8 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Crud;
 
+use App\Base\BaseOutput;
+use App\Base\BaseQuery;
+use App\Base\BaseType;
 use App\Exceptions\NotFoundException;
+use App\TypeRegistry;
 use GraphQL\Type\Definition\Type;
 use Nette\DI\Container;
 use Nette\Utils\Strings;
@@ -15,7 +19,7 @@ use StORM\Repository;
  */
 abstract class CrudQuery extends BaseQuery
 {
-	public const DEFAULT_SORT = 'this.' . IType::ID_NAME;
+	public const DEFAULT_SORT = 'this.' . BaseType::ID_NAME;
 	public const DEFAULT_ORDER = 'ASC';
 	public const DEFAULT_PAGE = 1;
 	public const DEFAULT_LIMIT = 50;
@@ -35,7 +39,7 @@ abstract class CrudQuery extends BaseQuery
 	 */
 	abstract public function getRepositoryClass(): string;
 
-	public function __construct(protected readonly Container $container)
+	public function __construct(protected Container $container)
 	{
 		$baseName = Strings::firstUpper($this->getName());
 		$outputType = $this->getOutputType();
@@ -46,7 +50,7 @@ abstract class CrudQuery extends BaseQuery
 				"get$baseName" => [
 					'type' => $outputType,
 					'args' => [
-						IType::ID_NAME => TypeRegistry::nonNull(TypeRegistry::id()),
+						BaseType::ID_NAME => TypeRegistry::nonNull(TypeRegistry::id()),
 					],
 					'resolve' => function (array $rootValue, array $args) use ($repository): Entity {
 						if ($this->onBeforeGetOne) {
@@ -54,9 +58,9 @@ abstract class CrudQuery extends BaseQuery
 						}
 
 						try {
-							return $repository->one($args[IType::ID_NAME], true);
+							return $repository->one($args[BaseType::ID_NAME], true);
 						} catch (\Throwable $e) {
-							throw new NotFoundException($args[IType::ID_NAME]);
+							throw new NotFoundException($args[BaseType::ID_NAME]);
 						}
 					},
 				],
@@ -94,7 +98,7 @@ abstract class CrudQuery extends BaseQuery
 			],
 		];
 
-		parent::__construct($config);
+		parent::__construct($config, $container);
 	}
 
 	/**

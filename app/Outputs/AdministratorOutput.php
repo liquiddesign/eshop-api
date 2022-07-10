@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Outputs;
 
 use Admin\DB\Administrator;
-use App\BaseOutput;
+use App\Base\BaseOutput;
 use App\TypeRegistry;
 
 class AdministratorOutput extends BaseOutput

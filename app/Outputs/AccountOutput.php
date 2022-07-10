@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Outputs;
 
-use App\BaseOutput;
+use App\Base\BaseOutput;
 use App\TypeRegistry;
 use Security\DB\Account;
 

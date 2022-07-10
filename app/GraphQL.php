@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Base\BaseMutation;
+use App\Base\BaseQuery;
 use GraphQL\Error\DebugFlag;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Schema;
@@ -23,7 +25,7 @@ class GraphQL
 	{
 		try {
 			$queries = $this->container->findByType(BaseQuery::class);
-			$mutations = $this->container->findByType(IMutation::class);
+			$mutations = $this->container->findByType(BaseMutation::class);
 
 			$queryFields = [];
 			$mutationFields = [];

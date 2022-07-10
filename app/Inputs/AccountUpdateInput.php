@@ -2,7 +2,7 @@
 
 namespace App\Inputs;
 
-use App\BaseInput;
+use App\Base\BaseInput;
 use App\TypeRegistry;
 use Security\DB\Account;
 

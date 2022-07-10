@@ -1,9 +1,13 @@
 <?php
 
-namespace App;
+namespace App\Crud;
 
+use App\Base\BaseInput;
+use App\Base\BaseMutation;
+use App\Base\BaseOutput;
+use App\Base\BaseType;
 use App\Exceptions\NotFoundException;
-use GraphQL\Type\Definition\ObjectType;
+use App\TypeRegistry;
 use Nette\DI\Container;
 use Nette\Utils\Strings;
 use StORM\Entity;
@@ -14,7 +18,7 @@ use StORM\Repository;
  * @method array onBeforeUpdate(array $rootValues, array $args)
  * @method array onBeforeDelete(array $rootValues, array $args)
  */
-abstract class CrudMutation extends ObjectType implements IMutation
+abstract class CrudMutation extends BaseMutation
 {
 	/** @var callable(array<mixed>, array<mixed>): array<mixed>|null */
 	public $onBeforeCreate = null;
@@ -38,13 +42,13 @@ abstract class CrudMutation extends ObjectType implements IMutation
 	 */
 	abstract public function getRepositoryClass(): string;
 
-	public function __construct(protected readonly Container $container)
+	public function __construct($config, protected Container $container)
 	{
 		$baseName = Strings::firstUpper($this->getName());
 		$outputType = $this->getOutputType();
 		$repository = $this->getRepository();
 
-		$config = [
+		$config = $this->mergeFields($config, [
 			'fields' => [
 				"create$baseName" => [
 					'type' => $outputType,
@@ -68,27 +72,27 @@ abstract class CrudMutation extends ObjectType implements IMutation
 						try {
 							$repository->syncOne($args['input']);
 						} catch (\Throwable $e) {
-							throw new NotFoundException($args['input'][IType::ID_NAME]);
+							throw new NotFoundException($args['input'][BaseType::ID_NAME]);
 						}
 
-						return $repository->one($args['input'][IType::ID_NAME], true);
+						return $repository->one($args['input'][BaseType::ID_NAME], true);
 					},
 				],
 				"delete$baseName" => [
 					'type' => TypeRegistry::int(),
-					'args' => [IType::ID_NAME => TypeRegistry::id(),],
+					'args' => [BaseType::ID_NAME => TypeRegistry::id(),],
 					'resolve' => function (array $rootValue, array $args) use ($repository): int {
 						if ($this->onBeforeDelete) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeDelete, $rootValue, $args);
 						}
 
-						return ($object = $repository->one($args[IType::ID_NAME])) ? $object->delete() : 0;
+						return ($object = $repository->one($args[BaseType::ID_NAME])) ? $object->delete() : 0;
 					},
 				],
 			],
-		];
+		]);
 
-		parent::__construct($config);
+		parent::__construct($config, $container);
 	}
 
 	/**
