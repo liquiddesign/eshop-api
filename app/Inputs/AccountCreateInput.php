@@ -22,4 +22,9 @@ class AccountCreateInput extends BaseInput
 	{
 		return Account::class;
 	}
+
+	public function validate(BaseInput $input): bool
+	{
+		return true;
+	}
 }

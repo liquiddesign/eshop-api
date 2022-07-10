@@ -8,6 +8,7 @@ use GraphQL\Type\Definition\Type;
 use Nette\DI\Container;
 use Nette\Utils\Strings;
 use StORM\Entity;
+use StORM\Repository;
 
 /**
  * @method array onBeforeGetOne(array $rootValues, array $args)
@@ -39,8 +40,7 @@ abstract class CrudQuery extends ObjectType implements IQuery
 	{
 		$baseName = Strings::firstUpper($this->getName());
 		$outputType = $this->getOutputType();
-		/** @var \StORM\Repository<\StORM\Entity> $repository */
-		$repository = $container->getByType($this->getRepositoryClass());
+		$repository = $this->getRepository();
 
 		$config = [
 			'fields' => [
@@ -96,5 +96,13 @@ abstract class CrudQuery extends ObjectType implements IQuery
 		];
 
 		parent::__construct($config);
+	}
+
+	/**
+	 * @return \StORM\Repository<\StORM\Entity>
+	 */
+	protected function getRepository(): Repository
+	{
+		return $this->container->getByType($this->getRepositoryClass());
 	}
 }

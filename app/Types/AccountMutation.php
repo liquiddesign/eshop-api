@@ -2,69 +2,60 @@
 
 namespace App\Types;
 
+use App\BaseInput;
+use App\BaseOutput;
+use App\CrudMutation;
 use App\Exceptions\NotFoundException;
 use App\IMutation;
 use App\IType;
+use App\Outputs\AccountOutput;
 use App\TypeRegistry;
 use Eshop\Shopper;
 use Nette;
+use Nette\DI\Container;
 use Nette\Security\Passwords;
 use Security\DB\AccountRepository;
 
-class AccountMutation extends \GraphQL\Type\Definition\ObjectType implements IMutation
+class AccountMutation extends CrudMutation
 {
-	public function __construct(AccountRepository $accountRepository, Passwords $passwords, Shopper $shopper,)
+	public function __construct(Container $container, Passwords $passwords, Shopper $shopper,)
 	{
-		$config = [
-			'fields' => [
-				'createAccount' => [
-					'type' => TypeRegistry::account(),
-					'args' => [
-						'input' => TypeRegistry::accountCreate(),
-					],
-					'resolve' => function (array $rootValue, array $args) use ($accountRepository, $shopper, $passwords): \Security\DB\Account {
-						$registerConfig = $shopper->getRegistrationConfiguration();
+		$this->onBeforeCreate = function (array $rootValues, array $args) use ($passwords, $shopper): array {
+			$registerConfig = $shopper->getRegistrationConfiguration();
 
-						$values = $args['input'];
+			$args['input']['password'] = $passwords->hash($args['input']['password'] ?? Nette\Utils\Random::generate(8));
+			$args['input']['active'] = !$registerConfig['confirmation'];
+			$args['input']['authorized'] = !$registerConfig['emailAuthorization'];
+			$args['input']['confirmationToken'] = $registerConfig['emailAuthorization'] ? Nette\Utils\Random::generate(128) : null;
 
-						$values['password'] = $passwords->hash($values['password'] ?? Nette\Utils\Random::generate(8));
-						$values['active'] = !$registerConfig['confirmation'];
-						$values['authorized'] = !$registerConfig['emailAuthorization'];
-						$values['confirmationToken'] = $registerConfig['emailAuthorization'] ? Nette\Utils\Random::generate(128) : null;
+			return [$rootValues, $args];
+		};
 
-						/** @var \Security\DB\Account $account */
-						$account = $accountRepository->createOne($values);
+		parent::__construct($container);
+	}
 
-						return $account;
-					},
-				],
-				'updateAccount' => [
-					'type' => TypeRegistry::account(),
-					'args' => [
-						'input' => TypeRegistry::accountUpdate(),
-					],
-					'resolve' => function (array $rootValue, array $args) use ($accountRepository): \Security\DB\Account {
-						$affected = $accountRepository->many()->where('this.' . IType::ID_NAME, $args['input'][IType::ID_NAME])->update($args['input']);
+	public function getName(): string
+	{
+		return 'account';
+	}
 
-						if ($affected === 0) {
-							throw new NotFoundException($args['input'][IType::ID_NAME]);
-						}
+	public function getOutputType(): BaseOutput
+	{
+		return TypeRegistry::account();
+	}
 
-						return $accountRepository->one($args['input'][IType::ID_NAME], true);
-					},
-				],
-				'deleteAccount' => [
-					'type' => TypeRegistry::int(),
-					'args' => [
-						IType::ID_NAME => TypeRegistry::id(),
-					],
-					'resolve' => function (array $rootValue, array $args) use ($accountRepository): int {
-						return ($account = $accountRepository->one($args[IType::ID_NAME])) ? $account->delete() : 0;
-					},
-				],
-			],
-		];
+	public function getCreateInputType(): BaseInput
+	{
+		return TypeRegistry::accountCreate();
+	}
 
-		parent::__construct($config);
+	public function getUpdateInputType(): BaseInput
+	{
+		return TypeRegistry::accountUpdate();
+	}
+
+	public function getRepositoryClass(): string
+	{
+		return AccountRepository::class;
 	}
 }
