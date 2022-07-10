@@ -6,6 +6,7 @@ use App\Exceptions\NotFoundException;
 use GraphQL\Type\Definition\ObjectType;
 use Nette\DI\Container;
 use Nette\Utils\Strings;
+use StORM\Entity;
 use StORM\Repository;
 
 /**
@@ -48,9 +49,9 @@ abstract class CrudMutation extends ObjectType implements IMutation
 				"create$baseName" => [
 					'type' => $outputType,
 					'args' => ['input' => $this->getCreateInputType(),],
-					'resolve' => function (array $rootValue, array $args) use ($repository): \Security\DB\Account {
+					'resolve' => function (array $rootValue, array $args) use ($repository): Entity {
 						if ($this->onBeforeCreate) {
-							[$rootValue, $args] = $this->onBeforeCreate($rootValue, $args);
+							[$rootValue, $args] = \call_user_func($this->onBeforeCreate, $rootValue, $args);
 						}
 
 						return $repository->createOne($args['input']);
@@ -59,14 +60,14 @@ abstract class CrudMutation extends ObjectType implements IMutation
 				"update$baseName" => [
 					'type' => $outputType,
 					'args' => ['input' => $this->getUpdateInputType(),],
-					'resolve' => function (array $rootValue, array $args) use ($repository): \Security\DB\Account {
+					'resolve' => function (array $rootValue, array $args) use ($repository): Entity {
 						if ($this->onBeforeUpdate) {
-							[$rootValue, $args] = $this->onBeforeUpdate($rootValue, $args);
+							[$rootValue, $args] = \call_user_func($this->onBeforeUpdate, $rootValue, $args);
 						}
 
-						$object = $repository->syncOne($args['input']);
-
-						if (!$object) {
+						try {
+							$repository->syncOne($args['input']);
+						} catch (\Throwable $e) {
 							throw new NotFoundException($args['input'][IType::ID_NAME]);
 						}
 
@@ -78,7 +79,7 @@ abstract class CrudMutation extends ObjectType implements IMutation
 					'args' => [IType::ID_NAME => TypeRegistry::id(),],
 					'resolve' => function (array $rootValue, array $args) use ($repository): int {
 						if ($this->onBeforeDelete) {
-							[$rootValue, $args] = $this->onBeforeDelete($rootValue, $args);
+							[$rootValue, $args] = \call_user_func($this->onBeforeDelete, $rootValue, $args);
 						}
 
 						return ($object = $repository->one($args[IType::ID_NAME])) ? $object->delete() : 0;

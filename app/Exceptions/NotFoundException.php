@@ -2,7 +2,6 @@
 
 namespace App\Exceptions;
 
-
 class NotFoundException extends BaseException
 {
 	public function __construct(string $id)
@@ -15,8 +14,8 @@ class NotFoundException extends BaseException
 		return true;
 	}
 
-	public function getCategory(): ExceptionCategories
+	public function getCategory(): string
 	{
-		return ExceptionCategories::NOT_FOUND;
+		return (string) ExceptionCategories::NOT_FOUND->value;
 	}
 }

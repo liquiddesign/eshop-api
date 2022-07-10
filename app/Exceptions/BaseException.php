@@ -8,8 +8,6 @@ abstract class BaseException extends \Exception implements ClientAware
 {
 	public function __construct(string $message)
 	{
-		parent::__construct($message, $this->getCategory()->value);
+		parent::__construct($message, (int) $this->getCategory());
 	}
-
-	public abstract function getCategory(): ExceptionCategories;
 }

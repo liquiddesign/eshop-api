@@ -22,7 +22,7 @@ class GraphQL
 	public function execute(): array
 	{
 		try {
-			$queries = $this->container->findByType(IQuery::class);
+			$queries = $this->container->findByType(BaseQuery::class);
 			$mutations = $this->container->findByType(IMutation::class);
 
 			$queryFields = [];

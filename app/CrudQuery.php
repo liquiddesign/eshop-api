@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Exceptions\NotFoundException;
-use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Nette\DI\Container;
 use Nette\Utils\Strings;
@@ -14,7 +13,7 @@ use StORM\Repository;
  * @method array onBeforeGetOne(array $rootValues, array $args)
  * @method array onBeforeGetAll(array $rootValues, array $args)
  */
-abstract class CrudQuery extends ObjectType implements IQuery
+abstract class CrudQuery extends BaseQuery
 {
 	public const DEFAULT_SORT = 'this.' . IType::ID_NAME;
 	public const DEFAULT_ORDER = 'ASC';
@@ -49,9 +48,9 @@ abstract class CrudQuery extends ObjectType implements IQuery
 					'args' => [
 						IType::ID_NAME => TypeRegistry::nonNull(TypeRegistry::id()),
 					],
-					'resolve' => function (array $rootValue, array $args) use ($repository): ?Entity {
+					'resolve' => function (array $rootValue, array $args) use ($repository): Entity {
 						if ($this->onBeforeGetOne) {
-							[$rootValue, $args] = $this->onBeforeGetOne($rootValue, $args);
+							[$rootValue, $args] = \call_user_func($this->onBeforeGetOne, $rootValue, $args);
 						}
 
 						try {
@@ -72,7 +71,7 @@ abstract class CrudQuery extends ObjectType implements IQuery
 					],
 					'resolve' => function (array $rootValue, array $args, $a, $b) use ($repository, $outputType): array {
 						if ($this->onBeforeGetAll) {
-							[$rootValue, $args] = $this->onBeforeGetAll($rootValue, $args);
+							[$rootValue, $args] = \call_user_func($this->onBeforeGetAll, $rootValue, $args);
 						}
 
 						$collection = $repository->many()
