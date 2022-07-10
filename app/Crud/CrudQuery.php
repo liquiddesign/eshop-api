@@ -6,11 +6,12 @@ use App\Base\BaseOutput;
 use App\Base\BaseQuery;
 use App\Base\BaseType;
 use App\Exceptions\NotFoundException;
-use App\TypeRegistry;
+use App\TypeRegister;
+use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Nette\DI\Container;
+use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
-use StORM\Entity;
 use StORM\Repository;
 
 /**
@@ -48,32 +49,34 @@ abstract class CrudQuery extends BaseQuery
 		$config = [
 			'fields' => [
 				"get$baseName" => [
-					'type' => $outputType,
+					'type' => TypeRegister::nonNull($outputType),
 					'args' => [
-						BaseType::ID_NAME => TypeRegistry::nonNull(TypeRegistry::id()),
+						BaseType::ID_NAME => TypeRegister::nonNull(TypeRegister::id()),
 					],
-					'resolve' => function (array $rootValue, array $args) use ($repository): Entity {
+					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo) use ($repository, $outputType): array {
 						if ($this->onBeforeGetOne) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeGetOne, $rootValue, $args);
 						}
 
-						try {
-							return $repository->one($args[BaseType::ID_NAME], true);
-						} catch (\Throwable $e) {
+						$results = $this->fetchResult($repository->many()->where('this.' . BaseType::ID_NAME, $args[BaseType::ID_NAME]), $outputType, $resolveInfo->getFieldSelection());
+
+						if (!$results) {
 							throw new NotFoundException($args[BaseType::ID_NAME]);
 						}
+
+						return Arrays::first($results);
 					},
 				],
 				"get{$baseName}s" => [
-					'type' => TypeRegistry::listOf($outputType),
+					'type' => TypeRegister::listOf($outputType),
 					'args' => [
 						'sort' => Type::string(),
-						'order' => TypeRegistry::orderEnum(),
+						'order' => TypeRegister::orderEnum(),
 						'limit' => Type::int(),
 						'page' => Type::int(),
-						'filters' => TypeRegistry::JSON(),
+						'filters' => TypeRegister::JSON(),
 					],
-					'resolve' => function (array $rootValue, array $args, $a, $b) use ($repository, $outputType): array {
+					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo) use ($repository, $outputType): array {
 						if ($this->onBeforeGetAll) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeGetAll, $rootValue, $args);
 						}
@@ -82,17 +85,7 @@ abstract class CrudQuery extends BaseQuery
 							->orderBy([$args['sort'] ?? $this::DEFAULT_SORT => $args['order'] ?? $this::DEFAULT_ORDER])
 							->setPage($args['page'] ?? $this::DEFAULT_PAGE, $args['limit'] ?? $this::DEFAULT_LIMIT);
 
-						$objects = [];
-
-						while ($object = $collection->fetch()) {
-							$objects[$object->getPK()] = $object->toArray();
-
-							foreach ($outputType->getRelations() as $relation) {
-								$objects[$object->getPK()][$relation] = $object->$relation->toArray();
-							}
-						}
-
-						return $objects;
+						return $this->fetchResult($collection, $outputType, $resolveInfo->getFieldSelection());
 					},
 				],
 			],

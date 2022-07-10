@@ -2,31 +2,29 @@
 
 namespace App;
 
-use Admin\DB\Role;
 use App\Base\BaseType;
-use App\Inputs\AccountCreateInput;
-use App\Inputs\AccountUpdateInput;
-use App\Outputs\AccountOutput;
-use App\Outputs\AdministratorOutput;
-use App\Outputs\RoleOutput;
+use App\TypeRegistries\EshopTypeRegister;
+use App\TypeRegistries\SecurityTypeRegister;
+use GraphQL\Type\Definition\NullableType;
 use GraphQL\Type\Definition\Type;
 use MLL\GraphQLScalars\Date;
 use MLL\GraphQLScalars\DateTime;
 use MLL\GraphQLScalars\JSON;
+use MLL\GraphQLScalars\NullScalar;
 use Nette\Utils\Arrays;
+use Nette\Utils\Reflection;
 use Nette\Utils\Strings;
-use Security\DB\Account;
 use StORM\RelationCollection;
 
-class TypeRegistry extends Type
+class TypeRegister extends Type
 {
+	use EshopTypeRegister;
+	use SecurityTypeRegister;
 	/**
+	 * Custom mapping of relations.
 	 * @var array<string>
 	 */
-	public static array $outputTypesMap = [
-		Account::class => 'account',
-		Role::class => 'role',
-	];
+	public static array $outputTypesMap = [];
 
 	/**
 	 * @var array<string, mixed>
@@ -53,29 +51,9 @@ class TypeRegistry extends Type
 		return static::$types['date'] ??= new Date();
 	}
 
-	public static function account(): AccountOutput
+	public static function null(): NullScalar
 	{
-		return static::$types['account'] ??= new AccountOutput();
-	}
-
-	public static function accountCreate(): AccountCreateInput
-	{
-		return static::$types['accountCreate'] ??= new AccountCreateInput();
-	}
-
-	public static function accountUpdate(): AccountUpdateInput
-	{
-		return static::$types['accountUpdate'] ??= new AccountUpdateInput();
-	}
-
-	public static function administrator(): AdministratorOutput
-	{
-		return static::$types['administrator'] ??= new AdministratorOutput();
-	}
-
-	public static function role(): RoleOutput
-	{
-		return static::$types['role'] ??= new RoleOutput();
+		return static::$types['null'] ??= new NullScalar();
 	}
 
 	/**
@@ -119,7 +97,7 @@ class TypeRegistry extends Type
 			/** @var \ReflectionNamedType|null $reflectionType */
 			$reflectionType = $property->getType();
 
-			if (!$reflectionType) {
+			if (!$reflectionType || Reflection::expandClassName($reflectionType->getName(), $reflection) === $class) {
 				continue;
 			}
 
@@ -169,12 +147,9 @@ class TypeRegistry extends Type
 						}
 					}
 
-					if (!isset(static::$outputTypesMap[$typeName])) {
-						throw new \Exception("Unknown GraphQL type '$typeName'. Did you configured mapping correctly?");
-					}
-
-					/** @var \GraphQL\Type\Definition\ObjectType $type */
-					$type = static::get(static::$outputTypesMap[$typeName]);
+					$type = isset(static::$outputTypesMap[$typeName]) ?
+						static::get(static::$outputTypesMap[$typeName]) :
+						static::get(Strings::lower(Strings::substring($typeName, \strrpos($typeName, '\\') + 1)));
 				}
 
 				$isForceRequired = Arrays::contains($forceRequired, $name);
@@ -184,7 +159,7 @@ class TypeRegistry extends Type
 					throw new \Exception("Property '$name' can't be forced optional and required at same time.");
 				}
 
-				if ($forceAllOptional === false && ((!$forceOptional && $forceRequired) || (!$forceOptional && !$reflectionType->allowsNull()))) {
+				if ($forceAllOptional === false && ((!$forceOptional && $forceRequired) || (!$forceOptional && !$reflectionType->allowsNull())) && $type instanceof NullableType) {
 					$type = static::nonNull($type);
 				}
 
@@ -201,6 +176,24 @@ class TypeRegistry extends Type
 
 	public static function get(string $name): Type
 	{
+		if (!\method_exists(static::class, $name)) {
+			$found = false;
+
+			if ($traits = \class_uses(static::class)) {
+				foreach ($traits as $traitClass) {
+					if (\method_exists($traitClass, $name)) {
+						$found = true;
+
+						break;
+					}
+				}
+			}
+
+			if (!$found) {
+				return static::null();
+			}
+		}
+
 		return static::$types[$name] ??= static::{$name}();
 	}
 }

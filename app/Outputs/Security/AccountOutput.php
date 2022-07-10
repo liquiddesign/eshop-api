@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Outputs;
+namespace App\Outputs\Security;
 
 use App\Base\BaseOutput;
-use App\TypeRegistry;
+use App\TypeRegister;
 use Security\DB\Account;
 
 class AccountOutput extends BaseOutput
@@ -13,7 +13,7 @@ class AccountOutput extends BaseOutput
 	public function __construct()
 	{
 		$config = [
-			'fields' => TypeRegistry::createFieldsFromClass($this->getSourceClassName(), exclude: ['password']),
+			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName(), exclude: ['password']),
 		];
 
 		parent::__construct($config);
@@ -22,13 +22,5 @@ class AccountOutput extends BaseOutput
 	public function getSourceClassName(): string
 	{
 		return Account::class;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getRelations(): array
-	{
-		return [];
 	}
 }

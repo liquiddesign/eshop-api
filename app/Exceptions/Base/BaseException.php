@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions;
+namespace App\Exceptions\Base;
 
 use GraphQL\Error\ClientAware;
 

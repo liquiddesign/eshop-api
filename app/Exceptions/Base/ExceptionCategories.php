@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions;
+namespace App\Exceptions\Base;
 
 enum ExceptionCategories: int
 {

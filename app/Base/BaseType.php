@@ -4,6 +4,9 @@ namespace App\Base;
 
 use GraphQL\Type\Definition\ObjectType;
 use Nette\DI\Container;
+use StORM\Collection;
+use StORM\Meta\Relation;
+use StORM\Meta\RelationNxN;
 
 abstract class BaseType extends ObjectType
 {
@@ -35,5 +38,41 @@ abstract class BaseType extends ObjectType
 		}
 
 		return $config1;
+	}
+
+	/**
+	 * @param \StORM\Collection<\StORM\Entity> $collection
+	 * @param \App\Base\BaseOutput $outputType
+	 * @param array<string, bool> $fieldSelection
+	 * @return array<mixed>
+	 */
+	protected function fetchResult(Collection $collection, BaseOutput $outputType, array $fieldSelection): array
+	{
+		$objects = [];
+
+		$allRelations = $collection->getRepository()->getStructure()->getRelations();
+
+		$relations = \array_keys(\array_filter(
+			$allRelations,
+			fn ($value, $key): bool => isset($fieldSelection[$key]) && $fieldSelection[$key] === true && $value instanceof Relation,
+			\ARRAY_FILTER_USE_BOTH,
+		));
+
+		$relationCollections = \array_keys(\array_filter(
+			$allRelations,
+			fn ($value, $key): bool => isset($fieldSelection[$key]) && $fieldSelection[$key] === true && $value instanceof RelationNxN,
+			\ARRAY_FILTER_USE_BOTH,
+		));
+
+		while ($object = $collection->fetch()) {
+			/** @var \StORM\Entity $object */
+			$objects[$object->getPK()] = $object->toArray($relations);
+
+			foreach ($relationCollections as $relation) {
+				$objects[$object->getPK()][$relation] = $object->$relation->toArray();
+			}
+		}
+
+		return $objects;
 	}
 }

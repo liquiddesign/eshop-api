@@ -7,7 +7,7 @@ use App\Base\BaseMutation;
 use App\Base\BaseOutput;
 use App\Base\BaseType;
 use App\Exceptions\NotFoundException;
-use App\TypeRegistry;
+use App\TypeRegister;
 use Nette\DI\Container;
 use Nette\Utils\Strings;
 use StORM\Entity;
@@ -51,7 +51,7 @@ abstract class CrudMutation extends BaseMutation
 		$config = $this->mergeFields($config, [
 			'fields' => [
 				"create$baseName" => [
-					'type' => $outputType,
+					'type' => TypeRegister::nonNull($outputType),
 					'args' => ['input' => $this->getCreateInputType(),],
 					'resolve' => function (array $rootValue, array $args) use ($repository): Entity {
 						if ($this->onBeforeCreate) {
@@ -62,7 +62,7 @@ abstract class CrudMutation extends BaseMutation
 					},
 				],
 				"update$baseName" => [
-					'type' => $outputType,
+					'type' => TypeRegister::nonNull($outputType),
 					'args' => ['input' => $this->getUpdateInputType(),],
 					'resolve' => function (array $rootValue, array $args) use ($repository): Entity {
 						if ($this->onBeforeUpdate) {
@@ -79,8 +79,8 @@ abstract class CrudMutation extends BaseMutation
 					},
 				],
 				"delete$baseName" => [
-					'type' => TypeRegistry::int(),
-					'args' => [BaseType::ID_NAME => TypeRegistry::id(),],
+					'type' => TypeRegister::nonNull(TypeRegister::int()),
+					'args' => [BaseType::ID_NAME => TypeRegister::id(),],
 					'resolve' => function (array $rootValue, array $args) use ($repository): int {
 						if ($this->onBeforeDelete) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeDelete, $rootValue, $args);

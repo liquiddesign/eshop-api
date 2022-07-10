@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Types;
+namespace App\Types\Security;
 
 use App\Base\BaseInput;
 use App\Base\BaseOutput;
 use App\Crud\CrudMutation;
-use App\TypeRegistry;
+use App\TypeRegister;
 use Eshop\Shopper;
 use Nette;
 use Nette\DI\Container;
@@ -14,7 +14,7 @@ use Security\DB\AccountRepository;
 
 class AccountMutation extends CrudMutation
 {
-	public function __construct(Container $container, Passwords $passwords, Shopper $shopper,)
+	public function __construct(Container $container, Passwords $passwords, Shopper $shopper)
 	{
 		$this->onBeforeCreate = function (array $rootValues, array $args) use ($passwords, $shopper): array {
 			$registerConfig = $shopper->getRegistrationConfiguration();
@@ -30,8 +30,8 @@ class AccountMutation extends CrudMutation
 		$config = [
 			'fields' => [
 				'test' => [
-					'type' => TypeRegistry::nonNull(TypeRegistry::string()),
-					'args' => ['text' => TypeRegistry::nonNull(TypeRegistry::string())],
+					'type' => TypeRegister::nonNull(TypeRegister::string()),
+					'args' => ['text' => TypeRegister::nonNull(TypeRegister::string())],
 					'resolve' => function (array $rootValue, array $args): string {
 						return $args['text'];
 					},
@@ -49,17 +49,17 @@ class AccountMutation extends CrudMutation
 
 	public function getOutputType(): BaseOutput
 	{
-		return TypeRegistry::account();
+		return TypeRegister::account();
 	}
 
 	public function getCreateInputType(): BaseInput
 	{
-		return TypeRegistry::accountCreate();
+		return TypeRegister::accountCreate();
 	}
 
 	public function getUpdateInputType(): BaseInput
 	{
-		return TypeRegistry::accountUpdate();
+		return TypeRegister::accountUpdate();
 	}
 
 	public function getRepositoryClass(): string

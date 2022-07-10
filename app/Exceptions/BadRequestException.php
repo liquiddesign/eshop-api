@@ -5,11 +5,11 @@ namespace App\Exceptions;
 use App\Exceptions\Base\BaseException;
 use App\Exceptions\Base\ExceptionCategories;
 
-class NotFoundException extends BaseException
+class BadRequestException extends BaseException
 {
-	public function __construct(string $id)
+	public function __construct(string $string)
 	{
-		parent::__construct("Object '$id' not found");
+		parent::__construct("Bad request. $string");
 	}
 
 	public function isClientSafe(): bool
@@ -19,6 +19,6 @@ class NotFoundException extends BaseException
 
 	public function getCategory(): string
 	{
-		return (string) ExceptionCategories::NOT_FOUND->value;
+		return (string) ExceptionCategories::BAD_REQUEST->value;
 	}
 }

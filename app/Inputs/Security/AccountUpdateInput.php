@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Inputs;
+namespace App\Inputs\Security;
 
 use App\Base\BaseInput;
-use App\TypeRegistry;
+use App\TypeRegister;
 use Security\DB\Account;
 
 class AccountUpdateInput extends BaseInput
@@ -11,8 +11,7 @@ class AccountUpdateInput extends BaseInput
 	public function __construct()
 	{
 		$config = [
-			'name' => 'AccountUpdate',
-			'fields' => TypeRegistry::createFieldsFromClass($this->getSourceClassName(), exclude: ['tsRegistered', 'tsLastLogin'], forceAllOptional: true),
+			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName(), exclude: ['tsRegistered', 'tsLastLogin'], forceAllOptional: true),
 		];
 
 		parent::__construct($config);

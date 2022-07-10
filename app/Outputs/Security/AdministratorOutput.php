@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Outputs;
+namespace App\Outputs\Security;
 
 use Admin\DB\Administrator;
 use App\Base\BaseOutput;
-use App\TypeRegistry;
+use App\TypeRegister;
 
 class AdministratorOutput extends BaseOutput
 {
 	public function __construct()
 	{
 		$config = [
-			'fields' => TypeRegistry::createFieldsFromClass($this->getSourceClassName()),
+			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName()),
 		];
 
 		parent::__construct($config);
@@ -22,13 +22,5 @@ class AdministratorOutput extends BaseOutput
 	public function getSourceClassName(): string
 	{
 		return Administrator::class;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getRelations(): array
-	{
-		return ['accounts'];
 	}
 }

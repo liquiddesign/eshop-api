@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Outputs;
+namespace App\Outputs\Security;
 
 use Admin\DB\Role;
 use App\Base\BaseOutput;
-use App\TypeRegistry;
+use App\TypeRegister;
 
 class RoleOutput extends BaseOutput
 {
 	public function __construct()
 	{
 		$config = [
-			'fields' => TypeRegistry::createFieldsFromClass($this->getSourceClassName()),
+			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName()),
 		];
 
 		parent::__construct($config);
@@ -22,13 +22,5 @@ class RoleOutput extends BaseOutput
 	public function getSourceClassName(): string
 	{
 		return Role::class;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getRelations(): array
-	{
-		return [];
 	}
 }

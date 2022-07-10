@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Types;
+namespace App\Types\Security;
 
 use App\Base\BaseOutput;
 use App\Crud\CrudQuery;
-use App\TypeRegistry;
+use App\TypeRegister;
 use Security\DB\AccountRepository;
 
 class AccountQuery extends CrudQuery
@@ -18,7 +18,7 @@ class AccountQuery extends CrudQuery
 
 	public function getOutputType(): BaseOutput
 	{
-		return TypeRegistry::account();
+		return TypeRegister::account();
 	}
 
 	public function getRepositoryClass(): string
