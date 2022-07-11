@@ -42,7 +42,7 @@ abstract class CrudMutation extends BaseMutation
 	 */
 	abstract public function getRepositoryClass(): string;
 
-	public function __construct($config, protected Container $container)
+	public function __construct(protected Container $container, array $config = [])
 	{
 		$baseName = Strings::firstUpper($this->getName());
 		$outputType = $this->getOutputType();
@@ -92,7 +92,7 @@ abstract class CrudMutation extends BaseMutation
 			],
 		]);
 
-		parent::__construct($config, $container);
+		parent::__construct($container, $config);
 	}
 
 	/**

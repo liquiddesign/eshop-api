@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a2d5777aadb0477b99790d54deae315",
+    "content-hash": "59df17f500b5b06d64b34403a37d930b",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -885,6 +885,92 @@
                 "source": "https://github.com/contributte/comgate/tree/v0.2.0"
             },
             "time": "2021-02-12T21:31:47+00:00"
+        },
+        {
+            "name": "contributte/psr7-http-message",
+            "version": "v0.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/contributte/psr7-http-message.git",
+                "reference": "bad86b3a2625aca188288547405c85ce1b2a38d7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/contributte/psr7-http-message/zipball/bad86b3a2625aca188288547405c85ce1b2a38d7",
+                "reference": "bad86b3a2625aca188288547405c85ce1b2a38d7",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/psr7": "^1.7.0 || ^2.1.0",
+                "nette/utils": "^3.0.0",
+                "php": ">=7.2"
+            },
+            "conflict": {
+                "nette/di": "<3.0.7",
+                "nette/http": "<3.0.5"
+            },
+            "require-dev": {
+                "nette/application": "^3.0.0",
+                "nette/di": "^3.0.7",
+                "nette/http": "^3.0.5",
+                "ninjify/nunjuck": "^v0.3.0",
+                "ninjify/qa": "^v0.13.0",
+                "phpstan/phpstan": "^1.5.5",
+                "phpstan/phpstan-deprecation-rules": "^1.0.0",
+                "phpstan/phpstan-nette": "^1.0.0",
+                "phpstan/phpstan-strict-rules": "^1.1.0"
+            },
+            "suggest": {
+                "nette/application": "to use $request->withApplicationRequest[Nette\\Application\\Request]",
+                "nette/di": "to use Psr7HttpExtension[CompilerExtension]",
+                "nette/http": "to use $request->withHttpRequest[Nette\\Http\\Request], to use Psr7RequestFactory, to use Psr7ServerRequestFactory"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.8.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Contributte\\Psr7\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Milan Felix Šulc",
+                    "homepage": "https://f3l1x.io"
+                }
+            ],
+            "description": "PSR-7 (HTTP Message Interface) to Nette Framework",
+            "homepage": "https://github.com/contributte/psr7-http-message",
+            "keywords": [
+                "http",
+                "message",
+                "nette",
+                "psr7",
+                "request",
+                "response"
+            ],
+            "support": {
+                "issues": "https://github.com/contributte/psr7-http-message/issues",
+                "source": "https://github.com/contributte/psr7-http-message/tree/v0.8.0"
+            },
+            "funding": [
+                {
+                    "url": "https://contributte.org/partners.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/f3l1x",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-04-15T12:03:21+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -4556,16 +4642,16 @@
         },
         {
             "name": "php-http/discovery",
-            "version": "1.14.2",
+            "version": "1.14.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/discovery.git",
-                "reference": "c8d48852fbc052454af42f6de27635ddd916b959"
+                "reference": "31d8ee46d0215108df16a8527c7438e96a4d7735"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/discovery/zipball/c8d48852fbc052454af42f6de27635ddd916b959",
-                "reference": "c8d48852fbc052454af42f6de27635ddd916b959",
+                "url": "https://api.github.com/repos/php-http/discovery/zipball/31d8ee46d0215108df16a8527c7438e96a4d7735",
+                "reference": "31d8ee46d0215108df16a8527c7438e96a4d7735",
                 "shasum": ""
             },
             "require": {
@@ -4617,9 +4703,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/discovery/issues",
-                "source": "https://github.com/php-http/discovery/tree/1.14.2"
+                "source": "https://github.com/php-http/discovery/tree/1.14.3"
             },
-            "time": "2022-05-25T07:26:05+00:00"
+            "time": "2022-07-11T14:04:40+00:00"
         },
         {
             "name": "php-http/httplug",

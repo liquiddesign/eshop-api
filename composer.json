@@ -21,7 +21,9 @@
     "ext-json": "*",
     "ext-soap": "*",
     "webonyx/graphql-php": "^14.0",
-    "mll-lab/graphql-php-scalars": "^5.4"
+    "mll-lab/graphql-php-scalars": "^5.4",
+    "contributte/psr7-http-message": "^0.8.0",
+    "ext-zend-opcache": "*"
   },
   "require-dev": {
     "nette/tester": "^2.4",

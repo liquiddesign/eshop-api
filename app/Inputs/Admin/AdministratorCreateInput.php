@@ -1,19 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
-namespace App\Outputs\Security;
+namespace App\Inputs\Admin;
 
 use Admin\DB\Administrator;
-use App\Base\BaseOutput;
+use App\Base\BaseInput;
 use App\TypeRegister;
 
-class AdministratorOutput extends BaseOutput
+class AdministratorCreateInput extends BaseInput
 {
 	public function __construct()
 	{
 		$config = [
-			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName()),
+			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName(), includeId: false),
 		];
 
 		parent::__construct($config);

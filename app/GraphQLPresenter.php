@@ -25,6 +25,8 @@ class GraphQLPresenter extends Presenter
 			Debugger::$showBar = true;
 		}
 
-		$this->sendResponse(new JsonResponse($this->graphQLite->execute()));
+		$response = new JsonResponse($this->graphQLite->executeServer());
+
+		$this->sendResponse($response);
 	}
 }

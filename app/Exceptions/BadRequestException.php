@@ -9,7 +9,7 @@ class BadRequestException extends BaseException
 {
 	public function __construct(string $string)
 	{
-		parent::__construct("Bad request. $string");
+		parent::__construct("Bad request: $string");
 	}
 
 	public function isClientSafe(): bool

@@ -39,7 +39,7 @@ class AccountMutation extends CrudMutation
 			],
 		];
 
-		parent::__construct($config, $container);
+		parent::__construct($container, $config);
 	}
 
 	public function getName(): string

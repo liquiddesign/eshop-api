@@ -5,6 +5,7 @@ namespace App\Crud;
 use App\Base\BaseOutput;
 use App\Base\BaseQuery;
 use App\Base\BaseType;
+use App\Exceptions\BadRequestException;
 use App\Exceptions\NotFoundException;
 use App\TypeRegister;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -20,11 +21,6 @@ use StORM\Repository;
  */
 abstract class CrudQuery extends BaseQuery
 {
-	public const DEFAULT_SORT = 'this.' . BaseType::ID_NAME;
-	public const DEFAULT_ORDER = 'ASC';
-	public const DEFAULT_PAGE = 1;
-	public const DEFAULT_LIMIT = 50;
-
 	/** @var callable(array<mixed>, array<mixed>): array<mixed>|null */
 	public $onBeforeGetOne = null;
 
@@ -40,25 +36,25 @@ abstract class CrudQuery extends BaseQuery
 	 */
 	abstract public function getRepositoryClass(): string;
 
-	public function __construct(protected Container $container)
+	public function __construct(protected Container $container, array $config = [])
 	{
 		$baseName = Strings::firstUpper($this->getName());
 		$outputType = $this->getOutputType();
 		$repository = $this->getRepository();
 
-		$config = [
+		$config = $this->mergeFields($config, [
 			'fields' => [
 				"get$baseName" => [
 					'type' => TypeRegister::nonNull($outputType),
 					'args' => [
 						BaseType::ID_NAME => TypeRegister::nonNull(TypeRegister::id()),
 					],
-					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo) use ($repository, $outputType): array {
+					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo) use ($repository): array {
 						if ($this->onBeforeGetOne) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeGetOne, $rootValue, $args);
 						}
 
-						$results = $this->fetchResult($repository->many()->where('this.' . BaseType::ID_NAME, $args[BaseType::ID_NAME]), $outputType, $resolveInfo->getFieldSelection());
+						$results = $this->fetchResult($repository->many()->where('this.' . BaseType::ID_NAME, $args[BaseType::ID_NAME]), $resolveInfo);
 
 						if (!$results) {
 							throw new NotFoundException($args[BaseType::ID_NAME]);
@@ -76,7 +72,7 @@ abstract class CrudQuery extends BaseQuery
 						'page' => Type::int(),
 						'filters' => TypeRegister::JSON(),
 					],
-					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo) use ($repository, $outputType): array {
+					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo) use ($repository): array {
 						if ($this->onBeforeGetAll) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeGetAll, $rootValue, $args);
 						}
@@ -85,13 +81,19 @@ abstract class CrudQuery extends BaseQuery
 							->orderBy([$args['sort'] ?? $this::DEFAULT_SORT => $args['order'] ?? $this::DEFAULT_ORDER])
 							->setPage($args['page'] ?? $this::DEFAULT_PAGE, $args['limit'] ?? $this::DEFAULT_LIMIT);
 
-						return $this->fetchResult($collection, $outputType, $resolveInfo->getFieldSelection());
+						try {
+							$collection->filter((array) ($args['filters'] ?? []));
+						} catch (\Throwable $e) {
+							throw new BadRequestException('Invalid filters');
+						}
+
+						return $this->fetchResult($collection, $resolveInfo);
 					},
 				],
 			],
-		];
+		]);
 
-		parent::__construct($config, $container);
+		parent::__construct($container, $config);
 	}
 
 	/**

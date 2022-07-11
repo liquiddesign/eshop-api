@@ -1,9 +1,8 @@
 # ESHOP API
 
-GraphQL API pro Roiwell projekty.
+GraphQL API for Roiwell based projects.
 
 ## TODO
-- Create/Update s vnořenými relacemi
-- Rekurzivní procházení relací při výběru, zatím jen hloubka 1
+- Create/Update s rekurzí
 - Autentizace, autorizace
 - API není jen pro eshop ale univerzální - rozbalíčkovat?

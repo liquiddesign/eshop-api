@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Base\BaseType;
+use App\TypeRegistries\AdminTypeRegister;
 use App\TypeRegistries\EshopTypeRegister;
 use App\TypeRegistries\SecurityTypeRegister;
 use GraphQL\Type\Definition\NullableType;
@@ -18,6 +19,7 @@ use StORM\RelationCollection;
 
 class TypeRegister extends Type
 {
+	use AdminTypeRegister;
 	use EshopTypeRegister;
 	use SecurityTypeRegister;
 	/**
@@ -97,7 +99,7 @@ class TypeRegister extends Type
 			/** @var \ReflectionNamedType|null $reflectionType */
 			$reflectionType = $property->getType();
 
-			if (!$reflectionType || Reflection::expandClassName($reflectionType->getName(), $reflection) === $class) {
+			if (!$reflectionType) {
 				continue;
 			}
 
@@ -142,7 +144,7 @@ class TypeRegister extends Type
 								throw new \Exception("Error while processing type of '$class:$name'.");
 							}
 
-							$typeName = Strings::substring($doc, $start + 1, $end - $start - 1);
+							$typeName = \substr($doc, $start, $end - $start);
 							$array = true;
 						}
 					}
