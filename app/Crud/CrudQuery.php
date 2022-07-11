@@ -87,7 +87,11 @@ abstract class CrudQuery extends BaseQuery
 							throw new BadRequestException('Invalid filters');
 						}
 
-						return $this->fetchResult($collection, $resolveInfo);
+						$result = $this->fetchResult($collection, $resolveInfo);
+
+						\dump(\memory_get_peak_usage(true)/1024/1024);
+
+						return $result;
 					},
 				],
 			],
