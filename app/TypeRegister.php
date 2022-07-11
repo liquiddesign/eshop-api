@@ -13,7 +13,6 @@ use MLL\GraphQLScalars\DateTime;
 use MLL\GraphQLScalars\JSON;
 use MLL\GraphQLScalars\NullScalar;
 use Nette\Utils\Arrays;
-use Nette\Utils\Reflection;
 use Nette\Utils\Strings;
 use StORM\RelationCollection;
 
