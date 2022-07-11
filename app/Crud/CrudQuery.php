@@ -89,8 +89,6 @@ abstract class CrudQuery extends BaseQuery
 
 						$result = $this->fetchResult($collection, $resolveInfo);
 
-						\dump(\memory_get_peak_usage(true)/1024/1024);
-
 						return $result;
 					},
 				],
