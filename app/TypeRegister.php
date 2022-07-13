@@ -11,6 +11,7 @@ use GraphQL\Type\Definition\Type;
 use MLL\GraphQLScalars\Date;
 use MLL\GraphQLScalars\DateTime;
 use MLL\GraphQLScalars\JSON;
+use MLL\GraphQLScalars\MixedScalar;
 use MLL\GraphQLScalars\NullScalar;
 use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
@@ -55,6 +56,11 @@ class TypeRegister extends Type
 	public static function null(): NullScalar
 	{
 		return static::$types['null'] ??= new NullScalar();
+	}
+
+	public static function mixed(): MixedScalar
+	{
+		return static::$types['mixed'] ??= new MixedScalar();
 	}
 
 	/**
@@ -191,7 +197,7 @@ class TypeRegister extends Type
 			}
 
 			if (!$found) {
-				return static::null();
+				return static::mixed();
 			}
 		}
 

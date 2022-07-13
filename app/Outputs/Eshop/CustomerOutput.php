@@ -13,7 +13,7 @@ class CustomerOutput extends BaseOutput
 	public function __construct()
 	{
 		$config = [
-			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName()),
+			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName(), exclude: ['account']),
 		];
 
 		parent::__construct($config);

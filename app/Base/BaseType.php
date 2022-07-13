@@ -92,7 +92,7 @@ abstract class BaseType extends ObjectType
 			$reflectionClass = new \ReflectionClass($object::class);
 
 			foreach ($relations as $relation) {
-				if ($objectArray[$relation] === null) {
+				if ($objectArray[$relation] === null || \is_bool($fieldSelection[$relation])) {
 					continue;
 				}
 
@@ -106,6 +106,10 @@ abstract class BaseType extends ObjectType
 			}
 
 			foreach ($relationCollections as $relation) {
+				if (\is_bool($fieldSelection[$relation])) {
+					continue;
+				}
+
 				/** @var \StORM\RelationCollection<\StORM\Entity> $relationCollection */
 				$relationCollection = $object->$relation;
 

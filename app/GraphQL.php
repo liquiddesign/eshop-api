@@ -12,6 +12,7 @@ use GraphQL\Server\StandardServer;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Schema;
 use Nette\DI\Container;
+use Tracy\Debugger;
 
 class GraphQL
 {
@@ -71,7 +72,7 @@ class GraphQL
 			$server = new StandardServer([
 				'schema' => $this->getSchema(),
 				'rootValue' => [],
-				'queryBatching' => true,
+				'queryBatching' => false,
 			]);
 
 			/** @var \GraphQL\Executor\ExecutionResult $result */
