@@ -88,7 +88,11 @@ abstract class CrudQuery extends BaseQuery
 							throw new BadRequestException('Invalid filters');
 						}
 
+						Debugger::log('Before data fetched:' . Debugger::timer());
+
 						$result = $this->fetchResult($collection, $resolveInfo);
+
+						Debugger::log('After data fetched:' . Debugger::timer());
 
 						return $result;
 					},

@@ -5,7 +5,6 @@ namespace App\Base;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nette\DI\Container;
-use Nette\Utils\Arrays;
 use Nette\Utils\Reflection;
 use StORM\Collection;
 use StORM\Meta\Relation;
@@ -75,51 +74,73 @@ abstract class BaseType extends ObjectType
 
 		$relations = \array_keys(\array_filter(
 			$allRelations,
-			fn ($value, $key): bool => isset($fieldSelection[$key]) && $fieldSelection[$key] && $value::class === Relation::class,
+			fn($value, $key): bool => isset($fieldSelection[$key]) && $fieldSelection[$key] && $value::class === Relation::class,
 			\ARRAY_FILTER_USE_BOTH,
 		));
 
 		$relationCollections = \array_keys(\array_filter(
 			$allRelations,
-			fn ($value, $key): bool => isset($fieldSelection[$key]) && $fieldSelection[$key] && $value::class === RelationNxN::class,
+			fn($value, $key): bool => isset($fieldSelection[$key]) && $fieldSelection[$key] && $value::class === RelationNxN::class,
 			\ARRAY_FILTER_USE_BOTH,
 		));
 
 		while ($object = $collection->fetch()) {
 			/** @var \StORM\Entity $object */
-			$objectArray = $object->toArray();
+			$objects[$object->getPK()] = $object->toArray();
+		}
 
-			$reflectionClass = new \ReflectionClass($object::class);
+		$keys = \array_keys($objects);
 
-			foreach ($relations as $relation) {
-				if ($objectArray[$relation] === null || \is_bool($fieldSelection[$relation])) {
-					continue;
-				}
-
-				/** @var class-string<\StORM\Entity> $relationClassType */
-				$relationClassType = Reflection::getPropertyType($reflectionClass->getProperty($relation));
-
-				$objectArray[$relation] = Arrays::first($this->fetchResultHelper(
-					$collection->getConnection()->findRepository($relationClassType)->many()->where('this.' . BaseType::ID_NAME, $objectArray[$relation]),
-					$fieldSelection[$relation],
-				)) ?? null;
+		foreach ($relations as $relationName) {
+			if (\is_bool($fieldSelection[$relationName])) {
+				continue;
 			}
 
-			foreach ($relationCollections as $relation) {
-				if (\is_bool($fieldSelection[$relation])) {
-					continue;
-				}
+			/** @var class-string<\StORM\Entity> $relationClassType */
+			$relationClassType = $allRelations[$relationName]->getTarget();
 
-				/** @var \StORM\RelationCollection<\StORM\Entity> $relationCollection */
-				$relationCollection = $object->$relation;
+			$relationObjects = $this->fetchResultHelper(
+				$collection->getConnection()->findRepository($relationClassType)
+						->many()
+						->join(['relation' => $collection->getRepository()->getStructure()->getTable()->getName()], 'this.' . BaseType::ID_NAME . ' = relation.fk_' . $relationName)
+						->select(['originalId' => 'relation.' . BaseType::ID_NAME])
+						->setIndex('originalId')
+						->where('relation.' . BaseType::ID_NAME, $keys),
+				$fieldSelection[$relationName],
+			);
 
-				$objectArray[$relation] = $this->fetchResultHelper(
-					$relationCollection,
-					$fieldSelection[$relation],
-				);
+			foreach ($objects as $object) {
+				$objects[$object[BaseType::ID_NAME]][$relationName] = $relationObjects[$object[BaseType::ID_NAME]] ?? null;
+			}
+		}
+
+		foreach ($relationCollections as $relationName) {
+			if (\is_bool($fieldSelection[$relationName])) {
+				continue;
 			}
 
-			$objects[$object->getPK()] = $objectArray;
+			/** @var \StORM\Meta\RelationNxN $relation */
+			$relation = $allRelations[$relationName];
+
+			/** @var class-string<\StORM\Entity> $relationClassType */
+			$relationClassType = $relation->getTarget();
+
+			$relationObjects = $this->fetchResultHelper(
+				$collection->getConnection()->findRepository($relationClassType)
+					->many()
+					->join(['relationNxN' => $relation->getVia()], 'this.' . BaseType::ID_NAME . ' = relationNxN.' . $relation->getTargetViaKey())
+					->select(['originalId' => 'relationNxN.' . $relation->getSourceViaKey()])
+					->where('relationNxN.' . $relation->getSourceViaKey(), $keys),
+				$fieldSelection[$relationName],
+			);
+
+			foreach ($relationObjects as $relationObject) {
+				if (isset($objects[$relationObject['originalId']][$relationName])) {
+					$objects[$relationObject['originalId']][$relationName][$relationObject[BaseType::ID_NAME]] = $relationObject;
+				} else {
+					$objects[$relationObject['originalId']][$relationName] = [$relationObject[BaseType::ID_NAME] => $relationObject];
+				}
+			}
 		}
 
 		return $objects;

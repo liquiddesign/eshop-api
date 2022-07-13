@@ -24,7 +24,6 @@
     "mll-lab/graphql-php-scalars": "^5.4",
     "contributte/psr7-http-message": "^0.8.0",
     "ext-zend-opcache": "*",
-    "spatie/typescript-transformer": "^2.1",
     "simpod/graphql-utils": "^0.5.4"
   },
   "require-dev": {

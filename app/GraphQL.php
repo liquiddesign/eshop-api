@@ -13,6 +13,7 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Schema;
 use Nette\DI\Container;
 use Tracy\Debugger;
+use Tracy\ILogger;
 
 class GraphQL
 {
@@ -72,7 +73,8 @@ class GraphQL
 			$server = new StandardServer([
 				'schema' => $this->getSchema(),
 				'rootValue' => [],
-				'queryBatching' => false,
+				'queryBatching' => true,
+				'context' => [],
 			]);
 
 			/** @var \GraphQL\Executor\ExecutionResult $result */
@@ -80,6 +82,8 @@ class GraphQL
 
 			return $result->toArray($this->getDebugFlag());
 		} catch (\Throwable $e) {
+			Debugger::log($e, ILogger::EXCEPTION);
+
 			if ($this->container->getParameters()['debugMode'] && !$this->container->getParameters()['productionMode']) {
 				throw $e;
 			}
