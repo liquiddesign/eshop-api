@@ -5,7 +5,6 @@ namespace App\Base;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nette\DI\Container;
-use Nette\Utils\Reflection;
 use StORM\Collection;
 use StORM\Meta\Relation;
 use StORM\Meta\RelationNxN;
