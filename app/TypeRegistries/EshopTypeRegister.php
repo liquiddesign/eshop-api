@@ -2,6 +2,8 @@
 
 namespace App\TypeRegistries;
 
+use App\Inputs\Eshop\CustomerCreateInput;
+use App\Inputs\Eshop\CustomerUpdateInput;
 use App\Outputs\Eshop\AddressOutput;
 use App\Outputs\Eshop\CustomerGroupOutput;
 use App\Outputs\Eshop\CustomerOutput;
@@ -9,23 +11,33 @@ use App\Outputs\Eshop\PricelistOutput;
 
 trait EshopTypeRegister
 {
-	public static function customer(): CustomerOutput
+	public function customer(): CustomerOutput
 	{
-		return static::$types['customer'] ??= new CustomerOutput();
+		return $this->types['customer'] ??= new CustomerOutput($this);
 	}
 
-	public static function address(): AddressOutput
+	public function customerCreateInput(): CustomerCreateInput
 	{
-		return static::$types['address'] ??= new AddressOutput();
+		return $this->types['customerCreate'] ??= new CustomerCreateInput($this);
 	}
 
-	public static function customerGroup(): CustomerGroupOutput
+	public function customerUpdateInput(): CustomerUpdateInput
 	{
-		return static::$types['customerGroup'] ??= new CustomerGroupOutput();
+		return $this->types['customerUpdate'] ??= new CustomerUpdateInput($this);
 	}
 
-	public static function pricelist(): PricelistOutput
+	public function address(): AddressOutput
 	{
-		return static::$types['pricelist'] ??= new PricelistOutput();
+		return $this->types['address'] ??= new AddressOutput($this);
+	}
+
+	public function customerGroup(): CustomerGroupOutput
+	{
+		return $this->types['customerGroup'] ??= new CustomerGroupOutput($this);
+	}
+
+	public function pricelist(): PricelistOutput
+	{
+		return $this->types['pricelist'] ??= new PricelistOutput($this);
 	}
 }

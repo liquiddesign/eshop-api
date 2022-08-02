@@ -37,7 +37,7 @@ search:
 		files: [*/DB/*Repository.php]
 	graphql:
 		in: %appDir%
-		files: [Types/*/*Query.php, Types/*/*Mutation.php]
+		files: [Types/*/*Query.php]
 
 services:
 	pages.pageRepository: \Web\DB\PageRepository
@@ -49,6 +49,9 @@ services:
 
 	security.passwords: Security\LegacyPasswords('sha1','rE42xxxlzphy55')
 	- App\GraphQL
+	- App\TypeRegister
+	- App\Types\Security\AccountMutation
+	- App\Types\Admin\AdministratorMutation
 
 session:
 	name: %projectName%
@@ -146,7 +149,7 @@ messages:
 
 pages:
    mutations: %mutations%
-   redirects: true
+   redirects: false
 
 http:
 	headers:

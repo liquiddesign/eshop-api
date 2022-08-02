@@ -14,7 +14,6 @@ use Nette\DI\Container;
 use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use StORM\Repository;
-use Tracy\Debugger;
 
 /**
  * @method array onBeforeGetOne(array $rootValues, array $args)
@@ -37,7 +36,7 @@ abstract class CrudQuery extends BaseQuery
 	 */
 	abstract public function getRepositoryClass(): string;
 
-	public function __construct(protected Container $container, array $config = [])
+	public function __construct(protected Container $container, private readonly TypeRegister $typeRegister, array $config = [])
 	{
 		$baseName = Strings::firstUpper($this->getName());
 		$outputType = $this->getOutputType();
@@ -68,10 +67,10 @@ abstract class CrudQuery extends BaseQuery
 					'type' => TypeRegister::listOf($outputType),
 					'args' => [
 						'sort' => Type::string(),
-						'order' => TypeRegister::orderEnum(),
+						'order' => $this->typeRegister->orderEnum(),
 						'limit' => Type::int(),
 						'page' => Type::int(),
-						'filters' => TypeRegister::JSON(),
+						'filters' => $this->typeRegister->JSON(),
 					],
 					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo) use ($repository): array {
 						if ($this->onBeforeGetAll) {
@@ -88,13 +87,7 @@ abstract class CrudQuery extends BaseQuery
 							throw new BadRequestException('Invalid filters');
 						}
 
-						Debugger::log('Before data fetched:' . Debugger::timer());
-
-						$result = $this->fetchResult($collection, $resolveInfo);
-
-						Debugger::log('After data fetched:' . Debugger::timer());
-
-						return $result;
+						return $this->fetchResult($collection, $resolveInfo);
 					},
 				],
 			],

@@ -5,6 +5,7 @@ namespace App\Base;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nette\DI\Container;
+use Nette\Utils\Arrays;
 use StORM\Collection;
 use StORM\Meta\Relation;
 use StORM\Meta\RelationNxN;
@@ -66,7 +67,7 @@ abstract class BaseType extends ObjectType
 	 * @throws \StORM\Exception\GeneralException
 	 * @throws \ReflectionException
 	 */
-	private function fetchResultHelper(Collection $collection, array $fieldSelection): array
+	private function fetchResultHelper(Collection $collection, array $fieldSelection, ?string $selectOriginalId = null,): array
 	{
 		$objects = [];
 		$allRelations = $collection->getRepository()->getStructure()->getRelations();
@@ -83,9 +84,26 @@ abstract class BaseType extends ObjectType
 			\ARRAY_FILTER_USE_BOTH,
 		));
 
-		while ($object = $collection->fetch()) {
-			/** @var \StORM\Entity $object */
-			$objects[$object->getPK()] = $object->toArray();
+		$ormFieldSelection = [$this::ID_NAME => 'this.uuid'];
+
+		foreach (\array_keys($fieldSelection) as $select) {
+			if (Arrays::contains($relations, $select)) {
+				$ormFieldSelection[$select] = "this.fk_$select";
+
+				continue;
+			}
+
+			if (Arrays::contains($relationCollections, $select)) {
+				continue;
+			}
+
+			$ormFieldSelection[$select] = "this.$select";
+		}
+
+		$collection->setSelect(($selectOriginalId ? ['originalId' => $selectOriginalId] : []) + $ormFieldSelection);
+
+		foreach ($collection->fetchArray(\stdClass::class) as $object) {
+			$objects[$object->{$this::ID_NAME}] = \get_object_vars($object);
 		}
 
 		$keys = \array_keys($objects);
@@ -101,15 +119,15 @@ abstract class BaseType extends ObjectType
 			$relationObjects = $this->fetchResultHelper(
 				$collection->getConnection()->findRepository($relationClassType)
 						->many()
-						->join(['relation' => $collection->getRepository()->getStructure()->getTable()->getName()], 'this.' . BaseType::ID_NAME . ' = relation.fk_' . $relationName)
-						->select(['originalId' => 'relation.' . BaseType::ID_NAME])
+						->join(['relation' => $collection->getRepository()->getStructure()->getTable()->getName()], 'this.' . $this::ID_NAME . ' = relation.fk_' . $relationName)
 						->setIndex('originalId')
-						->where('relation.' . BaseType::ID_NAME, $keys),
+						->where('relation.' . $this::ID_NAME, $keys),
 				$fieldSelection[$relationName],
+				'relation.' . $this::ID_NAME,
 			);
 
 			foreach ($objects as $object) {
-				$objects[$object[BaseType::ID_NAME]][$relationName] = $relationObjects[$object[BaseType::ID_NAME]] ?? null;
+				$objects[$object[$this::ID_NAME]][$relationName] = $relationObjects[$object[$this::ID_NAME]] ?? null;
 			}
 		}
 
@@ -127,17 +145,17 @@ abstract class BaseType extends ObjectType
 			$relationObjects = $this->fetchResultHelper(
 				$collection->getConnection()->findRepository($relationClassType)
 					->many()
-					->join(['relationNxN' => $relation->getVia()], 'this.' . BaseType::ID_NAME . ' = relationNxN.' . $relation->getTargetViaKey())
-					->select(['originalId' => 'relationNxN.' . $relation->getSourceViaKey()])
+					->join(['relationNxN' => $relation->getVia()], 'this.' . $this::ID_NAME . ' = relationNxN.' . $relation->getTargetViaKey())
 					->where('relationNxN.' . $relation->getSourceViaKey(), $keys),
 				$fieldSelection[$relationName],
+				'relationNxN.' . $relation->getSourceViaKey(),
 			);
 
 			foreach ($relationObjects as $relationObject) {
 				if (isset($objects[$relationObject['originalId']][$relationName])) {
-					$objects[$relationObject['originalId']][$relationName][$relationObject[BaseType::ID_NAME]] = $relationObject;
+					$objects[$relationObject['originalId']][$relationName][$relationObject[$this::ID_NAME]] = $relationObject;
 				} else {
-					$objects[$relationObject['originalId']][$relationName] = [$relationObject[BaseType::ID_NAME] => $relationObject];
+					$objects[$relationObject['originalId']][$relationName] = [$relationObject[$this::ID_NAME] => $relationObject];
 				}
 			}
 		}

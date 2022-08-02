@@ -14,7 +14,7 @@ use Security\DB\AccountRepository;
 
 class AccountMutation extends CrudMutation
 {
-	public function __construct(Container $container, Passwords $passwords, Shopper $shopper)
+	public function __construct(Container $container, Passwords $passwords, Shopper $shopper, private readonly TypeRegister $typeRegister)
 	{
 		$this->onBeforeCreate = function (array $rootValues, array $args) use ($passwords, $shopper): array {
 			$registerConfig = $shopper->getRegistrationConfiguration();
@@ -49,17 +49,17 @@ class AccountMutation extends CrudMutation
 
 	public function getOutputType(): BaseOutput
 	{
-		return TypeRegister::account();
+		return $this->typeRegister->account();
 	}
 
 	public function getCreateInputType(): BaseInput
 	{
-		return TypeRegister::accountCreate();
+		return $this->typeRegister->accountCreateInput();
 	}
 
 	public function getUpdateInputType(): BaseInput
 	{
-		return TypeRegister::accountUpdate();
+		return $this->typeRegister->accountUpdateInput();
 	}
 
 	public function getRepositoryClass(): string

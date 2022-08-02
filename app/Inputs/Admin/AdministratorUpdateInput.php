@@ -8,10 +8,10 @@ use App\TypeRegister;
 
 class AdministratorUpdateInput extends BaseInput
 {
-	public function __construct()
+	public function __construct(TypeRegister $typeRegister)
 	{
 		$config = [
-			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName(), forceAllOptional: true),
+			'fields' => $typeRegister->createInputFieldsFromClass($this->getSourceClassName(), forceAllOptional: true, includeId: false),
 		];
 
 		parent::__construct($config);

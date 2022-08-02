@@ -10,10 +10,10 @@ use Eshop\DB\Customer;
 
 class CustomerOutput extends BaseOutput
 {
-	public function __construct()
+	public function __construct(TypeRegister $typeRegister)
 	{
 		$config = [
-			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName(), exclude: ['account']),
+			'fields' => $typeRegister->createOutputFieldsFromClass($this->getSourceClassName(), exclude: ['account']),
 		];
 
 		parent::__construct($config);

@@ -63,19 +63,25 @@ abstract class CrudMutation extends BaseMutation
 				],
 				"update$baseName" => [
 					'type' => TypeRegister::nonNull($outputType),
-					'args' => ['input' => $this->getUpdateInputType(),],
+					'args' => [
+						BaseType::ID_NAME => TypeRegister::nonNull(TypeRegister::id()),
+						'input' => $this->getUpdateInputType(),
+						],
 					'resolve' => function (array $rootValue, array $args) use ($repository): Entity {
 						if ($this->onBeforeUpdate) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeUpdate, $rootValue, $args);
 						}
 
+						$input = $args['input'];
+						$input[BaseType::ID_NAME] = $args['id'];
+
 						try {
-							$repository->syncOne($args['input']);
+							$repository->syncOne($input);
 						} catch (\Throwable $e) {
-							throw new NotFoundException($args['input'][BaseType::ID_NAME]);
+							throw new NotFoundException($input[BaseType::ID_NAME]);
 						}
 
-						return $repository->one($args['input'][BaseType::ID_NAME], true);
+						return $repository->one($input[BaseType::ID_NAME], true);
 					},
 				],
 				"delete$baseName" => [

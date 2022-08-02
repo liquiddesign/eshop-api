@@ -8,10 +8,15 @@ use Security\DB\Account;
 
 class AccountUpdateInput extends BaseInput
 {
-	public function __construct()
+	public function __construct(TypeRegister $typeRegister)
 	{
 		$config = [
-			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName(), exclude: ['tsRegistered', 'tsLastLogin'], forceAllOptional: true),
+			'fields' => $typeRegister->createInputFieldsFromClass(
+				$this->getSourceClassName(),
+				exclude: ['tsRegistered', 'tsLastLogin'],
+				forceAllOptional: true,
+				includeId: false,
+			),
 		];
 
 		parent::__construct($config);

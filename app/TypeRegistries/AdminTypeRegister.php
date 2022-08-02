@@ -8,18 +8,18 @@ use App\Outputs\Admin\AdministratorOutput;
 
 trait AdminTypeRegister
 {
-	public static function administrator(): AdministratorOutput
+	public function administrator(): AdministratorOutput
 	{
-		return static::$types['administrator'] ??= new AdministratorOutput();
+		return $this->types['administrator'] ??= new AdministratorOutput($this);
 	}
 
-	public static function administratorCreate(): AdministratorCreateInput
+	public function administratorCreateInput(): AdministratorCreateInput
 	{
-		return static::$types['administratorCreate'] ??= new AdministratorCreateInput();
+		return $this->types['administratorCreate'] ??= new AdministratorCreateInput($this);
 	}
 
-	public static function administratorUpdate(): AdministratorUpdateInput
+	public function administratorUpdateInput(): AdministratorUpdateInput
 	{
-		return static::$types['administratorUpdate'] ??= new AdministratorUpdateInput();
+		return $this->types['administratorUpdate'] ??= new AdministratorUpdateInput($this);
 	}
 }

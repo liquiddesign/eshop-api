@@ -10,10 +10,10 @@ use Security\DB\Account;
 
 class AccountOutput extends BaseOutput
 {
-	public function __construct()
+	public function __construct(TypeRegister $typeRegister)
 	{
 		$config = [
-			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName(), exclude: ['password']),
+			'fields' => $typeRegister->createOutputFieldsFromClass($this->getSourceClassName(), exclude: ['password']),
 		];
 
 		parent::__construct($config);

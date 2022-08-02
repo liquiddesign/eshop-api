@@ -9,7 +9,10 @@ if (\is_file($maintenance = __DIR__ . '/maintenance.php')) {
 	require $maintenance;
 }
 
-\App\Bootstrap::boot()
-	->createContainer()
-	->getByType(\App\Application::class)
-	->run();
+$container = \App\Bootstrap::boot()
+	->createContainer();
+
+(new \Nette\Application\Responses\JsonResponse(
+	$container->getByType(\App\GraphQL::class)
+	->executeServer())
+)->send($container->getByType(\Nette\Http\Request::class), $container->getByType(\Nette\Http\Response::class));

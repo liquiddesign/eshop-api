@@ -10,10 +10,10 @@ use Eshop\DB\Pricelist;
 
 class PricelistOutput extends BaseOutput
 {
-	public function __construct()
+	public function __construct(TypeRegister $typeRegister)
 	{
 		$config = [
-			'fields' => TypeRegister::createFieldsFromClass($this->getSourceClassName()),
+			'fields' => $typeRegister->createOutputFieldsFromClass($this->getSourceClassName()),
 		];
 
 		parent::__construct($config);

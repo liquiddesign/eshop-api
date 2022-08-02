@@ -80,7 +80,16 @@ class GraphQL
 			/** @var \GraphQL\Executor\ExecutionResult $result */
 			$result = $server->executePsrRequest($psrRequest);
 
-			return $result->toArray($this->getDebugFlag());
+			if ($debugFlag = $this->getDebugFlag()) {
+				/** @var \StORM\Bridges\StormTracy<\stdClass> $stormTracy */
+				$stormTracy = Debugger::getBar()->getPanel('StORM\Bridges\StormTracy');
+
+				Debugger::log('After request:' . Debugger::timer());
+				Debugger::log('Storm total time:' . $stormTracy->getTotalTime());
+				Debugger::log('Storm total queries:' . $stormTracy->getTotalQueries());
+			}
+
+			return $result->toArray($debugFlag);
 		} catch (\Throwable $e) {
 			Debugger::log($e, ILogger::EXCEPTION);
 
@@ -154,6 +163,7 @@ class GraphQL
 		$debug = DebugFlag::NONE;
 
 		if ($this->container->getParameters()['debugMode'] && !$this->container->getParameters()['productionMode']) {
+			Debugger::log('debugMode');
 			$debug = DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE;
 		}
 

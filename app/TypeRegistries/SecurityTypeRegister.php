@@ -9,23 +9,23 @@ use App\Outputs\Security\RoleOutput;
 
 trait SecurityTypeRegister
 {
-	public static function account(): AccountOutput
+	public function account(): AccountOutput
 	{
-		return static::$types['account'] ??= new AccountOutput();
+		return $this->types['account'] ??= new AccountOutput($this);
 	}
 
-	public static function accountCreate(): AccountCreateInput
+	public function accountCreateInput(): AccountCreateInput
 	{
-		return static::$types['accountCreate'] ??= new AccountCreateInput();
+		return $this->types['accountCreate'] ??= new AccountCreateInput($this);
 	}
 
-	public static function accountUpdate(): AccountUpdateInput
+	public function accountUpdateInput(): AccountUpdateInput
 	{
-		return static::$types['accountUpdate'] ??= new AccountUpdateInput();
+		return $this->types['accountUpdate'] ??= new AccountUpdateInput($this);
 	}
 
-	public static function role(): RoleOutput
+	public function role(): RoleOutput
 	{
-		return static::$types['role'] ??= new RoleOutput();
+		return $this->types['role'] ??= new RoleOutput($this);
 	}
 }
