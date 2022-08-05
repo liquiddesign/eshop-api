@@ -15,7 +15,6 @@ class AccountUpdateInput extends BaseInput
 				$this->getSourceClassName(),
 				exclude: ['tsRegistered', 'tsLastLogin'],
 				forceAllOptional: true,
-				includeId: false,
 			),
 		];
 

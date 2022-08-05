@@ -2,8 +2,6 @@
 
 namespace App\Types\Security;
 
-use App\Base\BaseInput;
-use App\Base\BaseOutput;
 use App\Crud\CrudMutation;
 use App\TypeRegister;
 use Eshop\Shopper;
@@ -14,7 +12,7 @@ use Security\DB\AccountRepository;
 
 class AccountMutation extends CrudMutation
 {
-	public function __construct(Container $container, Passwords $passwords, Shopper $shopper, private readonly TypeRegister $typeRegister)
+	public function __construct(Container $container, Passwords $passwords, Shopper $shopper)
 	{
 		$this->onBeforeCreate = function (array $rootValues, array $args) use ($passwords, $shopper): array {
 			$registerConfig = $shopper->getRegistrationConfiguration();
@@ -45,21 +43,6 @@ class AccountMutation extends CrudMutation
 	public function getName(): string
 	{
 		return 'account';
-	}
-
-	public function getOutputType(): BaseOutput
-	{
-		return $this->typeRegister->account();
-	}
-
-	public function getCreateInputType(): BaseInput
-	{
-		return $this->typeRegister->accountCreateInput();
-	}
-
-	public function getUpdateInputType(): BaseInput
-	{
-		return $this->typeRegister->accountUpdateInput();
 	}
 
 	public function getRepositoryClass(): string

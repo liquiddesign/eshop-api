@@ -12,11 +12,6 @@ class NotFoundException extends BaseException
 		parent::__construct("Object '$id' not found");
 	}
 
-	public function isClientSafe(): bool
-	{
-		return true;
-	}
-
 	public function getCategory(): string
 	{
 		return (string) ExceptionCategories::NOT_FOUND->value;

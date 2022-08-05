@@ -5,10 +5,9 @@ namespace App;
 use App\Base\BaseInput;
 use App\Base\BaseOutput;
 use App\Base\BaseType;
-use App\TypeRegistries\AdminTypeRegister;
-use App\TypeRegistries\EshopTypeRegister;
-use App\TypeRegistries\SecurityTypeRegister;
+use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\NullableType;
+use GraphQL\Type\Definition\OutputType;
 use GraphQL\Type\Definition\Type;
 use MLL\GraphQLScalars\Date;
 use MLL\GraphQLScalars\DateTime;
@@ -22,18 +21,15 @@ use StORM\SchemaManager;
 
 class TypeRegister extends Type
 {
-	use AdminTypeRegister;
-	use EshopTypeRegister;
-	use SecurityTypeRegister;
 	/**
 	 * @var array<string, mixed>
 	 */
 	public array $types = [];
 
 	/**
-	 * @var array<string, mixed>
+	 * @var array<string, class-string>
 	 */
-	public array $inputTypes = [];
+	public array $typesMap = [];
 
 	public function __construct(private readonly SchemaManager $schemaManager)
 	{
@@ -89,6 +85,7 @@ class TypeRegister extends Type
 		bool $includeId = true
 	): array {
 		$reflection = new \ReflectionClass($class);
+		$stormStructure = $this->schemaManager->getStructure($class);
 
 		$fields = $includeId ? [
 			BaseType::ID_NAME => static::nonNull(static::id()),
@@ -116,7 +113,7 @@ class TypeRegister extends Type
 
 			$typeName = $reflectionType->getName();
 
-			$fields[$name] = function () use ($typeName, $property, $forceOptional, $forceRequired, $name, $forceAllOptional, $reflectionType, $class) {
+			$fields[$name] = function () use ($typeName, $property, $forceOptional, $forceRequired, $name, $forceAllOptional, $reflectionType, $class, $stormStructure) {
 				$array = false;
 				$type = match ($typeName) {
 					'int' => static::int(),
@@ -126,34 +123,33 @@ class TypeRegister extends Type
 					default => null,
 				};
 
-				$doc = $property->getDocComment();
+				$column = $stormStructure->getColumn($property->getName());
 
-				if ($doc) {
-					if (Strings::contains($doc, '"type":"datetime"') || Strings::contains($doc, '"type":"timestamp"')) {
-						$type = static::datetime();
-					}
-
-					if (Strings::contains($doc, '"type":"date"')) {
-						$type = static::date();
-					}
+				if ($column) {
+					$type = match ($column->getType()) {
+						'datetime', 'timestamp' => static::datetime(),
+						'date' => static::date(),
+						default => $type,
+					};
 				}
 
 				if ($type === null) {
-					if ($doc) {
-						if ($typeName === RelationCollection::class && Strings::contains($doc, $typeName)) {
-							$relation = $this->schemaManager->getStructure($class)->getRelation($property->getName());
+					if ($typeName === RelationCollection::class) {
+						$relation = $this->schemaManager->getStructure($class)->getRelation($property->getName());
 
-							if (!$relation) {
-								throw new \Exception('Fatal error! Unknown relation "' . $property->getName() . '".');
-							}
-
-							$typeName = $relation->getTarget();
-							$array = true;
+						if (!$relation) {
+							throw new \Exception('Fatal error! Unknown relation "' . $property->getName() . '".');
 						}
+
+						$typeName = $relation->getTarget();
+						$array = true;
 					}
 
-					$type = $this->get(Strings::lower(Strings::substring($typeName, \strrpos($typeName, '\\') + 1)));
+					$typeName = Strings::lower(Strings::substring($typeName, \strrpos($typeName, '\\') + 1));
+
+					$type = $this->getOutputType($typeName);
 				}
+
 
 				$isForceRequired = Arrays::contains($forceRequired, $name);
 				$isForceOptional = Arrays::contains($forceOptional, $name);
@@ -167,6 +163,8 @@ class TypeRegister extends Type
 				}
 
 				if ($array) {
+					\assert($type instanceof Type);
+
 					$type = static::listOf($type);
 				}
 
@@ -197,6 +195,7 @@ class TypeRegister extends Type
 		bool $includeId = true,
 	): array {
 		$reflection = new \ReflectionClass($class);
+		$stormStructure = $this->schemaManager->getStructure($class);
 
 		$fields = $includeId ? [
 			BaseType::ID_NAME => static::nonNull(static::id()),
@@ -224,7 +223,7 @@ class TypeRegister extends Type
 
 			$typeName = $reflectionType->getName();
 
-			$fields[$name] = function () use ($typeName, $property, $forceOptional, $forceRequired, $name, $forceAllOptional, $reflectionType, $class) {
+			$fields[$name] = function () use ($typeName, $property, $forceOptional, $forceRequired, $name, $forceAllOptional, $reflectionType, $class, $stormStructure) {
 				$array = false;
 				$type = match ($typeName) {
 					'int' => static::int(),
@@ -234,33 +233,31 @@ class TypeRegister extends Type
 					default => null,
 				};
 
-				$doc = $property->getDocComment();
+				$column = $stormStructure->getColumn($property->getName());
 
-				if ($doc) {
-					if (Strings::contains($doc, '"type":"datetime"') || Strings::contains($doc, '"type":"timestamp"')) {
-						$type = static::datetime();
-					}
-
-					if (Strings::contains($doc, '"type":"date"')) {
-						$type = static::date();
-					}
+				if ($column) {
+					$type = match ($column->getType()) {
+						'datetime', 'timestamp' => static::datetime(),
+						'date' => static::date(),
+						default => $type,
+					};
 				}
 
 				if ($type === null) {
-					if ($doc) {
-						if ($typeName === RelationCollection::class && Strings::contains($doc, $typeName)) {
-							$relation = $this->schemaManager->getStructure($class)->getRelation($property->getName());
+					if ($typeName === RelationCollection::class) {
+						$relation = $this->schemaManager->getStructure($class)->getRelation($property->getName());
 
-							if (!$relation) {
-								throw new \Exception('Fatal error! Unknown relation "' . $property->getName() . '".');
-							}
-
-							$typeName = $relation->getTarget();
-							$array = true;
+						if (!$relation) {
+							throw new \Exception('Fatal error! Unknown relation "' . $property->getName() . '".');
 						}
+
+						$typeName = $relation->getTarget();
+						$array = true;
 					}
 
-					$type = $this->get(Strings::lower(Strings::substring($typeName, \strrpos($typeName, '\\') + 1)), TypeEnum::INPUT);
+					$typeName = Strings::lower(Strings::substring($typeName, \strrpos($typeName, '\\') + 1)) . 'Update';
+
+					$type = $this->getInputType($typeName);
 				}
 
 				$isForceRequired = Arrays::contains($forceRequired, $name);
@@ -275,6 +272,8 @@ class TypeRegister extends Type
 				}
 
 				if ($array) {
+					assert($type instanceof Type);
+
 					$type = static::listOf($type);
 				}
 
@@ -285,40 +284,54 @@ class TypeRegister extends Type
 		return $fields;
 	}
 
-	public function get(string $name, TypeEnum $typeEnum = TypeEnum::OUTPUT): Type
+	public function getInputType(string $name): InputType
 	{
-		if ($typeEnum === TypeEnum::INPUT) {
-			$name .= 'UpdateInput';
+		if (!Strings::endsWith($name, 'Input')) {
+			$name .= 'Input';
 		}
 
-		if (!\method_exists($this::class, $name)) {
-			$found = false;
-
-			if ($traits = \class_uses($this::class)) {
-				foreach ($traits as $traitClass) {
-					if (\method_exists($traitClass, $name)) {
-						$found = true;
-
-						break;
-					}
-				}
-			}
-
-			if (!$found) {
-				return static::mixed();
-			}
+		if (!isset($this->typesMap[$name])) {
+			return $this::mixed();
 		}
 
-		$type = $this->types[$name] ??= static::{$name}();
+		$type = $this->types[$name] ??= new $this->typesMap[$name]($this);
 
-		if ($typeEnum === TypeEnum::INPUT && !$type instanceof BaseInput) {
+		if (!$type instanceof BaseInput) {
 			throw new \Exception("Type '$name' is not input type!");
 		}
 
-		if ($typeEnum === TypeEnum::OUTPUT && !$type instanceof BaseOutput) {
+		return $type;
+	}
+
+	public function getOutputType(string $name): OutputType
+	{
+		if (!Strings::endsWith($name, 'Output')) {
+			$name .= 'Output';
+		}
+
+		if (!isset($this->typesMap[$name])) {
+			return $this::mixed();
+		}
+
+		$type = $this->types[$name] ??= new $this->typesMap[$name]($this);
+
+		if (!$type instanceof BaseOutput) {
 			throw new \Exception("Type '$name' is not output type!");
 		}
 
 		return $type;
+	}
+
+	/**
+	 * @param string $name
+	 * @param class-string $class
+	 */
+	public function set(string $name, string $class): void
+	{
+		if (isset($this->typesMap[$name])) {
+			throw new \Exception("Type '$name' is already registered!");
+		}
+
+		$this->typesMap[$name] = $class;
 	}
 }

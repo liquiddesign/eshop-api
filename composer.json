@@ -1,6 +1,6 @@
 {
-  "name": "liquiddesign/roiwell",
-  "description": "Roiwell",
+  "name": "liquiddesign/eshop-api",
+  "description": "Eshop API",
   "type": "project",
   "require": {
     "php": ">=8.1",

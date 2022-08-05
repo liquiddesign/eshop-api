@@ -49,7 +49,6 @@ services:
 
 	security.passwords: Security\LegacyPasswords('sha1','rE42xxxlzphy55')
 	- App\GraphQL
-	- App\TypeRegister
 	- App\Types\Security\AccountMutation
 	- App\Types\Admin\AdministratorMutation
 
@@ -74,6 +73,20 @@ extensions:
   messages: \Messages\Bridges\MessagesDI
   translator: Translator\Bridges\TranslatorDI
   comgate: Contributte\Comgate\DI\ComgateExtension
+  typeRegister: App\TypeRegisterDI
+
+typeRegister:
+    types:
+        output:
+            setting: App\Outputs\Web\SettingOutput
+            role: App\Outputs\Security\RoleOutput
+            customerGroup: App\Outputs\Eshop\CustomerGroupOutput
+            pricelist: App\Outputs\Eshop\PricelistOutput
+            address: App\Outputs\Eshop\AddressOutput
+        crud:
+            administrator: [App\Outputs\Admin\AdministratorOutput, App\Inputs\Admin\AdministratorCreateInput, App\Inputs\Admin\AdministratorUpdateInput]
+            account: [App\Outputs\Security\AccountOutput, App\Inputs\Security\AccountCreateInput, App\Inputs\Security\AccountUpdateInput]
+            customer: [App\Outputs\Eshop\CustomerOutput, App\Inputs\Eshop\CustomerCreateInput, App\Inputs\Eshop\CustomerUpdateInput]
 
 storm:
   debug: %debugMode%
@@ -146,6 +159,12 @@ messages:
 			- merchant.register.successAdmin
 			- administrator.register.success
 			- register.merchantInfo
+
+#graphqlTypes:
+#    basic:
+#        account: App\Outputs\Security\AccountOutput::class
+#    crud:
+#        account: [App\Outputs\Security\AccountOutput, App\Inputs\Security\AccountCreateInput, App\Inputs\Security\AccountUpdateInput]
 
 pages:
    mutations: %mutations%

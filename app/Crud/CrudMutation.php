@@ -2,12 +2,12 @@
 
 namespace App\Crud;
 
-use App\Base\BaseInput;
 use App\Base\BaseMutation;
-use App\Base\BaseOutput;
 use App\Base\BaseType;
-use App\Exceptions\NotFoundException;
 use App\TypeRegister;
+use GraphQL\Type\Definition\InputType;
+use GraphQL\Type\Definition\NullableType;
+use GraphQL\Type\Definition\OutputType;
 use Nette\DI\Container;
 use Nette\Utils\Strings;
 use StORM\Entity;
@@ -29,13 +29,9 @@ abstract class CrudMutation extends BaseMutation
 	/** @var callable(array<mixed>, array<mixed>): array<mixed>|null */
 	public $onBeforeDelete = null;
 
+	private TypeRegister $typeRegister;
+
 	abstract public function getName(): string;
-
-	abstract public function getOutputType(): BaseOutput;
-
-	abstract public function getCreateInputType(): BaseInput;
-
-	abstract public function getUpdateInputType(): BaseInput;
 
 	/**
 	 * @return class-string
@@ -44,9 +40,15 @@ abstract class CrudMutation extends BaseMutation
 
 	public function __construct(protected Container $container, array $config = [])
 	{
+		/** @var \App\TypeRegister $typeRegister */
+		$typeRegister = $this->container->getByType(TypeRegister::class);
+		$this->typeRegister = $typeRegister;
+
 		$baseName = Strings::firstUpper($this->getName());
 		$outputType = $this->getOutputType();
 		$repository = $this->getRepository();
+
+		\assert($outputType instanceof NullableType);
 
 		$config = $this->mergeFields($config, [
 			'fields' => [
@@ -64,7 +66,6 @@ abstract class CrudMutation extends BaseMutation
 				"update$baseName" => [
 					'type' => TypeRegister::nonNull($outputType),
 					'args' => [
-						BaseType::ID_NAME => TypeRegister::nonNull(TypeRegister::id()),
 						'input' => $this->getUpdateInputType(),
 						],
 					'resolve' => function (array $rootValue, array $args) use ($repository): Entity {
@@ -73,32 +74,42 @@ abstract class CrudMutation extends BaseMutation
 						}
 
 						$input = $args['input'];
-						$input[BaseType::ID_NAME] = $args['id'];
 
-						try {
-							$repository->syncOne($input);
-						} catch (\Throwable $e) {
-							throw new NotFoundException($input[BaseType::ID_NAME]);
-						}
+						$repository->many()->where('this.' . BaseType::ID_NAME, $input[BaseType::ID_NAME])->update($input);
 
 						return $repository->one($input[BaseType::ID_NAME], true);
 					},
 				],
-				"delete$baseName" => [
+				"delete{$baseName}s" => [
 					'type' => TypeRegister::nonNull(TypeRegister::int()),
-					'args' => [BaseType::ID_NAME => TypeRegister::id(),],
+					'args' => [BaseType::ID_NAME => TypeRegister::listOf(TypeRegister::id()),],
 					'resolve' => function (array $rootValue, array $args) use ($repository): int {
 						if ($this->onBeforeDelete) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeDelete, $rootValue, $args);
 						}
 
-						return ($object = $repository->one($args[BaseType::ID_NAME])) ? $object->delete() : 0;
+						return $repository->many()->where('this.' . BaseType::ID_NAME, $args[BaseType::ID_NAME])->delete();
 					},
 				],
 			],
 		]);
 
 		parent::__construct($container, $config);
+	}
+
+	public function getOutputType(): OutputType
+	{
+		return $this->typeRegister->getOutputType($this->getName());
+	}
+
+	public function getCreateInputType(): InputType
+	{
+		return $this->typeRegister->getInputType($this->getName() . 'Create');
+	}
+
+	public function getUpdateInputType(): InputType
+	{
+		return $this->typeRegister->getInputType($this->getName() . 'Update');
 	}
 
 	/**

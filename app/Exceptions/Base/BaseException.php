@@ -10,4 +10,9 @@ abstract class BaseException extends \Exception implements ClientAware
 	{
 		parent::__construct($message, (int) $this->getCategory());
 	}
+
+	public function isClientSafe(): bool
+	{
+		return true;
+	}
 }

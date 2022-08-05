@@ -12,11 +12,6 @@ class BadRequestException extends BaseException
 		parent::__construct("Bad request: $string");
 	}
 
-	public function isClientSafe(): bool
-	{
-		return true;
-	}
-
 	public function getCategory(): string
 	{
 		return (string) ExceptionCategories::BAD_REQUEST->value;

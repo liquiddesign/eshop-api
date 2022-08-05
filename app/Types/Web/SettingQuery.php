@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Types\Eshop;
+namespace App\Types\Web;
 
 use App\Crud\CrudQuery;
-use Eshop\DB\CustomerRepository;
+use Web\DB\SettingRepository;
 
-class CustomerQuery extends CrudQuery
+class SettingQuery extends CrudQuery
 {
 	public function getName(): string
 	{
-		return 'customer';
+		return 'setting';
 	}
 
 	public function getRepositoryClass(): string
 	{
-		return CustomerRepository::class;
+		return SettingRepository::class;
 	}
 }

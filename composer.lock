@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0167dca69764cfd478bb7f407f009ff1",
+    "content-hash": "d85b684d69715ea9b082716a486d9940",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -2087,16 +2087,16 @@
         },
         {
             "name": "liquiddesign/eshop",
-            "version": "v1.0.0-beta.7",
+            "version": "v1.0.0-beta.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liquiddesign/eshop.git",
-                "reference": "26c88be5929bfe21060f57d88ffb53dff8c4a701"
+                "reference": "7e5d0cc99cc6e0255d61d6980579af05c0b1e1ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liquiddesign/eshop/zipball/26c88be5929bfe21060f57d88ffb53dff8c4a701",
-                "reference": "26c88be5929bfe21060f57d88ffb53dff8c4a701",
+                "url": "https://api.github.com/repos/liquiddesign/eshop/zipball/7e5d0cc99cc6e0255d61d6980579af05c0b1e1ae",
+                "reference": "7e5d0cc99cc6e0255d61d6980579af05c0b1e1ae",
                 "shasum": ""
             },
             "require": {
@@ -2156,9 +2156,9 @@
             ],
             "description": "Ⓔ Služby, entity, administrace a kontroly pro eshop",
             "support": {
-                "source": "https://github.com/liquiddesign/eshop/tree/v1.0.0-beta.7"
+                "source": "https://github.com/liquiddesign/eshop/tree/v1.0.0-beta.8"
             },
-            "time": "2022-07-14T17:02:33+00:00"
+            "time": "2022-08-04T13:50:25+00:00"
         },
         {
             "name": "liquiddesign/forms",
@@ -7458,16 +7458,16 @@
         },
         {
             "name": "thecodingmachine/safe",
-            "version": "v2.2.2",
+            "version": "v2.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thecodingmachine/safe.git",
-                "reference": "440284f9592c9df402832452a6871a8b3c48d97e"
+                "reference": "e454a3142d2197694d1fda291a4462ccd3f66e12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thecodingmachine/safe/zipball/440284f9592c9df402832452a6871a8b3c48d97e",
-                "reference": "440284f9592c9df402832452a6871a8b3c48d97e",
+                "url": "https://api.github.com/repos/thecodingmachine/safe/zipball/e454a3142d2197694d1fda291a4462ccd3f66e12",
+                "reference": "e454a3142d2197694d1fda291a4462ccd3f66e12",
                 "shasum": ""
             },
             "require": {
@@ -7590,9 +7590,9 @@
             "description": "PHP core functions that throw exceptions instead of returning FALSE on error",
             "support": {
                 "issues": "https://github.com/thecodingmachine/safe/issues",
-                "source": "https://github.com/thecodingmachine/safe/tree/v2.2.2"
+                "source": "https://github.com/thecodingmachine/safe/tree/v2.2.3"
             },
-            "time": "2022-07-20T17:46:34+00:00"
+            "time": "2022-08-04T14:05:49+00:00"
         },
         {
             "name": "tracy/tracy",

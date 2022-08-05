@@ -2,12 +2,13 @@
 
 namespace App\Crud;
 
-use App\Base\BaseOutput;
 use App\Base\BaseQuery;
 use App\Base\BaseType;
 use App\Exceptions\BadRequestException;
 use App\Exceptions\NotFoundException;
 use App\TypeRegister;
+use GraphQL\Type\Definition\NullableType;
+use GraphQL\Type\Definition\OutputType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Nette\DI\Container;
@@ -27,20 +28,27 @@ abstract class CrudQuery extends BaseQuery
 	/** @var callable(array<mixed>, array<mixed>): array<mixed>|null */
 	public $onBeforeGetAll = null;
 
-	abstract public function getName(): string;
+	private TypeRegister $typeRegister;
 
-	abstract public function getOutputType(): BaseOutput;
+	abstract public function getName(): string;
 
 	/**
 	 * @return class-string
 	 */
 	abstract public function getRepositoryClass(): string;
 
-	public function __construct(protected Container $container, private readonly TypeRegister $typeRegister, array $config = [])
+	public function __construct(protected Container $container, array $config = [])
 	{
+		/** @var \App\TypeRegister $typeRegister */
+		$typeRegister = $this->container->getByType(TypeRegister::class);
+		$this->typeRegister = $typeRegister;
+
 		$baseName = Strings::firstUpper($this->getName());
 		$outputType = $this->getOutputType();
 		$repository = $this->getRepository();
+
+		\assert($outputType instanceof NullableType);
+		\assert($outputType instanceof Type);
 
 		$config = $this->mergeFields($config, [
 			'fields' => [
@@ -66,7 +74,7 @@ abstract class CrudQuery extends BaseQuery
 				"get{$baseName}s" => [
 					'type' => TypeRegister::listOf($outputType),
 					'args' => [
-						'sort' => Type::string(),
+						'sort' => $this->typeRegister::string(),
 						'order' => $this->typeRegister->orderEnum(),
 						'limit' => Type::int(),
 						'page' => Type::int(),
@@ -94,6 +102,11 @@ abstract class CrudQuery extends BaseQuery
 		]);
 
 		parent::__construct($container, $config);
+	}
+
+	public function getOutputType(): OutputType
+	{
+		return $this->typeRegister->getOutputType($this->getName());
 	}
 
 	/**
