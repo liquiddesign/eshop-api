@@ -11,14 +11,9 @@ class CustomerCreateInput extends BaseInput
 	public function __construct(TypeRegister $typeRegister)
 	{
 		$config = [
-			'fields' => $typeRegister->createInputFieldsFromClass($this->getSourceClassName(), includeId: false),
+			'fields' => $typeRegister->createInputFieldsFromClass(Customer::class, includeId: false),
 		];
 
 		parent::__construct($config);
-	}
-
-	public function getSourceClassName(): string
-	{
-		return Customer::class;
 	}
 }

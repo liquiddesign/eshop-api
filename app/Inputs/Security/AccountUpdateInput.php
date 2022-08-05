@@ -12,17 +12,12 @@ class AccountUpdateInput extends BaseInput
 	{
 		$config = [
 			'fields' => $typeRegister->createInputFieldsFromClass(
-				$this->getSourceClassName(),
-				exclude: ['tsRegistered', 'tsLastLogin'],
+				Account::class,
+				exclude: ['tsRegistered', 'tsLastLogin', 'confirmationToken'],
 				forceAllOptional: true,
 			),
 		];
 
 		parent::__construct($config);
-	}
-
-	public function getSourceClassName(): string
-	{
-		return Account::class;
 	}
 }

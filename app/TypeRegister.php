@@ -272,7 +272,7 @@ class TypeRegister extends Type
 				}
 
 				if ($array) {
-					assert($type instanceof Type);
+					\assert($type instanceof Type);
 
 					$type = static::listOf($type);
 				}

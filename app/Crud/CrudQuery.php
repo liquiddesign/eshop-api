@@ -14,6 +14,7 @@ use GraphQL\Type\Definition\Type;
 use Nette\DI\Container;
 use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
+use StORM\DIConnection;
 use StORM\Repository;
 
 /**
@@ -30,12 +31,15 @@ abstract class CrudQuery extends BaseQuery
 
 	private TypeRegister $typeRegister;
 
-	abstract public function getName(): string;
+	/**
+	 * @var \StORM\Repository<\StORM\Entity>
+	 */
+	private Repository $repository;
 
 	/**
-	 * @return class-string
+	 * @return class-string<\StORM\Entity>
 	 */
-	abstract public function getRepositoryClass(): string;
+	abstract public function getClass(): string;
 
 	public function __construct(protected Container $container, array $config = [])
 	{
@@ -45,7 +49,6 @@ abstract class CrudQuery extends BaseQuery
 
 		$baseName = Strings::firstUpper($this->getName());
 		$outputType = $this->getOutputType();
-		$repository = $this->getRepository();
 
 		\assert($outputType instanceof NullableType);
 		\assert($outputType instanceof Type);
@@ -57,12 +60,12 @@ abstract class CrudQuery extends BaseQuery
 					'args' => [
 						BaseType::ID_NAME => TypeRegister::nonNull(TypeRegister::id()),
 					],
-					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo) use ($repository): array {
+					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo): array {
 						if ($this->onBeforeGetOne) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeGetOne, $rootValue, $args);
 						}
 
-						$results = $this->fetchResult($repository->many()->where('this.' . BaseType::ID_NAME, $args[BaseType::ID_NAME]), $resolveInfo);
+						$results = $this->fetchResult($this->getRepository()->many()->where('this.' . BaseType::ID_NAME, $args[BaseType::ID_NAME]), $resolveInfo);
 
 						if (!$results) {
 							throw new NotFoundException($args[BaseType::ID_NAME]);
@@ -76,16 +79,16 @@ abstract class CrudQuery extends BaseQuery
 					'args' => [
 						'sort' => $this->typeRegister::string(),
 						'order' => $this->typeRegister->orderEnum(),
-						'limit' => Type::int(),
-						'page' => Type::int(),
+						'limit' => TypeRegister::int(),
+						'page' => TypeRegister::int(),
 						'filters' => $this->typeRegister->JSON(),
 					],
-					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo) use ($repository): array {
+					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo): array {
 						if ($this->onBeforeGetAll) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeGetAll, $rootValue, $args);
 						}
 
-						$collection = $repository->many()
+						$collection = $this->getRepository()->many()
 							->orderBy([$args['sort'] ?? $this::DEFAULT_SORT => $args['order'] ?? $this::DEFAULT_ORDER])
 							->setPage($args['page'] ?? $this::DEFAULT_PAGE, $args['limit'] ?? $this::DEFAULT_LIMIT);
 
@@ -104,6 +107,13 @@ abstract class CrudQuery extends BaseQuery
 		parent::__construct($container, $config);
 	}
 
+	public function getName(): string
+	{
+		$reflection = new \ReflectionClass($this->getClass());
+
+		return Strings::lower($reflection->getShortName());
+	}
+
 	public function getOutputType(): OutputType
 	{
 		return $this->typeRegister->getOutputType($this->getName());
@@ -114,6 +124,6 @@ abstract class CrudQuery extends BaseQuery
 	 */
 	protected function getRepository(): Repository
 	{
-		return $this->container->getByType($this->getRepositoryClass());
+		return $this->repository ??= $this->container->getByType(DIConnection::class)->findRepository($this->getClass());
 	}
 }

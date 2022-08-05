@@ -5,17 +5,12 @@ declare(strict_types=1);
 namespace App\Types\Eshop;
 
 use App\Crud\CrudQuery;
-use Eshop\DB\CustomerRepository;
+use Eshop\DB\Customer;
 
 class CustomerQuery extends CrudQuery
 {
-	public function getName(): string
+	public function getClass(): string
 	{
-		return 'customer';
-	}
-
-	public function getRepositoryClass(): string
-	{
-		return CustomerRepository::class;
+		return Customer::class;
 	}
 }

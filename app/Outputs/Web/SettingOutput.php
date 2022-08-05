@@ -13,14 +13,9 @@ class SettingOutput extends BaseOutput
 	public function __construct(TypeRegister $typeRegister)
 	{
 		$config = [
-			'fields' => $typeRegister->createOutputFieldsFromClass($this->getSourceClassName()),
+			'fields' => $typeRegister->createOutputFieldsFromClass(Setting::class),
 		];
 
 		parent::__construct($config);
-	}
-
-	public function getSourceClassName(): string
-	{
-		return Setting::class;
 	}
 }

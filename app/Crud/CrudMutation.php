@@ -10,6 +10,7 @@ use GraphQL\Type\Definition\NullableType;
 use GraphQL\Type\Definition\OutputType;
 use Nette\DI\Container;
 use Nette\Utils\Strings;
+use StORM\DIConnection;
 use StORM\Entity;
 use StORM\Repository;
 
@@ -31,12 +32,15 @@ abstract class CrudMutation extends BaseMutation
 
 	private TypeRegister $typeRegister;
 
-	abstract public function getName(): string;
+	/**
+	 * @var \StORM\Repository<\StORM\Entity>
+	 */
+	private Repository $repository;
 
 	/**
-	 * @return class-string
+	 * @return class-string<\StORM\Entity>
 	 */
-	abstract public function getRepositoryClass(): string;
+	abstract public function getClass(): string;
 
 	public function __construct(protected Container $container, array $config = [])
 	{
@@ -112,11 +116,18 @@ abstract class CrudMutation extends BaseMutation
 		return $this->typeRegister->getInputType($this->getName() . 'Update');
 	}
 
+	public function getName(): string
+	{
+		$reflection = new \ReflectionClass($this->getClass());
+
+		return Strings::lower($reflection->getShortName());
+	}
+
 	/**
 	 * @return \StORM\Repository<\StORM\Entity>
 	 */
 	protected function getRepository(): Repository
 	{
-		return $this->container->getByType($this->getRepositoryClass());
+		return $this->repository ??= $this->container->getByType(DIConnection::class)->findRepository($this->getClass());
 	}
 }

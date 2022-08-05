@@ -3,17 +3,12 @@
 namespace App\Types\Eshop;
 
 use App\Crud\CrudMutation;
-use Eshop\DB\CustomerRepository;
+use Eshop\DB\Customer;
 
 class CustomerMutation extends CrudMutation
 {
-	public function getName(): string
+	public function getClass(): string
 	{
-		return 'customer';
-	}
-
-	public function getRepositoryClass(): string
-	{
-		return CustomerRepository::class;
+		return Customer::class;
 	}
 }

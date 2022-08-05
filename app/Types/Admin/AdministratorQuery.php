@@ -4,18 +4,13 @@ declare(strict_types=1);
 
 namespace App\Types\Admin;
 
-use Admin\DB\AdministratorRepository;
+use Admin\DB\Administrator;
 use App\Crud\CrudQuery;
 
 class AdministratorQuery extends CrudQuery
 {
-	public function getName(): string
+	public function getClass(): string
 	{
-		return 'administrator';
-	}
-
-	public function getRepositoryClass(): string
-	{
-		return AdministratorRepository::class;
+		return Administrator::class;
 	}
 }

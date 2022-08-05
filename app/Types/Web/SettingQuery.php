@@ -5,17 +5,12 @@ declare(strict_types=1);
 namespace App\Types\Web;
 
 use App\Crud\CrudQuery;
-use Web\DB\SettingRepository;
+use Web\DB\Setting;
 
 class SettingQuery extends CrudQuery
 {
-	public function getName(): string
+	public function getClass(): string
 	{
-		return 'setting';
-	}
-
-	public function getRepositoryClass(): string
-	{
-		return SettingRepository::class;
+		return Setting::class;
 	}
 }

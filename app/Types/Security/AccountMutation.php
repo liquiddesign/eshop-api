@@ -8,7 +8,7 @@ use Eshop\Shopper;
 use Nette;
 use Nette\DI\Container;
 use Nette\Security\Passwords;
-use Security\DB\AccountRepository;
+use Security\DB\Account;
 
 class AccountMutation extends CrudMutation
 {
@@ -25,6 +25,7 @@ class AccountMutation extends CrudMutation
 			return [$rootValues, $args];
 		};
 
+		// Example of added field
 		$config = [
 			'fields' => [
 				'test' => [
@@ -40,13 +41,8 @@ class AccountMutation extends CrudMutation
 		parent::__construct($container, $config);
 	}
 
-	public function getName(): string
+	public function getClass(): string
 	{
-		return 'account';
-	}
-
-	public function getRepositoryClass(): string
-	{
-		return AccountRepository::class;
+		return Account::class;
 	}
 }

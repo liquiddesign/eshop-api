@@ -13,14 +13,9 @@ class AccountOutput extends BaseOutput
 	public function __construct(TypeRegister $typeRegister)
 	{
 		$config = [
-			'fields' => $typeRegister->createOutputFieldsFromClass($this->getSourceClassName(), exclude: ['password']),
+			'fields' => $typeRegister->createOutputFieldsFromClass(Account::class, exclude: ['password']),
 		];
 
 		parent::__construct($config);
-	}
-
-	public function getSourceClassName(): string
-	{
-		return Account::class;
 	}
 }
