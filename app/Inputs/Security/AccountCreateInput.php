@@ -3,6 +3,7 @@
 namespace App\Inputs\Security;
 
 use App\Base\BaseInput;
+use App\Inputs\InputRelationFieldsEnum;
 use App\TypeRegister;
 use Security\DB\Account;
 
@@ -15,6 +16,7 @@ class AccountCreateInput extends BaseInput
 				Account::class,
 				exclude: ['tsRegistered', 'tsLastLogin', 'confirmationToken', 'active', 'authorized'],
 				includeId: false,
+				inputRelationFieldsEnum: InputRelationFieldsEnum::ONLY_ADD,
 			),
 		];
 

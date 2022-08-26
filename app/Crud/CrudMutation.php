@@ -8,10 +8,11 @@ use App\TypeRegister;
 use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\NullableType;
 use GraphQL\Type\Definition\OutputType;
+use GraphQL\Type\Definition\ResolveInfo;
 use Nette\DI\Container;
+use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use StORM\DIConnection;
-use StORM\Entity;
 use StORM\Repository;
 
 /**
@@ -59,12 +60,21 @@ abstract class CrudMutation extends BaseMutation
 				"create$baseName" => [
 					'type' => TypeRegister::nonNull($outputType),
 					'args' => ['input' => $this->getCreateInputType(),],
-					'resolve' => function (array $rootValue, array $args) use ($repository): Entity {
+					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo) use ($repository): array {
 						if ($this->onBeforeCreate) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeCreate, $rootValue, $args);
 						}
 
-						return $repository->createOne($args['input']);
+						foreach ($args['input'] as $inputKey => $inputField) {
+							if (Strings::startsWith($inputKey, 'add')) {
+								$args['input'][Strings::lower(\substr($inputKey, 3))] = $inputField;
+								unset($args['input'][$inputKey]);
+							}
+						}
+
+						$new = $repository->createOne($args['input']);
+
+						return Arrays::first($this->fetchResult($repository->many()->where('this.' . BaseType::ID_NAME, $new->getPK()), $resolveInfo));
 					},
 				],
 				"update$baseName" => [
@@ -72,7 +82,7 @@ abstract class CrudMutation extends BaseMutation
 					'args' => [
 						'input' => $this->getUpdateInputType(),
 						],
-					'resolve' => function (array $rootValue, array $args) use ($repository): Entity {
+					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo) use ($repository): array {
 						if ($this->onBeforeUpdate) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeUpdate, $rootValue, $args);
 						}
@@ -81,13 +91,13 @@ abstract class CrudMutation extends BaseMutation
 
 						$repository->many()->where('this.' . BaseType::ID_NAME, $input[BaseType::ID_NAME])->update($input);
 
-						return $repository->one($input[BaseType::ID_NAME], true);
+						return Arrays::first($this->fetchResult($repository->many()->where('this.' . BaseType::ID_NAME, $input[BaseType::ID_NAME]), $resolveInfo));
 					},
 				],
 				"delete{$baseName}s" => [
 					'type' => TypeRegister::nonNull(TypeRegister::int()),
 					'args' => [BaseType::ID_NAME => TypeRegister::listOf(TypeRegister::id()),],
-					'resolve' => function (array $rootValue, array $args) use ($repository): int {
+					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo) use ($repository): int {
 						if ($this->onBeforeDelete) {
 							[$rootValue, $args] = \call_user_func($this->onBeforeDelete, $rootValue, $args);
 						}

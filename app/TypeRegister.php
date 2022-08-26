@@ -5,6 +5,7 @@ namespace App;
 use App\Base\BaseInput;
 use App\Base\BaseOutput;
 use App\Base\BaseType;
+use App\Inputs\InputRelationFieldsEnum;
 use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\NullableType;
 use GraphQL\Type\Definition\OutputType;
@@ -193,6 +194,7 @@ class TypeRegister extends Type
 		array $forceOptional = [],
 		bool $forceAllOptional = false,
 		bool $includeId = true,
+		InputRelationFieldsEnum $inputRelationFieldsEnum = InputRelationFieldsEnum::ALL,
 	): array {
 		$reflection = new \ReflectionClass($class);
 		$stormStructure = $this->schemaManager->getStructure($class);
@@ -223,62 +225,77 @@ class TypeRegister extends Type
 
 			$typeName = $reflectionType->getName();
 
-			$fields[$name] = function () use ($typeName, $property, $forceOptional, $forceRequired, $name, $forceAllOptional, $reflectionType, $class, $stormStructure) {
-				$array = false;
-				$type = match ($typeName) {
-					'int' => static::int(),
-					'float' => static::float(),
-					'bool' => static::boolean(),
-					'string' => static::string(),
-					default => null,
+
+			$array = false;
+			$type = match ($typeName) {
+				'int' => static::int(),
+				'float' => static::float(),
+				'bool' => static::boolean(),
+				'string' => static::string(),
+				default => null,
+			};
+
+			$column = $stormStructure->getColumn($property->getName());
+
+			if ($column) {
+				$type = match ($column->getType()) {
+					'datetime', 'timestamp' => static::datetime(),
+					'date' => static::date(),
+					default => $type,
 				};
+			}
 
-				$column = $stormStructure->getColumn($property->getName());
+			if ($type === null) {
+				if ($typeName === RelationCollection::class) {
+					$relation = $this->schemaManager->getStructure($class)->getRelation($property->getName());
 
-				if ($column) {
-					$type = match ($column->getType()) {
-						'datetime', 'timestamp' => static::datetime(),
-						'date' => static::date(),
-						default => $type,
-					};
-				}
-
-				if ($type === null) {
-					if ($typeName === RelationCollection::class) {
-						$relation = $this->schemaManager->getStructure($class)->getRelation($property->getName());
-
-						if (!$relation) {
-							throw new \Exception('Fatal error! Unknown relation "' . $property->getName() . '".');
-						}
-
-						$typeName = $relation->getTarget();
-						$array = true;
+					if (!$relation) {
+						throw new \Exception('Fatal error! Unknown relation "' . $property->getName() . '".');
 					}
 
-					$typeName = Strings::lower(Strings::substring($typeName, \strrpos($typeName, '\\') + 1)) . 'Update';
-
-					$type = $this->getInputType($typeName);
+					$array = true;
 				}
 
-				$isForceRequired = Arrays::contains($forceRequired, $name);
-				$isForceOptional = Arrays::contains($forceOptional, $name);
+				$type = static::string();
+			}
 
-				if ($isForceRequired && $isForceOptional) {
-					throw new \Exception("Property '$name' can't be forced optional and required at same time.");
+			$isForceRequired = Arrays::contains($forceRequired, $name);
+			$isForceOptional = Arrays::contains($forceOptional, $name);
+
+			if ($isForceRequired && $isForceOptional) {
+				throw new \Exception("Property '$name' can't be forced optional and required at same time.");
+			}
+
+			if (($array ||
+					($forceAllOptional === false &&
+						(
+							(!$isForceOptional && $isForceRequired) ||
+							(!$isForceOptional && !$reflectionType->allowsNull())
+						)
+					)
+				) && $type instanceof NullableType && $property->getDefaultValue() === null) {
+				$type = static::nonNull($type);
+			}
+
+			if ($array) {
+				\assert($type instanceof Type);
+
+				$type = static::listOf($type);
+			}
+
+			if (isset($relation)) {
+				if ($inputRelationFieldsEnum === InputRelationFieldsEnum::ALL || $inputRelationFieldsEnum === InputRelationFieldsEnum::ONLY_ADD) {
+					$fields['add' . Strings::firstUpper($name)] = $type;
 				}
 
-				if (($array || ($forceAllOptional === false && ((!$forceOptional && $forceRequired) || (!$forceOptional && !$reflectionType->allowsNull())))) && $type instanceof NullableType) {
-					$type = static::nonNull($type);
+				if ($inputRelationFieldsEnum === InputRelationFieldsEnum::ALL || $inputRelationFieldsEnum === InputRelationFieldsEnum::ONLY_REMOVE) {
+					$fields['remove' . Strings::firstUpper($name)] = $type;
 				}
-
-				if ($array) {
-					\assert($type instanceof Type);
-
-					$type = static::listOf($type);
-				}
-
-				return $type;
-			};
+			} else {
+				$fields[$name] = function () use ($type) {
+					return $type;
+				};
+			}
 		}
 
 		return $fields;
