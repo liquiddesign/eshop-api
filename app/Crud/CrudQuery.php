@@ -5,14 +5,12 @@ namespace App\Crud;
 use App\Base\BaseQuery;
 use App\Base\BaseType;
 use App\Exceptions\BadRequestException;
-use App\Exceptions\NotFoundException;
 use App\TypeRegister;
 use GraphQL\Type\Definition\NullableType;
 use GraphQL\Type\Definition\OutputType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Nette\DI\Container;
-use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use StORM\DIConnection;
 use StORM\Repository;
@@ -43,11 +41,9 @@ abstract class CrudQuery extends BaseQuery
 
 	public function __construct(protected Container $container, array $config = [])
 	{
-		/** @var \App\TypeRegister $typeRegister */
-		$typeRegister = $this->container->getByType(TypeRegister::class);
-		$this->typeRegister = $typeRegister;
+		$this->typeRegister = $this->container->getByType(TypeRegister::class);
 
-		$baseName = Strings::firstUpper($this->getName());
+		$baseName = $this->getName();
 		$outputType = $this->getOutputType();
 
 		\assert($outputType instanceof NullableType);
@@ -55,27 +51,14 @@ abstract class CrudQuery extends BaseQuery
 
 		$config = $this->mergeFields($config, [
 			'fields' => [
-				"get$baseName" => [
-					'type' => TypeRegister::nonNull($outputType),
+				"{$baseName}One" => [
+					'type' => $outputType,
 					'args' => [
 						BaseType::ID_NAME => TypeRegister::nonNull(TypeRegister::id()),
 					],
-					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo): array {
-						if ($this->onBeforeGetOne) {
-							[$rootValue, $args] = \call_user_func($this->onBeforeGetOne, $rootValue, $args);
-						}
-
-						$results = $this->fetchResult($this->getRepository()->many()->where('this.' . BaseType::ID_NAME, $args[BaseType::ID_NAME]), $resolveInfo);
-
-						if (!$results) {
-							throw new NotFoundException($args[BaseType::ID_NAME]);
-						}
-
-						return Arrays::first($results);
-					},
 				],
-				"get{$baseName}s" => [
-					'type' => TypeRegister::listOf($outputType),
+				"{$baseName}All" => [
+					'type' => TypeRegister::nonNull(TypeRegister::listOf($outputType)),
 					'args' => [
 						'sort' => $this->typeRegister::string(),
 						'order' => $this->typeRegister->orderEnum(),

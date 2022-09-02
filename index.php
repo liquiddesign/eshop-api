@@ -14,5 +14,5 @@ $container = \App\Bootstrap::boot()
 
 (new \Nette\Application\Responses\JsonResponse(
 	$container->getByType(\App\GraphQL::class)
-	->executeServer())
-)->send($container->getByType(\Nette\Http\Request::class), $container->getByType(\Nette\Http\Response::class));
+	->executeServer()
+))->send($container->getByType(\Nette\Http\Request::class), $container->getByType(\Nette\Http\Response::class));
