@@ -48,11 +48,8 @@ abstract class CrudResolver extends BaseResolver
 		if ($this->onBeforeGetOne) {
 			[$rootValue, $args] = \call_user_func($this->onBeforeGetOne, $rootValue, $args);
 		}
-		Debugger::log('one' . Debugger::timer());
 
 		$results = $this->fetchResult($this->getRepository()->many()->where('this.' . BaseType::ID_NAME, $args[BaseType::ID_NAME]), $resolveInfo);
-
-		Debugger::log('fetchResult' . Debugger::timer());
 
 		return $results ? Arrays::first($results) : null;
 	}

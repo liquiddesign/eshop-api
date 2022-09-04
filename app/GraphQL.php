@@ -59,8 +59,6 @@ class GraphQL
 				$variableValues,
 				$operationName,
 				function ($objectValue, array $args, $context, ResolveInfo $info) {
-					Debugger::log('resolver1' . Debugger::timer());
-
 					$fieldName = $info->fieldName;
 
 					$matchedFieldName = \preg_split('~^[^A-Z]+\K|[A-Z][^A-Z]+\K~', $fieldName, 0, \PREG_SPLIT_NO_EMPTY);
@@ -101,17 +99,11 @@ class GraphQL
 
 					$actionName = Strings::firstLower(\implode('', $matchedFieldName));
 
-					Debugger::log('resolver2' . Debugger::timer());
-
 					return $resolver->{$actionName}([], $args, $context, $info);
 				}
 			);
 
-			Debugger::log('execute' . Debugger::timer());
-
 			$output = $result->toArray($this->getDebugFlag());
-
-			Debugger::log('toArray' . Debugger::timer());
 		} catch (\Throwable $e) {
 			if ($this->container->getParameters()['debugMode'] && !$this->container->getParameters()['productionMode']) {
 				throw $e;
@@ -143,8 +135,6 @@ class GraphQL
 				'schema' => $this->getCachedSchema(),
 				'queryBatching' => true,
 				'fieldResolver' => function ($objectValue, array $args, $context, ResolveInfo $info) {
-					Debugger::log('resolver1' . Debugger::timer());
-
 					$fieldName = $info->fieldName;
 
 					$matchedFieldName = \preg_split('~^[^A-Z]+\K|[A-Z][^A-Z]+\K~', $fieldName, 0, \PREG_SPLIT_NO_EMPTY);
@@ -185,18 +175,12 @@ class GraphQL
 
 					$actionName = Strings::firstLower(\implode('', $matchedFieldName));
 
-					Debugger::log('resolver2' . Debugger::timer());
-
 					return $resolver->{$actionName}([], $args, $context, $info);
 				},
 			]);
 
-			Debugger::log('server' . Debugger::timer());
-
 			/** @var \GraphQL\Executor\ExecutionResult $result */
 			$result = $server->executePsrRequest($psrRequest);
-
-			Debugger::log('execute' . Debugger::timer());
 
 			if ($debugFlag = $this->getDebugFlag()) {
 				/** @var \StORM\Bridges\StormTracy<\stdClass>|null $stormTracy */
@@ -211,13 +195,8 @@ class GraphQL
 				}
 			}
 
-			$res = $result->toArray($debugFlag);
-			Debugger::log('toArray' . Debugger::timer());
-
-			return $res;
+			return $result->toArray($debugFlag);
 		} catch (\Throwable $e) {
-			Debugger::log($e, ILogger::EXCEPTION);
-
 			if ($this->container->getParameters()['debugMode'] && !$this->container->getParameters()['productionMode']) {
 				throw $e;
 			}
@@ -232,7 +211,6 @@ class GraphQL
 
 	public function getCachedSchema(): Schema
 	{
-		Debugger::log(Debugger::timer());
 		$cacheDir = $this->container->getParameters()['tempDir'] . '/cache/graphql';
 
 		$cacheFilename = $cacheDir . '/cached_schema.php';
@@ -249,8 +227,6 @@ class GraphQL
 		}
 
 		$typeConfigDecorator = null;
-
-		Debugger::log(Debugger::timer());
 
 		return BuildSchema::build($document, $typeConfigDecorator);
 	}
