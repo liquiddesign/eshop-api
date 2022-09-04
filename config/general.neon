@@ -40,9 +40,9 @@ search:
 		files: [Resolvers/*Resolver.php, Resolvers/*/*Resolver.php]
 		implements:
 		    - App\BaseResolver
-#	graphql_types:
-#		in: %appDir%
-#		files: [Types/*/*Query.php]
+	graphql_types:
+		in: %appDir%
+		files: [Types/*/*Query.php]
 
 services:
 	pages.pageRepository: \Web\DB\PageRepository
