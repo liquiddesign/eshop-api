@@ -4,6 +4,7 @@ namespace App\Crud;
 
 use App\Base\BaseType;
 use App\BaseResolver;
+use App\Exceptions\BadRequestException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
@@ -54,6 +55,35 @@ abstract class CrudResolver extends BaseResolver
 		Debugger::log('fetchResult' . Debugger::timer());
 
 		return $results ? Arrays::first($results) : null;
+	}
+
+	/**
+	 * @param array<mixed> $rootValue
+	 * @param array<mixed> $args
+	 * @param mixed $context
+	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @return array<mixed>|null
+	 * @throws \App\Exceptions\BadRequestException
+	 * @throws \ReflectionException
+	 * @throws \StORM\Exception\GeneralException
+	 */
+	public function all(array $rootValue, array $args, mixed $context, ResolveInfo $resolveInfo): ?array
+	{
+		if ($this->onBeforeGetAll) {
+			[$rootValue, $args] = \call_user_func($this->onBeforeGetAll, $rootValue, $args);
+		}
+
+		$collection = $this->getRepository()->many()
+			->orderBy([$args['sort'] ?? BaseType::DEFAULT_SORT => $args['order'] ?? BaseType::DEFAULT_ORDER])
+			->setPage($args['page'] ?? BaseType::DEFAULT_PAGE, $args['limit'] ?? BaseType::DEFAULT_LIMIT);
+
+		try {
+			$collection->filter((array) ($args['filters'] ?? []));
+		} catch (\Throwable $e) {
+			throw new BadRequestException('Invalid filters');
+		}
+
+		return $this->fetchResult($collection, $resolveInfo);
 	}
 
 	public function getName(): string

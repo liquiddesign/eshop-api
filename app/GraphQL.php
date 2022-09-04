@@ -141,6 +141,7 @@ class GraphQL
 
 			$server = new StandardServer([
 				'schema' => $this->getCachedSchema(),
+				'queryBatching' => true,
 				'fieldResolver' => function ($objectValue, array $args, $context, ResolveInfo $info) {
 					Debugger::log('resolver1' . Debugger::timer());
 

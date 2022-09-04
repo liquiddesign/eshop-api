@@ -66,23 +66,6 @@ abstract class CrudQuery extends BaseQuery
 						'page' => TypeRegister::int(),
 						'filters' => $this->typeRegister->JSON(),
 					],
-					'resolve' => function (array $rootValue, array $args, $context, ResolveInfo $resolveInfo): array {
-						if ($this->onBeforeGetAll) {
-							[$rootValue, $args] = \call_user_func($this->onBeforeGetAll, $rootValue, $args);
-						}
-
-						$collection = $this->getRepository()->many()
-							->orderBy([$args['sort'] ?? $this::DEFAULT_SORT => $args['order'] ?? $this::DEFAULT_ORDER])
-							->setPage($args['page'] ?? $this::DEFAULT_PAGE, $args['limit'] ?? $this::DEFAULT_LIMIT);
-
-						try {
-							$collection->filter((array) ($args['filters'] ?? []));
-						} catch (\Throwable $e) {
-							throw new BadRequestException('Invalid filters');
-						}
-
-						return $this->fetchResult($collection, $resolveInfo);
-					},
 				],
 			],
 		]);
