@@ -24,23 +24,23 @@ Options -Indexes
 #    RewriteRule ^(.*)$ https://www.kulturajih.cz/objekty/kino-luna [R=301,L]
 
 #   zapnuti https protokolu
-#    RewriteCond %{HTTPS} off
-#    RewriteCond %{HTTP_HOST} !^localhost
-#    RewriteCond %{HTTP_HOST} !masterinter\.net$
-#    RewriteCond %{HTTP_HOST} !vas-server\.cz$
-#    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP_HOST} !^localhost
+    RewriteCond %{HTTP_HOST} !masterinter\.net$
+    RewriteCond %{HTTP_HOST} !vas-server\.cz$
+    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 #   doplneni www
-#    RewriteCond %{HTTP_HOST} !^www\.
-#    RewriteCond %{HTTP_HOST} !^localhost
-#    RewriteCond %{HTTP_HOST} !masterinter\.net$
-#    RewriteCond %{HTTP_HOST} !vas-server\.cz$
-#    RewriteRule (.*) https://www.%{HTTP_HOST}/$1 [R=301,L]
-#
-#    RewriteCond %{REQUEST_URI} !^/admin
-#    RewriteCond %{REQUEST_FILENAME} !-d
-#    RewriteCond %{HTTP_HOST} !^localhost
-#    RewriteRule ^(.+)/$ /$1 [L,R=301]
+    RewriteCond %{HTTP_HOST} !^www\.
+    RewriteCond %{HTTP_HOST} !^localhost
+    RewriteCond %{HTTP_HOST} !masterinter\.net$
+    RewriteCond %{HTTP_HOST} !vas-server\.cz$
+    RewriteRule (.*) https://www.%{HTTP_HOST}/$1 [R=301,L]
+
+    RewriteCond %{REQUEST_URI} !^/admin
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{HTTP_HOST} !^localhost
+    RewriteRule ^(.+)/$ /$1 [L,R=301]
 
 #    Na prepis / z konca url na wamp folder treba dodat presnu url ("defaultweb3")
 #    RewriteCond %{REQUEST_FILENAME} !-d
