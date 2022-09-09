@@ -94,6 +94,7 @@ typeRegister:
 storm:
   debug: %debugMode%
   connections:
+      driver: postgres
       default:
           mutations:
           	cs: '_cs'
