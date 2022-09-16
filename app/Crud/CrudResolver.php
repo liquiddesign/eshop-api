@@ -124,6 +124,9 @@ abstract class CrudResolver extends BaseResolver
 
 		$result = $this->fetchResult($collection, $resolveInfo);
 
+		\var_dump($result);
+		die();
+
 		Debugger::log('fra:' . Debugger::timer());
 
 		return $result;
@@ -154,7 +157,12 @@ abstract class CrudResolver extends BaseResolver
 	{
 		$fieldSelection = $resolveInfo->getFieldSelection(BaseType::MAX_DEPTH);
 
-		return $this->fetchResultHelper($collection, $fieldSelection);
+		$result = $this->fetchResultHelper($collection, $fieldSelection);
+
+		$result['onPageCount'] = \count($result);
+		$result['totalCount'] = $collection->clear()->enum();
+
+		return $result;
 	}
 
 	/**

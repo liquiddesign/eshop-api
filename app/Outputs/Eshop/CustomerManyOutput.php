@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Outputs\Eshop;
 
-use App\Base\BaseOutput;
 use App\Base\CollectionOutput;
 use App\TypeRegister;
-use Eshop\DB\Customer;
 
-class CustomerOutput extends BaseOutput
+class CustomerManyOutput extends CollectionOutput
 {
 	public function __construct(TypeRegister $typeRegister)
 	{
 		$config = [
-			'fields' => $typeRegister->createOutputFieldsFromClass(Customer::class, exclude: ['account']),
+			'fields' => [
+				'data' => $typeRegister::nonNull($typeRegister::listOf($typeRegister->getOutputType('customer'))),
+			],
 		];
 
 		parent::__construct($config, $typeRegister);

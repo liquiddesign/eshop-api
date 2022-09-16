@@ -86,6 +86,7 @@ typeRegister:
             customerGroup: App\Outputs\Eshop\CustomerGroupOutput
             pricelist: App\Outputs\Eshop\PricelistOutput
             address: App\Outputs\Eshop\AddressOutput
+            productGetProducts: App\Outputs\Eshop\ProductGetProductsOutput
         crud:
             administrator: [App\Outputs\Admin\AdministratorOutput, App\Inputs\Admin\AdministratorCreateInput, App\Inputs\Admin\AdministratorUpdateInput]
             account: [App\Outputs\Security\AccountOutput, App\Inputs\Security\AccountCreateInput, App\Inputs\Security\AccountUpdateInput]
@@ -163,12 +164,6 @@ messages:
 			- merchant.register.successAdmin
 			- administrator.register.success
 			- register.merchantInfo
-
-#graphqlTypes:
-#    basic:
-#        account: App\Outputs\Security\AccountOutput::class
-#    crud:
-#        account: [App\Outputs\Security\AccountOutput, App\Inputs\Security\AccountCreateInput, App\Inputs\Security\AccountUpdateInput]
 
 pages:
    mutations: %mutations%

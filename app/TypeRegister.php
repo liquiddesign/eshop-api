@@ -8,6 +8,7 @@ use App\Base\BaseType;
 use App\Inputs\InputRelationFieldsEnum;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\InputType;
+use GraphQL\Type\Definition\InterfaceType;
 use GraphQL\Type\Definition\NullableType;
 use GraphQL\Type\Definition\OutputType;
 use GraphQL\Type\Definition\Type;
@@ -151,7 +152,6 @@ class TypeRegister extends Type
 
 					$type = $this->getOutputType($typeName);
 				}
-
 
 				$isForceRequired = Arrays::contains($forceRequired, $name);
 				$isForceOptional = Arrays::contains($forceOptional, $name);
@@ -353,16 +353,27 @@ class TypeRegister extends Type
 		$this->typesMap[$name] = $class;
 	}
 
-	public function getCollectionInput(): InputObjectType
+	public function getManyInput(): InputObjectType
 	{
-		return $this->types['collectionInput'] ??= new InputObjectType([
-			'name' => 'collectionInput',
+		return $this->types['manyInput'] ??= new InputObjectType([
+			'name' => 'ManyInput',
 			'fields' => [
 				'sort' => $this::string(),
 				'order' => $this->orderEnum(),
 				'limit' => $this::int(),
 				'page' => $this::int(),
 				'filters' => $this->JSON(),
+			],
+		]);
+	}
+
+	public function getManyOutputInterface(): InterfaceType
+	{
+		return $this->types['manyInterface'] ??= new InterfaceType([
+			'name' => 'ManyInterface',
+			'fields' => [
+				'onPageCount' => TypeRegister::nonNull(TypeRegister::int()),
+				'totalCount' => TypeRegister::nonNull(TypeRegister::int()),
 			],
 		]);
 	}

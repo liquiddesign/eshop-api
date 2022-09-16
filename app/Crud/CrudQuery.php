@@ -59,7 +59,7 @@ abstract class CrudQuery extends BaseQuery
 				"{$baseName}Many" => [
 					'type' => TypeRegister::nonNull(TypeRegister::listOf($outputType)),
 					'args' => [
-						'input' => $this->typeRegister->getCollectionInput(),
+						'input' => $this->typeRegister->getManyInput(),
 					],
 				],
 			],
@@ -69,22 +69,21 @@ abstract class CrudQuery extends BaseQuery
 			$localConfig['fields']["{$baseName}Collection"] = [
 				'type' => TypeRegister::nonNull(TypeRegister::listOf($outputType)),
 				'args' => [
-					'input' => $this->typeRegister->getCollectionInput(),
+					'input' => $this->typeRegister->getManyInput(),
 				],
 			];
 		}
 
-		$localConfig['fields'] += $this->addCustomFields($baseName, $outputType);
+		$localConfig['fields'] += $this->addCustomFields($baseName);
 
 		parent::__construct($container, $this->mergeFields($config, $localConfig));
 	}
 
 	/**
 	 * @param string $baseName
-	 * @param \GraphQL\Type\Definition\Type $outputType
 	 * @return array<mixed>
 	 */
-	public function addCustomFields(string $baseName, Type $outputType): array
+	public function addCustomFields(string $baseName): array
 	{
 		return [];
 	}

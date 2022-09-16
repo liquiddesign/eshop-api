@@ -45,11 +45,7 @@ class TypeRegisterDI extends \Nette\DI\CompilerExtension
 			}
 		}
 
-		if (!isset($config['types']->crud)) {
-			return;
-		}
-
-		foreach ($config['types']->crud as $name => $types) {
+		foreach ($config['types']?->crud ?? [] as $name => $types) {
 			if (!isset($types[0])) {
 				throw new \Exception('Crud type has to have at least output type!');
 			}
