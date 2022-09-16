@@ -19,8 +19,8 @@ class TypeRegisterDI extends \Nette\DI\CompilerExtension
 				'output' => Expect::arrayOf(Expect::string()),
 				'input' => Expect::arrayOf(Expect::string()),
 				'crud' => Expect::arrayOf(Expect::listOf(Expect::string())->assert(function ($value) {
-					return \count($value) === 3;
-				}, 'CRUD type have to has exactly 3 classes!')),
+					return \count($value) >= 1 && \count($value) <= 3;
+				}, 'CRUD type have to has 1-3 classes!')),
 			]),
 		]);
 	}
@@ -50,8 +50,22 @@ class TypeRegisterDI extends \Nette\DI\CompilerExtension
 		}
 
 		foreach ($config['types']->crud as $name => $types) {
+			if (!isset($types[0])) {
+				throw new \Exception('Crud type has to have at least output type!');
+			}
+
 			$typeRegister->addSetup('set', ["{$name}Output", $types[0]]);
+
+			if (!isset($types[1])) {
+				continue;
+			}
+
 			$typeRegister->addSetup('set', ["{$name}CreateInput", $types[1]]);
+
+			if (!isset($types[2])) {
+				continue;
+			}
+
 			$typeRegister->addSetup('set', ["{$name}UpdateInput", $types[2]]);
 		}
 	}

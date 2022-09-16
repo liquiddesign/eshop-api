@@ -6,6 +6,7 @@ use App\Base\BaseInput;
 use App\Base\BaseOutput;
 use App\Base\BaseType;
 use App\Inputs\InputRelationFieldsEnum;
+use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\NullableType;
 use GraphQL\Type\Definition\OutputType;
@@ -350,5 +351,19 @@ class TypeRegister extends Type
 		}
 
 		$this->typesMap[$name] = $class;
+	}
+
+	public function getCollectionInput(): InputObjectType
+	{
+		return $this->types['collectionInput'] ??= new InputObjectType([
+			'name' => 'collectionInput',
+			'fields' => [
+				'sort' => $this::string(),
+				'order' => $this->orderEnum(),
+				'limit' => $this::int(),
+				'page' => $this::int(),
+				'filters' => $this->JSON(),
+			],
+		]);
 	}
 }

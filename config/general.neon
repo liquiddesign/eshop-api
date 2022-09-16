@@ -42,7 +42,7 @@ search:
 		    - App\BaseResolver
 	graphql_types:
 		in: %appDir%
-		files: [Types/*/*Query.php]
+		files: [Types/*/*Query.php, Types/*/*Mutation.php]
 
 services:
 	pages.pageRepository: \Web\DB\PageRepository
@@ -90,6 +90,7 @@ typeRegister:
             administrator: [App\Outputs\Admin\AdministratorOutput, App\Inputs\Admin\AdministratorCreateInput, App\Inputs\Admin\AdministratorUpdateInput]
             account: [App\Outputs\Security\AccountOutput, App\Inputs\Security\AccountCreateInput, App\Inputs\Security\AccountUpdateInput]
             customer: [App\Outputs\Eshop\CustomerOutput, App\Inputs\Eshop\CustomerCreateInput, App\Inputs\Eshop\CustomerUpdateInput]
+            product: [App\Outputs\Eshop\ProductOutput]
 
 storm:
   debug: %debugMode%

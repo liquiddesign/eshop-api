@@ -4,11 +4,10 @@ namespace App\Crud;
 
 use App\Base\BaseQuery;
 use App\Base\BaseType;
-use App\Exceptions\BadRequestException;
 use App\TypeRegister;
+use Common\DB\IGeneralRepository;
 use GraphQL\Type\Definition\NullableType;
 use GraphQL\Type\Definition\OutputType;
-use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Nette\DI\Container;
 use Nette\Utils\Strings;
@@ -27,7 +26,7 @@ abstract class CrudQuery extends BaseQuery
 	/** @var callable(array<mixed>, array<mixed>): array<mixed>|null */
 	public $onBeforeGetAll = null;
 
-	private TypeRegister $typeRegister;
+	protected TypeRegister $typeRegister;
 
 	/**
 	 * @var \StORM\Repository<\StORM\Entity>
@@ -49,7 +48,7 @@ abstract class CrudQuery extends BaseQuery
 		\assert($outputType instanceof NullableType);
 		\assert($outputType instanceof Type);
 
-		$config = $this->mergeFields($config, [
+		$localConfig = [
 			'fields' => [
 				"{$baseName}One" => [
 					'type' => $outputType,
@@ -57,20 +56,37 @@ abstract class CrudQuery extends BaseQuery
 						BaseType::ID_NAME => TypeRegister::nonNull(TypeRegister::id()),
 					],
 				],
-				"{$baseName}All" => [
+				"{$baseName}Many" => [
 					'type' => TypeRegister::nonNull(TypeRegister::listOf($outputType)),
 					'args' => [
-						'sort' => $this->typeRegister::string(),
-						'order' => $this->typeRegister->orderEnum(),
-						'limit' => TypeRegister::int(),
-						'page' => TypeRegister::int(),
-						'filters' => $this->typeRegister->JSON(),
+						'input' => $this->typeRegister->getCollectionInput(),
 					],
 				],
 			],
-		]);
+		];
 
-		parent::__construct($container, $config);
+		if ($this->getRepository() instanceof IGeneralRepository) {
+			$localConfig['fields']["{$baseName}Collection"] = [
+				'type' => TypeRegister::nonNull(TypeRegister::listOf($outputType)),
+				'args' => [
+					'input' => $this->typeRegister->getCollectionInput(),
+				],
+			];
+		}
+
+		$localConfig['fields'] += $this->addCustomFields($baseName, $outputType);
+
+		parent::__construct($container, $this->mergeFields($config, $localConfig));
+	}
+
+	/**
+	 * @param string $baseName
+	 * @param \GraphQL\Type\Definition\Type $outputType
+	 * @return array<mixed>
+	 */
+	public function addCustomFields(string $baseName, Type $outputType): array
+	{
+		return [];
 	}
 
 	public function getName(): string

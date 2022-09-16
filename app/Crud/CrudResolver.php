@@ -5,6 +5,7 @@ namespace App\Crud;
 use App\Base\BaseType;
 use App\BaseResolver;
 use App\Exceptions\BadRequestException;
+use Common\DB\IGeneralRepository;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
@@ -64,7 +65,7 @@ abstract class CrudResolver extends BaseResolver
 	 * @throws \ReflectionException
 	 * @throws \StORM\Exception\GeneralException
 	 */
-	public function all(array $rootValue, array $args, mixed $context, ResolveInfo $resolveInfo): ?array
+	public function many(array $rootValue, array $args, mixed $context, ResolveInfo $resolveInfo): ?array
 	{
 		if ($this->onBeforeGetAll) {
 			[$rootValue, $args] = \call_user_func($this->onBeforeGetAll, $rootValue, $args);
@@ -80,7 +81,52 @@ abstract class CrudResolver extends BaseResolver
 			throw new BadRequestException('Invalid filters');
 		}
 
-		return $this->fetchResult($collection, $resolveInfo);
+		Debugger::log('frb:' . Debugger::timer());
+
+		$result = $this->fetchResult($collection, $resolveInfo);
+
+		Debugger::log('fra:' . Debugger::timer());
+
+		return $result;
+	}
+
+	/**
+	 * @param array<mixed> $rootValue
+	 * @param array<mixed> $args
+	 * @param mixed $context
+	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @return array<mixed>|null
+	 * @throws \App\Exceptions\BadRequestException
+	 * @throws \ReflectionException
+	 * @throws \StORM\Exception\GeneralException
+	 */
+	public function collection(array $rootValue, array $args, mixed $context, ResolveInfo $resolveInfo): ?array
+	{
+		if ($this->onBeforeGetAll) {
+			[$rootValue, $args] = \call_user_func($this->onBeforeGetAll, $rootValue, $args);
+		}
+
+		$repository = $this->getRepository();
+
+		\assert($repository instanceof IGeneralRepository);
+
+		$collection = $repository->getCollection()
+			->orderBy([$args['sort'] ?? BaseType::DEFAULT_SORT => $args['order'] ?? BaseType::DEFAULT_ORDER])
+			->setPage($args['page'] ?? BaseType::DEFAULT_PAGE, $args['limit'] ?? BaseType::DEFAULT_LIMIT);
+
+		try {
+			$collection->filter((array) ($args['filters'] ?? []));
+		} catch (\Throwable $e) {
+			throw new BadRequestException('Invalid filters');
+		}
+
+		Debugger::log('frb:' . Debugger::timer());
+
+		$result = $this->fetchResult($collection, $resolveInfo);
+
+		Debugger::log('fra:' . Debugger::timer());
+
+		return $result;
 	}
 
 	public function getName(): string
@@ -122,7 +168,9 @@ abstract class CrudResolver extends BaseResolver
 	private function fetchResultHelper(Collection $collection, array $fieldSelection, ?string $selectOriginalId = null,): array
 	{
 		$objects = [];
-		$allRelations = $collection->getRepository()->getStructure()->getRelations();
+		$structure = $collection->getRepository()->getStructure();
+		$allRelations = $structure->getRelations();
+		$mutationSuffix = $collection->getConnection()->getMutationSuffix();
 
 		$relations = \array_keys(\array_filter(
 			$allRelations,
@@ -146,6 +194,16 @@ abstract class CrudResolver extends BaseResolver
 			}
 
 			if (Arrays::contains($relationCollections, $select)) {
+				continue;
+			}
+
+			if (!$column = $structure->getColumn($select)) {
+				continue;
+			}
+
+			if ($column->hasMutations()) {
+				$ormFieldSelection[$select] = "this.$select$mutationSuffix";
+
 				continue;
 			}
 
@@ -212,9 +270,5 @@ abstract class CrudResolver extends BaseResolver
 		}
 
 		return $objects;
-	}
-
-	public function __call(string $name, array $arguments): void
-	{
 	}
 }

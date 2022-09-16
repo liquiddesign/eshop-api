@@ -131,8 +131,12 @@ class GraphQL
 
 			$psrRequest = Psr7RequestFactory::fromNette($httpRequest);
 
+			Debugger::log('csb:' . Debugger::timer());
+			$schema = $this->getCachedSchema();
+			Debugger::log('csa:' . Debugger::timer());
+
 			$server = new StandardServer([
-				'schema' => $this->getCachedSchema(),
+				'schema' => $schema,
 				'queryBatching' => true,
 				'fieldResolver' => function ($objectValue, array $args, $context, ResolveInfo $info) {
 					$fieldName = $info->fieldName;
@@ -179,8 +183,12 @@ class GraphQL
 				},
 			]);
 
+			Debugger::log('sa:' . Debugger::timer());
+
 			/** @var \GraphQL\Executor\ExecutionResult $result */
 			$result = $server->executePsrRequest($psrRequest);
+
+			Debugger::log('ea:' . Debugger::timer());
 
 			if ($debugFlag = $this->getDebugFlag()) {
 				/** @var \StORM\Bridges\StormTracy<\stdClass>|null $stormTracy */
@@ -195,7 +203,11 @@ class GraphQL
 				}
 			}
 
-			return $result->toArray($debugFlag);
+			$result = $result->toArray($debugFlag);
+
+			Debugger::log('ra:' . Debugger::timer());
+
+			return $result;
 		} catch (\Throwable $e) {
 			if ($this->container->getParameters()['debugMode'] && !$this->container->getParameters()['productionMode']) {
 				throw $e;

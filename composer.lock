@@ -418,16 +418,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "2.4.1",
+            "version": "2.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "777d542e3af65f8e7a66a4d98ce7a697da339414"
+                "reference": "7d887621e69a0311eb50aed4a16f7044b2b385b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/777d542e3af65f8e7a66a4d98ce7a697da339414",
-                "reference": "777d542e3af65f8e7a66a4d98ce7a697da339414",
+                "url": "https://api.github.com/repos/composer/composer/zipball/7d887621e69a0311eb50aed4a16f7044b2b385b9",
+                "reference": "7d887621e69a0311eb50aed4a16f7044b2b385b9",
                 "shasum": ""
             },
             "require": {
@@ -457,7 +457,7 @@
                 "phpstan/phpstan-deprecation-rules": "^1",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1",
-                "phpstan/phpstan-symfony": "^1.1",
+                "phpstan/phpstan-symfony": "^1.2.10",
                 "symfony/phpunit-bridge": "^6.0"
             },
             "suggest": {
@@ -510,7 +510,7 @@
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/composer/issues",
-                "source": "https://github.com/composer/composer/tree/2.4.1"
+                "source": "https://github.com/composer/composer/tree/2.4.2"
             },
             "funding": [
                 {
@@ -526,7 +526,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-20T09:44:50+00:00"
+            "time": "2022-09-14T14:11:15+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -1300,16 +1300,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.4.5",
+            "version": "7.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "1dd98b0564cb3f6bd16ce683cb755f94c10fbd82"
+                "reference": "b50a2a1251152e43f6a37f0fa053e730a67d25ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/1dd98b0564cb3f6bd16ce683cb755f94c10fbd82",
-                "reference": "1dd98b0564cb3f6bd16ce683cb755f94c10fbd82",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/b50a2a1251152e43f6a37f0fa053e730a67d25ba",
+                "reference": "b50a2a1251152e43f6a37f0fa053e730a67d25ba",
                 "shasum": ""
             },
             "require": {
@@ -1324,10 +1324,10 @@
                 "psr/http-client-implementation": "1.0"
             },
             "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.4.1",
+                "bamarni/composer-bin-plugin": "^1.8.1",
                 "ext-curl": "*",
                 "php-http/client-integration-tests": "^3.0",
-                "phpunit/phpunit": "^8.5.5 || ^9.3.5",
+                "phpunit/phpunit": "^8.5.29 || ^9.5.23",
                 "psr/log": "^1.1 || ^2.0 || ^3.0"
             },
             "suggest": {
@@ -1337,8 +1337,12 @@
             },
             "type": "library",
             "extra": {
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": false
+                },
                 "branch-alias": {
-                    "dev-master": "7.4-dev"
+                    "dev-master": "7.5-dev"
                 }
             },
             "autoload": {
@@ -1404,7 +1408,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.4.5"
+                "source": "https://github.com/guzzle/guzzle/tree/7.5.0"
             },
             "funding": [
                 {
@@ -1420,20 +1424,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-06-20T22:16:13+00:00"
+            "time": "2022-08-28T15:39:27+00:00"
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "1.5.1",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "fe752aedc9fd8fcca3fe7ad05d419d32998a06da"
+                "reference": "b94b2807d85443f9719887892882d0329d1e2598"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/fe752aedc9fd8fcca3fe7ad05d419d32998a06da",
-                "reference": "fe752aedc9fd8fcca3fe7ad05d419d32998a06da",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/b94b2807d85443f9719887892882d0329d1e2598",
+                "reference": "b94b2807d85443f9719887892882d0329d1e2598",
                 "shasum": ""
             },
             "require": {
@@ -1488,7 +1492,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/1.5.1"
+                "source": "https://github.com/guzzle/promises/tree/1.5.2"
             },
             "funding": [
                 {
@@ -1504,7 +1508,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-22T20:56:57+00:00"
+            "time": "2022-08-28T14:55:35+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -2162,16 +2166,16 @@
         },
         {
             "name": "liquiddesign/eshop",
-            "version": "v1.0.0-beta.8",
+            "version": "v1.0.0-beta.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liquiddesign/eshop.git",
-                "reference": "7e5d0cc99cc6e0255d61d6980579af05c0b1e1ae"
+                "reference": "3810012dc301c02775624c2c1e5fc33ab01146dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liquiddesign/eshop/zipball/7e5d0cc99cc6e0255d61d6980579af05c0b1e1ae",
-                "reference": "7e5d0cc99cc6e0255d61d6980579af05c0b1e1ae",
+                "url": "https://api.github.com/repos/liquiddesign/eshop/zipball/3810012dc301c02775624c2c1e5fc33ab01146dd",
+                "reference": "3810012dc301c02775624c2c1e5fc33ab01146dd",
                 "shasum": ""
             },
             "require": {
@@ -2231,9 +2235,9 @@
             ],
             "description": "Ⓔ Služby, entity, administrace a kontroly pro eshop",
             "support": {
-                "source": "https://github.com/liquiddesign/eshop/tree/v1.0.0-beta.8"
+                "source": "https://github.com/liquiddesign/eshop/tree/v1.0.0-beta.9"
             },
-            "time": "2022-08-04T13:50:25+00:00"
+            "time": "2022-08-31T13:18:05+00:00"
         },
         {
             "name": "liquiddesign/forms",
@@ -2288,16 +2292,16 @@
         },
         {
             "name": "liquiddesign/grid",
-            "version": "v0.1.3",
+            "version": "v0.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liquiddesign/grid.git",
-                "reference": "4ab005c4f5cad78b509d84172101887276e84eb6"
+                "reference": "cabafbd435d1ab188f2045b8fa9a10f6ab7b7f20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liquiddesign/grid/zipball/4ab005c4f5cad78b509d84172101887276e84eb6",
-                "reference": "4ab005c4f5cad78b509d84172101887276e84eb6",
+                "url": "https://api.github.com/repos/liquiddesign/grid/zipball/cabafbd435d1ab188f2045b8fa9a10f6ab7b7f20",
+                "reference": "cabafbd435d1ab188f2045b8fa9a10f6ab7b7f20",
                 "shasum": ""
             },
             "require": {
@@ -2331,22 +2335,22 @@
             ],
             "description": "⊞ Komponenty datalistu, datagridu, stránkování, řazení a filtry",
             "support": {
-                "source": "https://github.com/liquiddesign/grid/tree/v0.1.3"
+                "source": "https://github.com/liquiddesign/grid/tree/v0.1.6"
             },
-            "time": "2022-08-25T05:48:55+00:00"
+            "time": "2022-09-01T10:41:29+00:00"
         },
         {
             "name": "liquiddesign/messages",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liquiddesign/messages.git",
-                "reference": "55cb8d4cfda11e6ae3e98da9fc368eff2c574098"
+                "reference": "fedeee8dd906b96446b3e90e4fd1bc1aeb33ad2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liquiddesign/messages/zipball/55cb8d4cfda11e6ae3e98da9fc368eff2c574098",
-                "reference": "55cb8d4cfda11e6ae3e98da9fc368eff2c574098",
+                "url": "https://api.github.com/repos/liquiddesign/messages/zipball/fedeee8dd906b96446b3e90e4fd1bc1aeb33ad2d",
+                "reference": "fedeee8dd906b96446b3e90e4fd1bc1aeb33ad2d",
                 "shasum": ""
             },
             "require": {
@@ -2384,9 +2388,9 @@
             ],
             "description": "✉ Služba pro generování zpráv pro Nette Mailer ze šablon z databáze",
             "support": {
-                "source": "https://github.com/liquiddesign/messages/tree/v0.1.1"
+                "source": "https://github.com/liquiddesign/messages/tree/v0.1.2"
             },
-            "time": "2022-07-19T08:31:26+00:00"
+            "time": "2022-09-08T09:23:09+00:00"
         },
         {
             "name": "liquiddesign/migrator",
@@ -2435,16 +2439,16 @@
         },
         {
             "name": "liquiddesign/pages",
-            "version": "v1.0.4",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liquiddesign/pages.git",
-                "reference": "7a515cdb2bf82c2e0478635763b2c572bbc03d2e"
+                "reference": "3faea327bf38e1796b211068e0adb0f998a6fa7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liquiddesign/pages/zipball/7a515cdb2bf82c2e0478635763b2c572bbc03d2e",
-                "reference": "7a515cdb2bf82c2e0478635763b2c572bbc03d2e",
+                "url": "https://api.github.com/repos/liquiddesign/pages/zipball/3faea327bf38e1796b211068e0adb0f998a6fa7f",
+                "reference": "3faea327bf38e1796b211068e0adb0f998a6fa7f",
                 "shasum": ""
             },
             "require": {
@@ -2476,9 +2480,9 @@
             ],
             "description": "℗ Nette extension obsahující databázový router, přesměrování (na StORMu) a přidružené funkce.",
             "support": {
-                "source": "https://github.com/liquiddesign/pages/tree/v1.0.4"
+                "source": "https://github.com/liquiddesign/pages/tree/v1.0.8"
             },
-            "time": "2022-05-31T08:24:44+00:00"
+            "time": "2022-09-01T19:55:04+00:00"
         },
         {
             "name": "liquiddesign/security",
@@ -2576,16 +2580,16 @@
         },
         {
             "name": "liquiddesign/storm",
-            "version": "v1.0.52",
+            "version": "v1.0.55",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liquiddesign/storm.git",
-                "reference": "81686dd037e528c37a4b508ab7cba0923cb964ed"
+                "reference": "0a4cf7232432bcf43dac6cdc75798d1ddedcafef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liquiddesign/storm/zipball/81686dd037e528c37a4b508ab7cba0923cb964ed",
-                "reference": "81686dd037e528c37a4b508ab7cba0923cb964ed",
+                "url": "https://api.github.com/repos/liquiddesign/storm/zipball/0a4cf7232432bcf43dac6cdc75798d1ddedcafef",
+                "reference": "0a4cf7232432bcf43dac6cdc75798d1ddedcafef",
                 "shasum": ""
             },
             "require": {
@@ -2617,9 +2621,9 @@
             ],
             "description": "ϟ StORM is lightweight PHP ORM library based on PDO",
             "support": {
-                "source": "https://github.com/liquiddesign/storm/tree/v1.0.52"
+                "source": "https://github.com/liquiddesign/storm/tree/v1.0.55"
             },
-            "time": "2022-08-12T11:03:20+00:00"
+            "time": "2022-09-07T10:12:06+00:00"
         },
         {
             "name": "liquiddesign/translator",
@@ -2673,16 +2677,16 @@
         },
         {
             "name": "liquiddesign/web",
-            "version": "0.1.9",
+            "version": "v0.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liquiddesign/web.git",
-                "reference": "027882a8df5da29db1d7383f54941d28c2f8bef5"
+                "reference": "93a6ee42f6777d4324774c5506406d8c5e692c8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liquiddesign/web/zipball/027882a8df5da29db1d7383f54941d28c2f8bef5",
-                "reference": "027882a8df5da29db1d7383f54941d28c2f8bef5",
+                "url": "https://api.github.com/repos/liquiddesign/web/zipball/93a6ee42f6777d4324774c5506406d8c5e692c8e",
+                "reference": "93a6ee42f6777d4324774c5506406d8c5e692c8e",
                 "shasum": ""
             },
             "require": {
@@ -2721,9 +2725,9 @@
             ],
             "description": "Ⓦ Služby, entity, administrace a kontroly pro CMS",
             "support": {
-                "source": "https://github.com/liquiddesign/web/tree/0.1.9"
+                "source": "https://github.com/liquiddesign/web/tree/v0.1.10"
             },
-            "time": "2022-06-23T11:56:20+00:00"
+            "time": "2022-08-29T14:35:44+00:00"
         },
         {
             "name": "mailerlite/mailerlite-api-v2-php-sdk",
@@ -2925,16 +2929,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.61.0",
+            "version": "2.62.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "bdf4f4fe3a3eac4de84dbec0738082a862c68ba6"
+                "reference": "01bc4cdefe98ef58d1f9cb31bdbbddddf2a88f7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bdf4f4fe3a3eac4de84dbec0738082a862c68ba6",
-                "reference": "bdf4f4fe3a3eac4de84dbec0738082a862c68ba6",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/01bc4cdefe98ef58d1f9cb31bdbbddddf2a88f7a",
+                "reference": "01bc4cdefe98ef58d1f9cb31bdbbddddf2a88f7a",
                 "shasum": ""
             },
             "require": {
@@ -3023,7 +3027,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-06T12:41:24+00:00"
+            "time": "2022-09-02T07:48:13+00:00"
         },
         {
             "name": "nette/application",
@@ -3919,21 +3923,21 @@
         },
         {
             "name": "nette/php-generator",
-            "version": "v4.0.2",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/php-generator.git",
-                "reference": "f19b7975c7c4d729be5b64fce7eb72f0d4aac6fc"
+                "reference": "ce449138b73ee788e818afeb41af51df3ec03710"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/php-generator/zipball/f19b7975c7c4d729be5b64fce7eb72f0d4aac6fc",
-                "reference": "f19b7975c7c4d729be5b64fce7eb72f0d4aac6fc",
+                "url": "https://api.github.com/repos/nette/php-generator/zipball/ce449138b73ee788e818afeb41af51df3ec03710",
+                "reference": "ce449138b73ee788e818afeb41af51df3ec03710",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.2.7 || ^4.0",
-                "php": ">=8.0 <8.2"
+                "php": ">=8.0 <8.3"
             },
             "require-dev": {
                 "nette/tester": "^2.4",
@@ -3981,9 +3985,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/php-generator/issues",
-                "source": "https://github.com/nette/php-generator/tree/v4.0.2"
+                "source": "https://github.com/nette/php-generator/tree/v4.0.3"
             },
-            "time": "2022-06-17T12:20:08+00:00"
+            "time": "2022-09-12T23:43:02+00:00"
         },
         {
             "name": "nette/robot-loader",
@@ -4370,20 +4374,20 @@
         },
         {
             "name": "nette/utils",
-            "version": "v3.2.7",
+            "version": "v3.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "0af4e3de4df9f1543534beab255ccf459e7a2c99"
+                "reference": "02a54c4c872b99e4ec05c4aec54b5a06eb0f6368"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/0af4e3de4df9f1543534beab255ccf459e7a2c99",
-                "reference": "0af4e3de4df9f1543534beab255ccf459e7a2c99",
+                "url": "https://api.github.com/repos/nette/utils/zipball/02a54c4c872b99e4ec05c4aec54b5a06eb0f6368",
+                "reference": "02a54c4c872b99e4ec05c4aec54b5a06eb0f6368",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2 <8.2"
+                "php": ">=7.2 <8.3"
             },
             "conflict": {
                 "nette/di": "<3.0.6"
@@ -4449,9 +4453,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/utils/issues",
-                "source": "https://github.com/nette/utils/tree/v3.2.7"
+                "source": "https://github.com/nette/utils/tree/v3.2.8"
             },
-            "time": "2022-01-24T11:29:14+00:00"
+            "time": "2022-09-12T23:36:20+00:00"
         },
         {
             "name": "nyholm/psr7",
@@ -5579,16 +5583,16 @@
         },
         {
             "name": "seld/phar-utils",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/phar-utils.git",
-                "reference": "9f3452c93ff423469c0d56450431562ca423dcee"
+                "reference": "ea2f4014f163c1be4c601b9b7bd6af81ba8d701c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/9f3452c93ff423469c0d56450431562ca423dcee",
-                "reference": "9f3452c93ff423469c0d56450431562ca423dcee",
+                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/ea2f4014f163c1be4c601b9b7bd6af81ba8d701c",
+                "reference": "ea2f4014f163c1be4c601b9b7bd6af81ba8d701c",
                 "shasum": ""
             },
             "require": {
@@ -5621,9 +5625,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/phar-utils/issues",
-                "source": "https://github.com/Seldaek/phar-utils/tree/1.2.0"
+                "source": "https://github.com/Seldaek/phar-utils/tree/1.2.1"
             },
-            "time": "2021-12-10T11:20:11+00:00"
+            "time": "2022-08-31T10:31:18+00:00"
         },
         {
             "name": "seld/signal-handler",
@@ -6102,16 +6106,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v6.1.3",
+            "version": "v6.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "43fcb5c5966b43c56bcfa481368d90d748936ab8"
+                "reference": "7fccea8728aa2d431a6725b02b3ce759049fc84d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/43fcb5c5966b43c56bcfa481368d90d748936ab8",
-                "reference": "43fcb5c5966b43c56bcfa481368d90d748936ab8",
+                "url": "https://api.github.com/repos/symfony/console/zipball/7fccea8728aa2d431a6725b02b3ce759049fc84d",
+                "reference": "7fccea8728aa2d431a6725b02b3ce759049fc84d",
                 "shasum": ""
             },
             "require": {
@@ -6178,7 +6182,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v6.1.3"
+                "source": "https://github.com/symfony/console/tree/v6.1.4"
             },
             "funding": [
                 {
@@ -6194,7 +6198,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-22T14:17:57+00:00"
+            "time": "2022-08-26T10:32:31+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -6265,16 +6269,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v6.1.3",
+            "version": "v6.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "c780e677cddda78417fa5187a7c6cd2f21110db9"
+                "reference": "3f39c04d2630c34019907b02f85672dac99f8659"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/c780e677cddda78417fa5187a7c6cd2f21110db9",
-                "reference": "c780e677cddda78417fa5187a7c6cd2f21110db9",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/3f39c04d2630c34019907b02f85672dac99f8659",
+                "reference": "3f39c04d2630c34019907b02f85672dac99f8659",
                 "shasum": ""
             },
             "require": {
@@ -6308,7 +6312,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/filesystem/tree/v6.1.3"
+                "source": "https://github.com/symfony/filesystem/tree/v6.1.4"
             },
             "funding": [
                 {
@@ -6324,7 +6328,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-20T14:45:06+00:00"
+            "time": "2022-08-02T16:17:38+00:00"
         },
         {
             "name": "symfony/finder",
@@ -7260,16 +7264,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v6.1.3",
+            "version": "v6.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "f35241f45c30bcd9046af2bb200a7086f70e1d6b"
+                "reference": "290972cad7b364e3befaa74ba0ec729800fb161c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/f35241f45c30bcd9046af2bb200a7086f70e1d6b",
-                "reference": "f35241f45c30bcd9046af2bb200a7086f70e1d6b",
+                "url": "https://api.github.com/repos/symfony/string/zipball/290972cad7b364e3befaa74ba0ec729800fb161c",
+                "reference": "290972cad7b364e3befaa74ba0ec729800fb161c",
                 "shasum": ""
             },
             "require": {
@@ -7325,7 +7329,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v6.1.3"
+                "source": "https://github.com/symfony/string/tree/v6.1.4"
             },
             "funding": [
                 {
@@ -7341,20 +7345,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-27T15:50:51+00:00"
+            "time": "2022-08-12T18:05:43+00:00"
         },
         {
             "name": "symfony/translation",
-            "version": "v6.1.3",
+            "version": "v6.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "b042e16087d298d08c1f013ff505d16c12a3b1be"
+                "reference": "45d0f5bb8df7255651ca91c122fab604e776af03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/b042e16087d298d08c1f013ff505d16c12a3b1be",
-                "reference": "b042e16087d298d08c1f013ff505d16c12a3b1be",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/45d0f5bb8df7255651ca91c122fab604e776af03",
+                "reference": "45d0f5bb8df7255651ca91c122fab604e776af03",
                 "shasum": ""
             },
             "require": {
@@ -7421,7 +7425,7 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/translation/tree/v6.1.3"
+                "source": "https://github.com/symfony/translation/tree/v6.1.4"
             },
             "funding": [
                 {
@@ -7437,7 +7441,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-20T13:46:29+00:00"
+            "time": "2022-08-02T16:17:38+00:00"
         },
         {
             "name": "symfony/translation-contracts",
@@ -7594,16 +7598,16 @@
         },
         {
             "name": "thecodingmachine/safe",
-            "version": "v2.2.3",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thecodingmachine/safe.git",
-                "reference": "e454a3142d2197694d1fda291a4462ccd3f66e12"
+                "reference": "dc8df8f5047e7d3021a3f41f492dc99f8b3dc475"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thecodingmachine/safe/zipball/e454a3142d2197694d1fda291a4462ccd3f66e12",
-                "reference": "e454a3142d2197694d1fda291a4462ccd3f66e12",
+                "url": "https://api.github.com/repos/thecodingmachine/safe/zipball/dc8df8f5047e7d3021a3f41f492dc99f8b3dc475",
+                "reference": "dc8df8f5047e7d3021a3f41f492dc99f8b3dc475",
                 "shasum": ""
             },
             "require": {
@@ -7726,9 +7730,9 @@
             "description": "PHP core functions that throw exceptions instead of returning FALSE on error",
             "support": {
                 "issues": "https://github.com/thecodingmachine/safe/issues",
-                "source": "https://github.com/thecodingmachine/safe/tree/v2.2.3"
+                "source": "https://github.com/thecodingmachine/safe/tree/v2.3.0"
             },
-            "time": "2022-08-04T14:05:49+00:00"
+            "time": "2022-09-13T15:49:48+00:00"
         },
         {
             "name": "tracy/tracy",
@@ -7986,20 +7990,20 @@
         },
         {
             "name": "nette/tester",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tester.git",
-                "reference": "2e788e243bb17a6889aac5411f3fabc48cc5b23a"
+                "reference": "451f6e97b117797e817446de8d19fe06e54fd33f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tester/zipball/2e788e243bb17a6889aac5411f3fabc48cc5b23a",
-                "reference": "2e788e243bb17a6889aac5411f3fabc48cc5b23a",
+                "url": "https://api.github.com/repos/nette/tester/zipball/451f6e97b117797e817446de8d19fe06e54fd33f",
+                "reference": "451f6e97b117797e817446de8d19fe06e54fd33f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2 <8.2"
+                "php": ">=7.2 <8.3"
             },
             "require-dev": {
                 "ext-simplexml": "*",
@@ -8055,9 +8059,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/tester/issues",
-                "source": "https://github.com/nette/tester/tree/v2.4.2"
+                "source": "https://github.com/nette/tester/tree/v2.4.3"
             },
-            "time": "2022-03-24T19:02:37+00:00"
+            "time": "2022-08-29T16:39:38+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
@@ -8106,16 +8110,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.8.2",
+            "version": "1.8.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "c53312ecc575caf07b0e90dee43883fdf90ca67c"
+                "reference": "f6598a5ff12ca4499a836815e08b4d77a2ddeb20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c53312ecc575caf07b0e90dee43883fdf90ca67c",
-                "reference": "c53312ecc575caf07b0e90dee43883fdf90ca67c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f6598a5ff12ca4499a836815e08b4d77a2ddeb20",
+                "reference": "f6598a5ff12ca4499a836815e08b4d77a2ddeb20",
                 "shasum": ""
             },
             "require": {
@@ -8139,9 +8143,13 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.8.2"
+                "source": "https://github.com/phpstan/phpstan/tree/1.8.5"
             },
             "funding": [
                 {
@@ -8153,15 +8161,11 @@
                     "type": "github"
                 },
                 {
-                    "url": "https://www.patreon.com/phpstan",
-                    "type": "patreon"
-                },
-                {
                     "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-20T09:57:31+00:00"
+            "time": "2022-09-07T16:05:32+00:00"
         },
         {
             "name": "phpstan/phpstan-nette",
