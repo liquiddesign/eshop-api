@@ -2,7 +2,7 @@
 
 namespace App\Resolvers;
 
-use App\Crud\CrudResolver;
+use App\Resolvers\Base\CrudResolver;
 use Eshop\DB\Product;
 use GraphQL\Type\Definition\ResolveInfo;
 

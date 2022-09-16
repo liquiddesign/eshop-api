@@ -3,7 +3,7 @@
 namespace App\Resolvers;
 
 use Admin\DB\Administrator;
-use App\Crud\CrudResolver;
+use App\Resolvers\Base\CrudResolver;
 
 class AdministratorResolver extends CrudResolver
 {

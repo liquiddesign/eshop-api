@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Base\BaseMutation;
-use App\Base\BaseQuery;
-use App\Exceptions\BadRequestException;
+use App\Resolvers\Exceptions\BadRequestException;
+use App\Schema\Base\BaseMutation;
+use App\Schema\Base\BaseQuery;
 use ArrayAccess;
 use Closure;
 use Contributte\Psr7\Psr7RequestFactory;
@@ -62,7 +62,7 @@ class GraphQL
 					/** @var class-string $resolverName */
 					$resolverName = 'App\\Resolvers\\' . Strings::firstUpper(Strings::lower($matchedFieldName[0])) . 'Resolver';
 
-					/** @var \App\BaseResolver|null $resolver */
+					/** @var \App\Resolvers\Base\BaseResolver|null $resolver */
 					$resolver = $this->container->getByType($resolverName, false);
 
 					if (!$resolver) {

@@ -2,7 +2,7 @@
 
 namespace App\Resolvers;
 
-use App\Crud\CrudResolver;
+use App\Resolvers\Base\CrudResolver;
 use Web\DB\Setting;
 
 class SettingResolver extends CrudResolver

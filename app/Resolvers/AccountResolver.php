@@ -2,7 +2,7 @@
 
 namespace App\Resolvers;
 
-use App\Crud\CrudResolver;
+use App\Resolvers\Base\CrudResolver;
 use Security\DB\Account;
 
 class AccountResolver extends CrudResolver
