@@ -39,7 +39,7 @@ search:
 		in: %appDir%
 		files: [Resolvers/*Resolver.php, Resolvers/*/*Resolver.php]
 		implements:
-		    - App\BaseResolver
+		    - App\Resolvers\Base\BaseResolver
 	graphql_types:
 		in: %appDir%
 		files: [Types/*/*Query.php, Types/*/*Mutation.php]
@@ -76,22 +76,22 @@ extensions:
   messages: \Messages\Bridges\MessagesDI
   translator: Translator\Bridges\TranslatorDI
   comgate: Contributte\Comgate\DI\ComgateExtension
-  typeRegister: App\TypeRegisterDI
+  typeRegister: App\Schema\TypeRegisterDI
 
 typeRegister:
     types:
         output:
-            setting: App\Outputs\Web\SettingOutput
-            role: App\Outputs\Security\RoleOutput
-            customerGroup: App\Outputs\Eshop\CustomerGroupOutput
-            pricelist: App\Outputs\Eshop\PricelistOutput
-            address: App\Outputs\Eshop\AddressOutput
-            productGetProducts: App\Outputs\Eshop\ProductGetProductsOutput
+            setting: App\Schema\Outputs\Web\SettingOutput
+            role: App\Schema\Outputs\Security\RoleOutput
+            customerGroup: App\Schema\Outputs\Eshop\CustomerGroupOutput
+            pricelist: App\Schema\Outputs\Eshop\PricelistOutput
+            address: App\Schema\Outputs\Eshop\AddressOutput
+            productGetProducts: App\Schema\Outputs\Eshop\ProductGetProductsOutput
         crud:
-            administrator: [App\Outputs\Admin\AdministratorOutput, App\Inputs\Admin\AdministratorCreateInput, App\Inputs\Admin\AdministratorUpdateInput]
-            account: [App\Outputs\Security\AccountOutput, App\Inputs\Security\AccountCreateInput, App\Inputs\Security\AccountUpdateInput]
-            customer: [App\Outputs\Eshop\CustomerOutput, App\Inputs\Eshop\CustomerCreateInput, App\Inputs\Eshop\CustomerUpdateInput]
-            product: [App\Outputs\Eshop\ProductOutput]
+            administrator: [App\Schema\Outputs\Admin\AdministratorOutput, App\Schema\Inputs\Admin\AdministratorCreateInput, App\Schema\Inputs\Admin\AdministratorUpdateInput]
+            account: [App\Schema\Outputs\Security\AccountOutput, App\Schema\Inputs\Security\AccountCreateInput, App\Schema\Inputs\Security\AccountUpdateInput]
+            customer: [App\Schema\Outputs\Eshop\CustomerOutput, App\Schema\Inputs\Eshop\CustomerCreateInput, App\Schema\Inputs\Eshop\CustomerUpdateInput]
+            product: [App\Schema\Outputs\Eshop\ProductOutput]
 
 storm:
   debug: %debugMode%

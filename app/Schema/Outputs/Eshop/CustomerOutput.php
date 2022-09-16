@@ -16,6 +16,6 @@ class CustomerOutput extends BaseOutput
 			'fields' => $typeRegister->createOutputFieldsFromClass(Customer::class, exclude: ['account']),
 		];
 
-		parent::__construct($config, $typeRegister);
+		parent::__construct($config);
 	}
 }

@@ -9,9 +9,7 @@ use App\Schema\Base\OrderEnum;
 use App\Schema\Inputs\InputRelationFieldsEnum;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\InputType;
-use GraphQL\Type\Definition\InterfaceType;
 use GraphQL\Type\Definition\NullableType;
-use GraphQL\Type\Definition\OutputType;
 use GraphQL\Type\Definition\Type;
 use MLL\GraphQLScalars\Date;
 use MLL\GraphQLScalars\DateTime;
@@ -20,6 +18,8 @@ use MLL\GraphQLScalars\MixedScalar;
 use MLL\GraphQLScalars\NullScalar;
 use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
+use SimPod\GraphQLUtils\Builder\FieldBuilder;
+use SimPod\GraphQLUtils\Builder\ObjectBuilder;
 use StORM\RelationCollection;
 use StORM\SchemaManager;
 
@@ -322,7 +322,7 @@ class TypeRegister extends Type
 		return $type;
 	}
 
-	public function getOutputType(string $name): OutputType
+	public function getOutputType(string $name): Type
 	{
 		if (!Strings::endsWith($name, 'Output')) {
 			$name .= 'Output';
@@ -339,6 +339,26 @@ class TypeRegister extends Type
 		}
 
 		return $type;
+	}
+
+	public function getManyOutputType(string $name): Type
+	{
+		$type = $this->getOutputType($name);
+
+		if ($type instanceof MixedScalar) {
+			return $this::mixed();
+		}
+
+		if (!Strings::endsWith($name, 'ManyOutput')) {
+			$name .= 'ManyOutput';
+		}
+
+		return $this->types[$name] ??= new \GraphQL\Type\Definition\ObjectType(
+			ObjectBuilder::create(Strings::firstUpper($name))->setFields([
+				FieldBuilder::create('data', TypeRegister::nonNull(TypeRegister::listOf($type)))->build(),
+				FieldBuilder::create('onPageCount', TypeRegister::nonNull(TypeRegister::int()))->build(),
+			])->build(),
+		);
 	}
 
 	/**
@@ -364,17 +384,6 @@ class TypeRegister extends Type
 				'limit' => $this::int(),
 				'page' => $this::int(),
 				'filters' => $this->JSON(),
-			],
-		]);
-	}
-
-	public function getManyOutputInterface(): InterfaceType
-	{
-		return $this->types['manyInterface'] ??= new InterfaceType([
-			'name' => 'ManyInterface',
-			'fields' => [
-				'onPageCount' => TypeRegister::nonNull(TypeRegister::int()),
-				'totalCount' => TypeRegister::nonNull(TypeRegister::int()),
 			],
 		]);
 	}

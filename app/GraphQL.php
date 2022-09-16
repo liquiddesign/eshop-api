@@ -43,9 +43,7 @@ class GraphQL
 
 			$psrRequest = Psr7RequestFactory::fromNette($httpRequest);
 
-			Debugger::log('csb:' . Debugger::timer());
 			$schema = $this->getCachedSchema();
-			Debugger::log('csa:' . Debugger::timer());
 
 			$server = new StandardServer([
 				'schema' => $schema,
@@ -95,12 +93,8 @@ class GraphQL
 				},
 			]);
 
-			Debugger::log('sa:' . Debugger::timer());
-
 			/** @var \GraphQL\Executor\ExecutionResult $result */
 			$result = $server->executePsrRequest($psrRequest);
-
-			Debugger::log('ea:' . Debugger::timer());
 
 			if ($debugFlag = $this->getDebugFlag()) {
 				/** @var \StORM\Bridges\StormTracy<\stdClass>|null $stormTracy */
@@ -116,8 +110,6 @@ class GraphQL
 			}
 
 			$result = $result->toArray($debugFlag);
-
-			Debugger::log('ra:' . Debugger::timer());
 
 			return $result;
 		} catch (\Throwable $e) {
@@ -213,7 +205,7 @@ class GraphQL
 		$debug = DebugFlag::NONE;
 
 		if ($this->container->getParameters()['debugMode'] && !$this->container->getParameters()['productionMode']) {
-			Debugger::log('debugMode');
+			Debugger::log('Debug mode ENABLED');
 			$debug = DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE;
 		}
 

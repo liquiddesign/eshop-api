@@ -70,23 +70,7 @@ abstract class CrudResolver extends BaseResolver
 			[$rootValue, $args] = \call_user_func($this->onBeforeGetAll, $rootValue, $args);
 		}
 
-		$collection = $this->getRepository()->many()
-			->orderBy([$args['sort'] ?? BaseType::DEFAULT_SORT => $args['order'] ?? BaseType::DEFAULT_ORDER])
-			->setPage($args['page'] ?? BaseType::DEFAULT_PAGE, $args['limit'] ?? BaseType::DEFAULT_LIMIT);
-
-		try {
-			$collection->filter((array) ($args['filters'] ?? []));
-		} catch (\Throwable $e) {
-			throw new BadRequestException('Invalid filters');
-		}
-
-		Debugger::log('frb:' . Debugger::timer());
-
-		$result = $this->fetchResult($collection, $resolveInfo);
-
-		Debugger::log('fra:' . Debugger::timer());
-
-		return $result;
+		return $this->fetchResult($this->getRepository()->many(), $resolveInfo, $args['manyInput'] ?? null);
 	}
 
 	/**
@@ -109,26 +93,7 @@ abstract class CrudResolver extends BaseResolver
 
 		\assert($repository instanceof IGeneralRepository);
 
-		$collection = $repository->getCollection()
-			->orderBy([$args['sort'] ?? BaseType::DEFAULT_SORT => $args['order'] ?? BaseType::DEFAULT_ORDER])
-			->setPage($args['page'] ?? BaseType::DEFAULT_PAGE, $args['limit'] ?? BaseType::DEFAULT_LIMIT);
-
-		try {
-			$collection->filter((array) ($args['filters'] ?? []));
-		} catch (\Throwable $e) {
-			throw new BadRequestException('Invalid filters');
-		}
-
-		Debugger::log('frb:' . Debugger::timer());
-
-		$result = $this->fetchResult($collection, $resolveInfo);
-
-		\var_dump($result);
-		die();
-
-		Debugger::log('fra:' . Debugger::timer());
-
-		return $result;
+		return $this->fetchResult($repository->getCollection(), $resolveInfo, $args['manyInput'] ?? null);
 	}
 
 	public function getName(): string
@@ -152,14 +117,32 @@ abstract class CrudResolver extends BaseResolver
 	 * @return array<mixed>
 	 * @throws \StORM\Exception\GeneralException|\ReflectionException
 	 */
-	protected function fetchResult(Collection $collection, ResolveInfo $resolveInfo): array
+	protected function fetchResult(Collection $collection, ResolveInfo $resolveInfo, ?array $manyInput = null): array
 	{
 		$fieldSelection = $resolveInfo->getFieldSelection(BaseType::MAX_DEPTH);
 
-		$result = $this->fetchResultHelper($collection, $fieldSelection);
+		try {
+			$collection->filter((array) ($manyInput['filters'] ?? []));
+		} catch (\Throwable $e) {
+			throw new BadRequestException('Invalid filters');
+		}
 
-		$result['onPageCount'] = \count($result);
-		$result['totalCount'] = $collection->clear()->enum();
+		$collection->orderBy([$manyInput['sort'] ?? BaseType::DEFAULT_SORT => $manyInput['order'] ?? BaseType::DEFAULT_ORDER])
+			->setPage($manyInput['page'] ?? BaseType::DEFAULT_PAGE, $manyInput['limit'] ?? BaseType::DEFAULT_LIMIT);
+
+		$result = [];
+
+		if (isset($fieldSelection['data'])) {
+			$result['data'] = $this->fetchResultHelper($collection, $fieldSelection['data']);
+		}
+
+		if (isset($fieldSelection['onPageCount'])) {
+			if (!isset($result['data'])) {
+				throw new BadRequestException('Can´t request "onPageCount" without requesting "data".');
+			}
+
+			$result['onPageCount'] = \count($result['data']);
+		}
 
 		return $result;
 	}

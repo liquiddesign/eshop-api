@@ -5,7 +5,6 @@ namespace App\Schema\Base;
 use App\Schema\TypeRegister;
 use Common\DB\IGeneralRepository;
 use GraphQL\Type\Definition\NullableType;
-use GraphQL\Type\Definition\OutputType;
 use GraphQL\Type\Definition\Type;
 use Nette\DI\Container;
 use Nette\Utils\Strings;
@@ -55,9 +54,9 @@ abstract class CrudQuery extends BaseQuery
 					],
 				],
 				"{$baseName}Many" => [
-					'type' => TypeRegister::nonNull(TypeRegister::listOf($outputType)),
+					'type' => $this->typeRegister->getManyOutputType($this->getName()),
 					'args' => [
-						'input' => $this->typeRegister->getManyInput(),
+						'manyInput' => $this->typeRegister->getManyInput(),
 					],
 				],
 			],
@@ -65,9 +64,9 @@ abstract class CrudQuery extends BaseQuery
 
 		if ($this->getRepository() instanceof IGeneralRepository) {
 			$localConfig['fields']["{$baseName}Collection"] = [
-				'type' => TypeRegister::nonNull(TypeRegister::listOf($outputType)),
+				'type' => $this->typeRegister->getManyOutputType($this->getName()),
 				'args' => [
-					'input' => $this->typeRegister->getManyInput(),
+					'manyInput' => $this->typeRegister->getManyInput(),
 				],
 			];
 		}
@@ -93,7 +92,7 @@ abstract class CrudQuery extends BaseQuery
 		return Strings::lower($reflection->getShortName());
 	}
 
-	public function getOutputType(): OutputType
+	public function getOutputType(): Type
 	{
 		return $this->typeRegister->getOutputType($this->getName());
 	}
