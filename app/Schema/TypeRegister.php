@@ -275,7 +275,7 @@ class TypeRegister extends Type
 							(!$isForceOptional && !$reflectionType->allowsNull())
 						)
 					)
-				) && $type instanceof NullableType && $property->getDefaultValue() === null) {
+				) && $type instanceof NullableType) {
 				$type = static::nonNull($type);
 			}
 
@@ -294,9 +294,13 @@ class TypeRegister extends Type
 					$fields['remove' . Strings::firstUpper($name)] = $type;
 				}
 			} else {
-				$fields[$name] = function () use ($type) {
-					return $type;
-				};
+				$fields[$name] = ['type' => $type,];
+
+				$propertyDefaultValue = $property->getDefaultValue();
+
+				if ($propertyDefaultValue !== null) {
+					$fields[$name]['defaultValue'] = $propertyDefaultValue;
+				}
 			}
 		}
 

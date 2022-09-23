@@ -17,12 +17,6 @@ use StORM\Repository;
  */
 abstract class CrudQuery extends BaseQuery
 {
-	/** @var callable(array<mixed>, array<mixed>): array<mixed>|null */
-	public $onBeforeGetOne = null;
-
-	/** @var callable(array<mixed>, array<mixed>): array<mixed>|null */
-	public $onBeforeGetAll = null;
-
 	protected TypeRegister $typeRegister;
 
 	/**
@@ -43,7 +37,6 @@ abstract class CrudQuery extends BaseQuery
 		$outputType = $this->getOutputType();
 
 		\assert($outputType instanceof NullableType);
-		\assert($outputType instanceof Type);
 
 		$localConfig = [
 			'fields' => [

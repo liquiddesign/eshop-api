@@ -22,6 +22,7 @@ use GraphQL\Utils\SchemaPrinter;
 use Nette\DI\Container;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
+use StORM\Connection;
 use Tracy\Debugger;
 use Tracy\ILogger;
 
@@ -50,6 +51,10 @@ class GraphQL
 				'queryBatching' => true,
 				'fieldResolver' => function ($objectValue, array $args, $context, ResolveInfo $info) {
 					$fieldName = $info->fieldName;
+
+					if (isset($objectValue[$fieldName]) || (\is_array($objectValue) && \array_key_exists($fieldName, $objectValue))) {
+						return $objectValue[$fieldName];
+					}
 
 					$matchedFieldName = \preg_split('~^[^A-Z]+\K|[A-Z][^A-Z]+\K~', $fieldName, 0, \PREG_SPLIT_NO_EMPTY);
 
@@ -101,7 +106,13 @@ class GraphQL
 				$stormTracy = Debugger::getBar()->getPanel('StORM\Bridges\StormTracy');
 
 				if ($stormTracy) {
-					Debugger::log('After request:' . Debugger::timer());
+					/** @var \StORM\Connection $connection */
+					$connection = $this->container->getByType(Connection::class);
+
+					foreach ($connection->getLog() as $logItem) {
+						Debugger::log($logItem->getSql() . ':' . $logItem->getTotalTime());
+					}
+
 					Debugger::log('Storm total time:' . $stormTracy->getTotalTime());
 					Debugger::log('Storm total queries:' . $stormTracy->getTotalQueries());
 				} else {

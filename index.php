@@ -9,10 +9,23 @@ if (\is_file($maintenance = __DIR__ . '/maintenance.php')) {
 	require $maintenance;
 }
 
-$container = \App\Bootstrap::boot()
-	->createContainer();
+$container = \App\Bootstrap::boot()->createContainer();
+
+$graphql = $container->getByType(\App\GraphQL::class);
+$request = $container->getByType(\Nette\Http\Request::class);
+$response = $container->getByType(\Nette\Http\Response::class);
+
+if ($graphql->getDebugFlag() && $request->getMethod() === 'GET') {
+	/** @var \Nette\Bridges\ApplicationLatte\LatteFactory $latteFactory */
+	$latteFactory = $container->getByType(\Nette\Bridges\ApplicationLatte\LatteFactory::class);
+
+	$compiledSandbox = $latteFactory->create()->renderToString(__DIR__ . '/apollo.sandbox.latte', ['baseUrl' => $request->getUrl()->getBaseUrl()]);
+
+	(new \Nette\Application\Responses\TextResponse($compiledSandbox))->send($request, $response);
+
+	die;
+}
 
 (new \Nette\Application\Responses\JsonResponse(
-	$container->getByType(\App\GraphQL::class)
-	->executeServer()
-))->send($container->getByType(\Nette\Http\Request::class), $container->getByType(\Nette\Http\Response::class));
+	$graphql->executeServer()
+))->send($request, $response);

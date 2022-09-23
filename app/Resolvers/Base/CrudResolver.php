@@ -13,7 +13,6 @@ use StORM\DIConnection;
 use StORM\Meta\Relation;
 use StORM\Meta\RelationNxN;
 use StORM\Repository;
-use Tracy\Debugger;
 
 abstract class CrudResolver extends BaseResolver
 {
@@ -22,6 +21,15 @@ abstract class CrudResolver extends BaseResolver
 
 	/** @var callable(array<mixed>, array<mixed>): array<mixed>|null */
 	public $onBeforeGetAll = null;
+
+	/** @var callable(array<mixed>, array<mixed>): array<mixed>|null */
+	public $onBeforeCreate = null;
+
+	/** @var callable(array<mixed>, array<mixed>): array<mixed>|null */
+	public $onBeforeUpdate = null;
+
+	/** @var callable(array<mixed>, array<mixed>): array<mixed>|null */
+	public $onBeforeDelete = null;
 
 	/**
 	 * @var \StORM\Repository<\StORM\Entity>
@@ -96,6 +104,69 @@ abstract class CrudResolver extends BaseResolver
 		return $this->fetchResult($repository->getCollection(), $resolveInfo, $args['manyInput'] ?? null);
 	}
 
+	/**
+	 * @param array<mixed> $rootValue
+	 * @param array<mixed> $args
+	 * @param mixed $context
+	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @return array<mixed>|null
+	 */
+	public function create(array $rootValue, array $args, mixed $context, ResolveInfo $resolveInfo): ?array
+	{
+		if ($this->onBeforeCreate) {
+			[$rootValue, $args] = \call_user_func($this->onBeforeCreate, $rootValue, $args);
+		}
+
+		foreach ($args['input'] as $inputKey => $inputField) {
+			if (Strings::startsWith($inputKey, 'add')) {
+				$args['input'][Strings::lower(\substr($inputKey, 3))] = $inputField;
+				unset($args['input'][$inputKey]);
+			}
+		}
+
+		$repository = $this->getRepository();
+
+		$new = $repository->createOne($args['input']);
+
+		return Arrays::first($this->fetchResult($repository->many()->where('this.' . BaseType::ID_NAME, $new->getPK()), $resolveInfo));
+	}
+
+	/**
+	 * @param array<mixed> $rootValue
+	 * @param array<mixed> $args
+	 * @param mixed $context
+	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @return array<mixed>|null
+	 */
+	public function update(array $rootValue, array $args, mixed $context, ResolveInfo $resolveInfo): ?array
+	{
+		if ($this->onBeforeUpdate) {
+			[$rootValue, $args] = \call_user_func($this->onBeforeUpdate, $rootValue, $args);
+		}
+
+		$input = $args['input'];
+		$repository = $this->getRepository();
+
+		$repository->many()->where('this.' . BaseType::ID_NAME, $input[BaseType::ID_NAME])->update($input);
+
+		return Arrays::first($this->fetchResult($repository->many()->where('this.' . BaseType::ID_NAME, $input[BaseType::ID_NAME]), $resolveInfo));
+	}
+
+	/**
+	 * @param array<mixed> $rootValue
+	 * @param array<mixed> $args
+	 * @param mixed $context
+	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 */
+	public function delete(array $rootValue, array $args, mixed $context, ResolveInfo $resolveInfo): int
+	{
+		if ($this->onBeforeDelete) {
+			[$rootValue, $args] = \call_user_func($this->onBeforeDelete, $rootValue, $args);
+		}
+
+		return $this->getRepository()->many()->where('this.' . BaseType::ID_NAME, $args[BaseType::ID_NAME])->delete();
+	}
+
 	public function getName(): string
 	{
 		$reflection = new \ReflectionClass($this->getClass());
@@ -114,8 +185,11 @@ abstract class CrudResolver extends BaseResolver
 	/**
 	 * @param \StORM\Collection<\StORM\Entity> $collection
 	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @param array<mixed>|null $manyInput
 	 * @return array<mixed>
-	 * @throws \StORM\Exception\GeneralException|\ReflectionException
+	 * @throws \App\Resolvers\Exceptions\BadRequestException
+	 * @throws \ReflectionException
+	 * @throws \StORM\Exception\GeneralException
 	 */
 	protected function fetchResult(Collection $collection, ResolveInfo $resolveInfo, ?array $manyInput = null): array
 	{
@@ -132,7 +206,9 @@ abstract class CrudResolver extends BaseResolver
 
 		$result = [];
 
-		if (isset($fieldSelection['data'])) {
+		if (!isset($fieldSelection['data'])) {
+			$result = $this->fetchResultHelper($collection, $fieldSelection);
+		} else {
 			$result['data'] = $this->fetchResultHelper($collection, $fieldSelection['data']);
 		}
 
@@ -174,7 +250,7 @@ abstract class CrudResolver extends BaseResolver
 			\ARRAY_FILTER_USE_BOTH,
 		));
 
-		$ormFieldSelection = [BaseType::ID_NAME => 'this.uuid'];
+		$ormFieldSelection = [BaseType::ID_NAME => 'this.' . BaseType::ID_NAME];
 
 		foreach (\array_keys($fieldSelection) as $select) {
 			if (Arrays::contains($relations, $select)) {

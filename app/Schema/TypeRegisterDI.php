@@ -22,6 +22,8 @@ class TypeRegisterDI extends \Nette\DI\CompilerExtension
 					return \count($value) >= 1 && \count($value) <= 3;
 				}, 'CRUD type have to has 1-3 classes!')),
 			]),
+			'queries' => Expect::arrayOf(Expect::string()),
+			'mutations' => Expect::arrayOf(Expect::string()),
 		]);
 	}
 
