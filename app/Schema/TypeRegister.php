@@ -142,7 +142,7 @@ class TypeRegister extends Type
 						$relation = $this->schemaManager->getStructure($class)->getRelation($property->getName());
 
 						if (!$relation) {
-							throw new \Exception('Fatal error! Unknown relation "' . $property->getName() . '".');
+							throw new \Exception('Fatal error! Unknown relation "' . $property->getName() . '"!');
 						}
 
 						$typeName = $relation->getTarget();
@@ -158,7 +158,7 @@ class TypeRegister extends Type
 				$isForceOptional = Arrays::contains($forceOptional, $name);
 
 				if ($isForceRequired && $isForceOptional) {
-					throw new \Exception("Property '$name' can't be forced optional and required at same time.");
+					throw new \Exception("Property '$name' can't be forced optional and required at same time!");
 				}
 
 				if (($array || ($forceAllOptional === false && ((!$forceOptional && $forceRequired) || (!$forceOptional && !$reflectionType->allowsNull())))) && $type instanceof NullableType) {
@@ -252,7 +252,7 @@ class TypeRegister extends Type
 					$relation = $this->schemaManager->getStructure($class)->getRelation($property->getName());
 
 					if (!$relation) {
-						throw new \Exception('Fatal error! Unknown relation "' . $property->getName() . '".');
+						throw new \Exception('Fatal error! Unknown relation "' . $property->getName() . '"!');
 					}
 
 					$array = true;
@@ -265,7 +265,7 @@ class TypeRegister extends Type
 			$isForceOptional = Arrays::contains($forceOptional, $name);
 
 			if ($isForceRequired && $isForceOptional) {
-				throw new \Exception("Property '$name' can't be forced optional and required at same time.");
+				throw new \Exception("Property '$name' can't be forced optional and required at same time!");
 			}
 
 			if (($array ||

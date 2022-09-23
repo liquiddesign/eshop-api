@@ -19,6 +19,7 @@ use GraphQL\Type\Schema;
 use GraphQL\Utils\AST;
 use GraphQL\Utils\BuildSchema;
 use GraphQL\Utils\SchemaPrinter;
+use HaydenPierce\ClassFinder\ClassFinder;
 use Nette\DI\Container;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
@@ -160,36 +161,47 @@ class GraphQL
 
 	public function getSchema(): Schema
 	{
-		$queries = $this->container->findByType(BaseQuery::class);
-		$mutations = $this->container->findByType(BaseMutation::class);
+		$classes = ClassFinder::getClassesInNamespace('App\Schema\Types', ClassFinder::RECURSIVE_MODE);
+
+		if (!$classes) {
+			throw new \Exception('You need to specify at least one query or mutation!');
+		}
 
 		$queryFields = [];
 		$mutationFields = [];
 
-		foreach ($queries as $query) {
-			/** @var \GraphQL\Type\Definition\ObjectType $queryType */
-			$queryType = $this->container->getByName($query);
+		foreach ($classes as $class) {
+			if (!\class_exists($class)) {
+				throw new \Exception("Class '$class' not found!");
+			}
 
-			foreach ($queryType->getFields() as $field) {
-				if (isset($queryFields[$field->getName()])) {
-					throw new \Exception("Query '$field->name' already exists!");
+			$type = new $class($this->container);
+
+			if ($type instanceof BaseQuery) {
+				foreach ($type->getFields() as $field) {
+					if (isset($queryFields[$field->getName()])) {
+						throw new \Exception("Query '$field->name' already exists!");
+					}
+
+					$queryFields[$field->getName()] = $field;
 				}
 
-				$queryFields[$field->getName()] = $field;
+				continue;
 			}
-		}
 
-		foreach ($mutations as $mutation) {
-			/** @var \GraphQL\Type\Definition\ObjectType $queryType */
-			$queryType = $this->container->getByName($mutation);
+			if ($type instanceof BaseMutation) {
+				foreach ($type->getFields() as $field) {
+					if (isset($queryFields[$field->getName()])) {
+						throw new \Exception("Mutation '$field->name' already exists!");
+					}
 
-			foreach ($queryType->getFields() as $field) {
-				if (isset($queryFields[$field->getName()])) {
-					throw new \Exception("Mutation '$field->name' already exists!");
+					$mutationFields[$field->getName()] = $field;
 				}
 
-				$mutationFields[$field->getName()] = $field;
+				continue;
 			}
+
+			throw new \Exception("Class '$class' is not extending BaseQuery or BaseMutation. Can´t determine type!");
 		}
 
 		$schema = [];

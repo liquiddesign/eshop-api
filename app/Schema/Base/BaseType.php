@@ -33,7 +33,7 @@ abstract class BaseType extends ObjectType
 
 		foreach ($config2['fields'] as $fieldKey => $field) {
 			if (isset($config1['fields'][$fieldKey])) {
-				throw new \Exception("Field '$fieldKey' already defined.");
+				throw new \Exception("Field '$fieldKey' already defined!");
 			}
 
 			$config1['fields'][$fieldKey] = $field;

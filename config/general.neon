@@ -40,9 +40,6 @@ search:
 		files: [Resolvers/*Resolver.php, Resolvers/*/*Resolver.php]
 		implements:
 		    - App\Resolvers\Base\BaseResolver
-	graphql_types:
-		in: %appDir%
-		files: [Types/*/*Query.php, Types/*/*Mutation.php]
 
 services:
 	pages.pageRepository: \Web\DB\PageRepository

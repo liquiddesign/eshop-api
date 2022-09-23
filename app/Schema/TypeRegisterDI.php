@@ -22,8 +22,6 @@ class TypeRegisterDI extends \Nette\DI\CompilerExtension
 					return \count($value) >= 1 && \count($value) <= 3;
 				}, 'CRUD type have to has 1-3 classes!')),
 			]),
-			'queries' => Expect::arrayOf(Expect::string()),
-			'mutations' => Expect::arrayOf(Expect::string()),
 		]);
 	}
 
@@ -33,7 +31,6 @@ class TypeRegisterDI extends \Nette\DI\CompilerExtension
 
 		$builder = $this->getContainerBuilder();
 
-		//@TODO nenačítat Query a Mutace v configu ale jen na vyžádání pokud je potřeba sestrojit schéma
 		$typeRegister = $builder->addDefinition($this->prefix('typeRegister'))->setType(TypeRegister::class);
 
 		if (isset($config['types']->output)) {
