@@ -117,18 +117,25 @@ abstract class CrudResolver extends BaseResolver
 			[$rootValue, $args] = \call_user_func($this->onBeforeCreate, $rootValue, $args);
 		}
 
-		foreach ($args['input'] as $inputKey => $inputField) {
-			if (Strings::startsWith($inputKey, 'add')) {
-				$args['input'][Strings::lower(\substr($inputKey, 3))] = $inputField;
-				unset($args['input'][$inputKey]);
-			}
-		}
-
 		$repository = $this->getRepository();
 
-		$new = $repository->createOne($args['input']);
+		[$input, $addRelations] = $this->extractRelationsFromInput($args['input']);
 
-		return Arrays::first($this->fetchResult($repository->many()->where('this.' . BaseType::ID_NAME, $new->getPK()), $resolveInfo));
+		try {
+			$object = $repository->syncOne($input);
+
+			foreach ($addRelations as $relationName => $values) {
+				$object->{$relationName}->relate($values);
+			}
+		} catch (\Throwable $e) {
+			if ($e->getCode() === '1452') {
+				throw new BadRequestException('Invalid values in relations!');
+			}
+
+			throw new BadRequestException('Invalid values!');
+		}
+
+		return Arrays::first($this->fetchResult($repository->many()->where('this.' . BaseType::ID_NAME, $object->getPK()), $resolveInfo));
 	}
 
 	/**
@@ -144,10 +151,27 @@ abstract class CrudResolver extends BaseResolver
 			[$rootValue, $args] = \call_user_func($this->onBeforeUpdate, $rootValue, $args);
 		}
 
-		$input = $args['input'];
 		$repository = $this->getRepository();
 
-		$repository->many()->where('this.' . BaseType::ID_NAME, $input[BaseType::ID_NAME])->update($input);
+		[$input, $addRelations, $removeRelations] = $this->extractRelationsFromInput($args['input']);
+
+		try {
+			$object = $repository->syncOne($input);
+
+			foreach ($addRelations as $relationName => $values) {
+				$object->{$relationName}->relate($values);
+			}
+
+			foreach ($removeRelations as $relationName => $values) {
+				$object->{$relationName}->unrelate($values);
+			}
+		} catch (\Throwable $e) {
+			if ($e->getCode() === '1452') {
+				throw new BadRequestException('Invalid values in relations!');
+			}
+
+			throw new BadRequestException('Invalid values!');
+		}
 
 		return Arrays::first($this->fetchResult($repository->many()->where('this.' . BaseType::ID_NAME, $input[BaseType::ID_NAME]), $resolveInfo));
 	}
@@ -172,6 +196,48 @@ abstract class CrudResolver extends BaseResolver
 		$reflection = new \ReflectionClass($this->getClass());
 
 		return Strings::lower($reflection->getShortName());
+	}
+
+	protected function extractRelationsFromInput(array $input): array
+	{
+		$addRelations = [];
+		$removeRelations = [];
+
+		foreach ($input as $inputKey => $inputField) {
+			if (Strings::startsWith($inputKey, 'add')) {
+				if ($inputField !== null) {
+					$name = Strings::lower(\substr($inputKey, 3));
+
+					$addRelations[$name] = $inputField;
+				}
+
+				unset($input[$inputKey]);
+			}
+
+			if (Strings::startsWith($inputKey, 'remove')) {
+				if ($inputField !== null) {
+					$name = Strings::lower(\substr($inputKey, 6));
+
+					$removeRelations[$name] = $inputField;
+				}
+
+				unset($input[$inputKey]);
+			}
+
+			if (!Strings::startsWith($inputKey, 'overwrite')) {
+				continue;
+			}
+
+			if ($inputField !== null) {
+				$name = Strings::lower(\substr($inputKey, 9));
+
+				$input[$name] = $inputField;
+			}
+
+			unset($input[$inputKey]);
+		}
+
+		return [$input, $addRelations, $removeRelations];
 	}
 
 	/**

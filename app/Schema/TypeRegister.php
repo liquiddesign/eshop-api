@@ -296,6 +296,7 @@ class TypeRegister extends Type
 
 					if ($inputRelationFieldsEnum === InputRelationFieldsEnum::ALL || $inputRelationFieldsEnum === InputRelationFieldsEnum::ONLY_REMOVE) {
 						$fields['remove' . Strings::firstUpper($name)] = $type;
+						$fields['overwrite' . Strings::firstUpper($name)] = $type;
 					}
 				} elseif ($relation instanceof Relation) {
 					$fields[$name] = $type;

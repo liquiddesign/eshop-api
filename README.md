@@ -10,3 +10,9 @@ GraphQL API for Roiwell based projects.
 - Universal CRUD query, mutations and resolvers for generic generation and resolving
 - Recursive data fetcher of Storm entities from database based on requested query (highly optimized - makes only one query per entity class - simulating dataloader)
 
+## TODO
+- Create/Update process mutations
+- Fix custom scalars validator
+- Check HTTP headers for mutation selection
+- Security - guards, login
+- Write tests
