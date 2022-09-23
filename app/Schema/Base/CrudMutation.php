@@ -30,19 +30,23 @@ abstract class CrudMutation extends BaseMutation
 
 		$baseName = $this->getName();
 		$outputType = $this->getOutputType();
+		$createInputType = $this->getCreateInputType();
+		$updateInputType = $this->getUpdateInputType();
 
 		\assert($outputType instanceof NullableType);
+		\assert($createInputType instanceof NullableType);
+		\assert($updateInputType instanceof NullableType);
 
 		$config = $this->mergeFields($config, [
 			'fields' => [
 				"{$baseName}Create" => [
 					'type' => TypeRegister::nonNull($outputType),
-					'args' => ['input' => $this->getCreateInputType(),],
+					'args' => ['input' => TypeRegister::nonNull($createInputType),],
 				],
 				"{$baseName}Update" => [
 					'type' => TypeRegister::nonNull($outputType),
 					'args' => [
-						'input' => $this->getUpdateInputType(),
+						'input' => TypeRegister::nonNull($updateInputType),
 						],
 				],
 				"{$baseName}Delete" => [

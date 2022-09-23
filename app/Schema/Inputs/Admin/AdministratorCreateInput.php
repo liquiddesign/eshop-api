@@ -12,7 +12,12 @@ class AdministratorCreateInput extends BaseInput
 	public function __construct(TypeRegister $typeRegister)
 	{
 		$config = [
-			'fields' => $typeRegister->createInputFieldsFromClass(Administrator::class, includeId: false, inputRelationFieldsEnum: InputRelationFieldsEnum::ONLY_ADD),
+			'fields' => $typeRegister->createInputFieldsFromClass(
+				Administrator::class,
+				includeId: false,
+				setDefaultValues: true,
+				inputRelationFieldsEnum: InputRelationFieldsEnum::ONLY_ADD,
+			),
 		];
 
 		parent::__construct($config);

@@ -326,6 +326,10 @@ abstract class CrudResolver extends BaseResolver
 				'relationNxN.' . $relation->getSourceViaKey(),
 			);
 
+			foreach (\array_keys($objects) as $objectKey) {
+				$objects[$objectKey][$relationName] = [];
+			}
+
 			foreach ($relationObjects as $relationObject) {
 				if (isset($objects[$relationObject['originalId']][$relationName])) {
 					$objects[$relationObject['originalId']][$relationName][$relationObject[BaseType::ID_NAME]] = $relationObject;

@@ -20,6 +20,8 @@ use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use SimPod\GraphQLUtils\Builder\FieldBuilder;
 use SimPod\GraphQLUtils\Builder\ObjectBuilder;
+use StORM\Meta\Relation;
+use StORM\Meta\RelationNxN;
 use StORM\RelationCollection;
 use StORM\SchemaManager;
 
@@ -168,7 +170,7 @@ class TypeRegister extends Type
 				if ($array) {
 					\assert($type instanceof Type);
 
-					$type = static::listOf($type);
+					$type = static::nonNull(static::listOf($type));
 				}
 
 				return $type;
@@ -196,6 +198,7 @@ class TypeRegister extends Type
 		array $forceOptional = [],
 		bool $forceAllOptional = false,
 		bool $includeId = true,
+		bool $setDefaultValues = false,
 		InputRelationFieldsEnum $inputRelationFieldsEnum = InputRelationFieldsEnum::ALL,
 	): array {
 		$reflection = new \ReflectionClass($class);
@@ -248,9 +251,9 @@ class TypeRegister extends Type
 			}
 
 			if ($type === null) {
-				if ($typeName === RelationCollection::class) {
-					$relation = $this->schemaManager->getStructure($class)->getRelation($property->getName());
+				$relation = $this->schemaManager->getStructure($class)->getRelation($property->getName());
 
+				if ($typeName === RelationCollection::class) {
 					if (!$relation) {
 						throw new \Exception('Fatal error! Unknown relation "' . $property->getName() . '"!');
 					}
@@ -286,20 +289,26 @@ class TypeRegister extends Type
 			}
 
 			if (isset($relation)) {
-				if ($inputRelationFieldsEnum === InputRelationFieldsEnum::ALL || $inputRelationFieldsEnum === InputRelationFieldsEnum::ONLY_ADD) {
-					$fields['add' . Strings::firstUpper($name)] = $type;
-				}
+				if ($relation instanceof RelationNxN) {
+					if ($inputRelationFieldsEnum === InputRelationFieldsEnum::ALL || $inputRelationFieldsEnum === InputRelationFieldsEnum::ONLY_ADD) {
+						$fields['add' . Strings::firstUpper($name)] = $type;
+					}
 
-				if ($inputRelationFieldsEnum === InputRelationFieldsEnum::ALL || $inputRelationFieldsEnum === InputRelationFieldsEnum::ONLY_REMOVE) {
-					$fields['remove' . Strings::firstUpper($name)] = $type;
+					if ($inputRelationFieldsEnum === InputRelationFieldsEnum::ALL || $inputRelationFieldsEnum === InputRelationFieldsEnum::ONLY_REMOVE) {
+						$fields['remove' . Strings::firstUpper($name)] = $type;
+					}
+				} elseif ($relation instanceof Relation) {
+					$fields[$name] = $type;
 				}
 			} else {
 				$fields[$name] = ['type' => $type,];
 
-				$propertyDefaultValue = $property->getDefaultValue();
+				if ($setDefaultValues) {
+					$propertyDefaultValue = $property->getDefaultValue();
 
-				if ($propertyDefaultValue !== null) {
-					$fields[$name]['defaultValue'] = $propertyDefaultValue;
+					if ($propertyDefaultValue !== null) {
+						$fields[$name]['defaultValue'] = $propertyDefaultValue;
+					}
 				}
 			}
 		}
