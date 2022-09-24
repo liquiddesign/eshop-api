@@ -14,5 +14,7 @@ GraphQL API for Roiwell based projects.
 - Create/Update process mutations
 - Fix custom scalars validator
 - Check HTTP headers for mutation selection
+- Persisted queries with Redis/KeyDB
 - Security - guards, login
 - Write tests
+- Query batching + dataloader
