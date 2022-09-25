@@ -12,9 +12,9 @@ GraphQL API for Roiwell based projects.
 
 ## TODO
 - Create/Update process mutations
-- Fix custom scalars validator
+- Fix custom scalars validator -JSON, etc
 - Check HTTP headers for mutation selection
 - Persisted queries with Redis/KeyDB
 - Security - guards, login
 - Write tests
-- Query batching + dataloader
+- Query batching with dataloader
