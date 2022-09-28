@@ -39,13 +39,13 @@
     "phpcs": "phpcs --standard=ruleset.xml --ignore=*/tests/* --cache ./app",
     "phpcsfix": "phpcbf --standard=ruleset.xml --cache ./app",
     "phpcheck": "phpcs -p ./app --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.1",
-    "init-develop": "App\\Scripts::initDevel",
-    "init-production": "App\\Scripts::initProduction",
-    "clear-nette-cache": "App\\Scripts::clearNetteCache",
-    "maintenance": 	"App\\Scripts::maintenance",
+    "init-develop": "EshopApi\\Scripts::initDevel",
+    "init-production": "EshopApi\\Scripts::initProduction",
+    "clear-nette-cache": "EshopApi\\Scripts::clearNetteCache",
+    "maintenance": 	"EshopApi\\Scripts::maintenance",
     "create-database": "Migrator\\Scripts::createDatabase",
     "sync-database": [
-      "App\\Scripts::clearNetteCache",
+      "EshopApi\\Scripts::clearNetteCache",
       "Migrator\\Scripts::syncDatabase"
     ],
     "deploy-front": [
@@ -63,8 +63,8 @@
       "@maintenance off"
     ],
     "update-templates": "Messages\\Scripts::createTemplates",
-    "update-pages": "App\\Scripts::createPages",
-    "reproduce": "App\\Scripts::reproduce",
+    "update-pages": "EshopApi\\Scripts::createPages",
+    "reproduce": "EshopApi\\Scripts::reproduce",
     "test": "vendor/bin/tester -C ./tests"
   },
   "config": {
