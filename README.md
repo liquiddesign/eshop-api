@@ -1,20 +1,6 @@
-# ESHOP API
+# 🅔≈🅐 Eshop LqGrAphi
 
-GraphQL API for Roiwell based projects.
+GraphQL API for [liquiddesign/eshop](https://github.com/liquiddesign/eshop) using [liquiddesign/lqgraphi](https://github.com/liquiddesign/lqgraphi).
 
-## Functions
-- Built for work with Liquid Design ecosystem
-- Auto types creation from PHP classes to TypeRegister (Storm entities)
-- Autoload of Queries and Mutations
-- Caching of schema
-- Universal CRUD query, mutations and resolvers for generic generation and resolving
-- Recursive data fetcher of Storm entities from database based on requested query (highly optimized - makes only one query per entity class - simulating dataloader)
-
-## TODO
-- Create/Update process mutations
-- Fix custom scalars validator -JSON, etc
-- Check HTTP headers for mutation selection
-- Persisted queries with Redis/KeyDB
-- Security - guards, login
-- Write tests
-- Query batching with dataloader
+Recommended approach is use only types and config from this package and make your own API project.<br>
+But if you want you can use this package as standalone API, all needed resources for that are bundled.
