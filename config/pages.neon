@@ -2,8 +2,3 @@ pages:
    mapping:
    	  throw404: %productionMode%
    types:
-      graphql:
-         name: 'GraphQLite'
-         plink: 'GraphQL:default'
-         defaultMask: ''
-         prefetch: true

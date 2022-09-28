@@ -75,6 +75,8 @@ extensions:
   typeRegister: LqGrAphi\LqGrAphiDI
 
 typeRegister:
+    resolversNamespace: EshopApi\Resolvers
+    queryAndMutationsNamespace: EshopApi\Schema\Types
     types:
         output:
             customerGroup: EshopApi\Schema\Outputs\CustomerGroupOutput

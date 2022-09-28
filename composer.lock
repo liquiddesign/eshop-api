@@ -2337,16 +2337,16 @@
         },
         {
             "name": "liquiddesign/lqgraphi",
-            "version": "v0.0.2-alpha",
+            "version": "v0.0.3-alpha",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liquiddesign/lqgraphi.git",
-                "reference": "8eb4cdfa1dcff9d983bc6d52e32d3d59f4c56593"
+                "reference": "9e80f9d6ded9a952f93a3370efedc2eaa16a958e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liquiddesign/lqgraphi/zipball/8eb4cdfa1dcff9d983bc6d52e32d3d59f4c56593",
-                "reference": "8eb4cdfa1dcff9d983bc6d52e32d3d59f4c56593",
+                "url": "https://api.github.com/repos/liquiddesign/lqgraphi/zipball/9e80f9d6ded9a952f93a3370efedc2eaa16a958e",
+                "reference": "9e80f9d6ded9a952f93a3370efedc2eaa16a958e",
                 "shasum": ""
             },
             "require": {
@@ -2399,10 +2399,10 @@
             ],
             "description": "GraphQL API library for Liquid Design ecosystem",
             "support": {
-                "source": "https://github.com/liquiddesign/lqgraphi/tree/v0.0.2-alpha",
+                "source": "https://github.com/liquiddesign/lqgraphi/tree/v0.0.3-alpha",
                 "issues": "https://github.com/liquiddesign/lqgraphi/issues"
             },
-            "time": "2022-09-28T18:34:16+00:00"
+            "time": "2022-09-28T21:07:39+00:00"
         },
         {
             "name": "liquiddesign/messages",
