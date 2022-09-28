@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace EshopApi;
 
 use Nette\Configurator;
 use Security\DB\Account;

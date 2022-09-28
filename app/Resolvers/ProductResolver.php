@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Resolvers;
+namespace EshopApi\Resolvers;
 
-use App\Resolvers\Base\CrudResolver;
 use Eshop\DB\Product;
 use GraphQL\Type\Definition\ResolveInfo;
+use LqGrAphi\Resolvers\CrudResolver;
 
 class ProductResolver extends CrudResolver
 {

@@ -10,6 +10,6 @@ test('init', function () use ($container) {
 });
 
 test('graphQL', function () use ($container) {
-	Assert::type(\App\GraphQL::class, $container->getByType(\App\GraphQL::class));
+	Assert::type(\EshopApi\GraphQL::class, $container->getByType(\EshopApi\GraphQL::class));
 });
 

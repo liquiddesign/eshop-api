@@ -21,7 +21,7 @@ application:
 	catchExceptions: %productionMode%
 	debugger: %debugMode%
 	mapping:
-		*: App\*Presenter
+		*: EshopApi\*Presenter
 search:
 	app:
 		in: %appDir%/
@@ -39,18 +39,17 @@ search:
 		in: %appDir%
 		files: [Resolvers/*Resolver.php, Resolvers/*/*Resolver.php]
 		implements:
-		    - App\Resolvers\Base\BaseResolver
+		    - LqGrAphi\Resolvers\BaseResolver
 
 services:
 	pages.pageRepository: \Web\DB\PageRepository
 	application.application:
-		factory: App\Application(%mutations%, %locales%, %environment%)
+		factory: EshopApi\Application(%mutations%, %locales%, %environment%)
 		alteration: true
 		setup:
 			- "$onMutationChange[]" = [@storm.default, 'setMutation']
 
 	security.passwords: Security\LegacyPasswords('sha1','rE42xxxlzphy55')
-	- App\GraphQL
 
 session:
 	name: %projectName%
@@ -73,22 +72,18 @@ extensions:
   messages: \Messages\Bridges\MessagesDI
   translator: Translator\Bridges\TranslatorDI
   comgate: Contributte\Comgate\DI\ComgateExtension
-  typeRegister: App\Schema\TypeRegisterDI
+  typeRegister: LqGrAphi\LqGrAphiDI
 
 typeRegister:
     types:
         output:
-            setting: App\Schema\Outputs\Web\SettingOutput
-            role: App\Schema\Outputs\Security\RoleOutput
-            customerGroup: App\Schema\Outputs\Eshop\CustomerGroupOutput
-            pricelist: App\Schema\Outputs\Eshop\PricelistOutput
-            address: App\Schema\Outputs\Eshop\AddressOutput
-            productGetProducts: App\Schema\Outputs\Eshop\ProductGetProductsOutput
+            customerGroup: EshopApi\Schema\Outputs\CustomerGroupOutput
+            pricelist: EshopApi\Schema\Outputs\PricelistOutput
+            address: EshopApi\Schema\Outputs\AddressOutput
+            productGetProducts: EshopApi\Schema\Outputs\ProductGetProductsOutput
         crud:
-            administrator: [App\Schema\Outputs\Admin\AdministratorOutput, App\Schema\Inputs\Admin\AdministratorCreateInput, App\Schema\Inputs\Admin\AdministratorUpdateInput]
-            account: [App\Schema\Outputs\Security\AccountOutput, App\Schema\Inputs\Security\AccountCreateInput, App\Schema\Inputs\Security\AccountUpdateInput]
-            customer: [App\Schema\Outputs\Eshop\CustomerOutput, App\Schema\Inputs\Eshop\CustomerCreateInput, App\Schema\Inputs\Eshop\CustomerUpdateInput]
-            product: [App\Schema\Outputs\Eshop\ProductOutput]
+            customer: [EshopApi\Schema\Outputs\CustomerOutput, EshopApi\Schema\Inputs\CustomerCreateInput, EshopApi\Schema\Inputs\CustomerUpdateInput]
+            product: [EshopApi\Schema\Outputs\ProductOutput, EshopApi\Schema\Inputs\ProductCreateInput, EshopApi\Schema\Inputs\ProductUpdateInput]
 
 storm:
   debug: %debugMode%

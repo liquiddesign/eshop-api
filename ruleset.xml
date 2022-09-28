@@ -165,8 +165,7 @@
     <rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
         <properties>
             <property name="rootNamespaces" type="array">
-                <element key="app" value="App"/>
-                <element key="src" value="StORM"/>
+                <element key="app" value="EshopApi"/>
             </property>
             <property name="skipDirs" type="array">
                 <element value="modules"/>
@@ -229,7 +228,7 @@
     <rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
         <properties>
             <property name="rootNamespaces" type="array">
-                <element key="app" value="App"/>
+                <element key="app" value="EshopApi"/>
             </property>
         </properties>
     </rule>

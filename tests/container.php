@@ -13,7 +13,7 @@ $configurator->setDebugMode($environment['parameters']['access']['debug'] ?? [])
 $configurator->setTimeZone('Europe/Prague');
 
 $trustedMode = $configurator->isDebugMode() || Configurator::detectDebugMode($environment['parameters']['access']['trusted']);
-$debugMode = $trustedMode ? \App\Bootstrap::getDebugModeByCookie($configurator->isDebugMode()) : $configurator->isDebugMode();
+$debugMode = $trustedMode ? \EshopApi\Bootstrap::getDebugModeByCookie($configurator->isDebugMode()) : $configurator->isDebugMode();
 
 $configurator->addStaticParameters([
 	'trustedMode' => $trustedMode,

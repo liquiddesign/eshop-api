@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Resolvers;
+namespace EshopApi\Resolvers;
 
-use App\Resolvers\Base\CrudResolver;
 use Eshop\DB\Customer;
+use LqGrAphi\Resolvers\CrudResolver;
 
 class CustomerResolver extends CrudResolver
 {

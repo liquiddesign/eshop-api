@@ -9,9 +9,10 @@ if (\is_file($maintenance = __DIR__ . '/maintenance.php')) {
 	require $maintenance;
 }
 
-$container = \App\Bootstrap::boot()->createContainer();
+$container = \EshopApi\Bootstrap::boot()->createContainer();
 
-$graphql = $container->getByType(\App\GraphQL::class);
+/** @var \LqGrAphi\GraphQLHandler $graphql */
+$graphql = $container->getByType(\LqGrAphi\GraphQLHandler::class);
 $request = $container->getByType(\Nette\Http\Request::class);
 $response = $container->getByType(\Nette\Http\Response::class);
 
@@ -27,5 +28,5 @@ if ($graphql->getDebugFlag() && $request->getMethod() === 'GET') {
 }
 
 (new \Nette\Application\Responses\JsonResponse(
-	$graphql->executeServer()
+	$graphql->handle()
 ))->send($request, $response);
