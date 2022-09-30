@@ -2,6 +2,7 @@
   "name": "liquiddesign/eshop-api",
   "description": "Eshop API",
   "type": "project",
+  "license": "MIT",
   "repositories": [
     {
       "type": "vcs",
