@@ -3,22 +3,14 @@
   "description": "Eshop API",
   "type": "project",
   "license": "MIT",
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/liquiddesign/lqgraphi"
-    }
-  ],
   "require": {
     "php": ">=8.1",
-    "liquiddesign/eshop": "^1.0.0-beta.1",
+    "liquiddesign/eshop": "^1.0.0-beta.11",
+    "liquiddesign/lqgraphi": "~0.0.4@alpha",
     "ext-intl": "*",
     "ext-pdo": "*",
     "ext-curl": "*",
-    "ext-simplexml": "*",
-    "ext-json": "*",
-    "ext-soap": "*",
-    "liquiddesign/lqgraphi": "~0.0.1@alpha"
+    "ext-json": "*"
   },
   "require-dev": {
     "nette/tester": "^2.4",
