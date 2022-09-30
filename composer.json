@@ -38,7 +38,6 @@
     "phpstan": "phpstan analyse --memory-limit 4G -c phpstan.neon",
     "phpcs": "phpcs --standard=ruleset.xml --ignore=*/tests/* --cache ./app",
     "phpcsfix": "phpcbf --standard=ruleset.xml --cache ./app",
-    "phpcheck": "phpcs -p ./app --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.1",
     "init-develop": "EshopApi\\Scripts::initDevel",
     "init-production": "EshopApi\\Scripts::initProduction",
     "clear-nette-cache": "EshopApi\\Scripts::clearNetteCache",
@@ -48,23 +47,14 @@
       "EshopApi\\Scripts::clearNetteCache",
       "Migrator\\Scripts::syncDatabase"
     ],
-    "deploy-front": [
-      "git pull",
-      "cd ./public && npm install && npm run deploy",
-      "@clear-nette-cache"
-    ],
     "deploy": [
       "@maintenance on",
-      "@deploy-front",
       "composer clear-cache",
       "composer install --no-dev --no-interaction",
       "@sync-database",
       "@clear-nette-cache",
       "@maintenance off"
     ],
-    "update-templates": "Messages\\Scripts::createTemplates",
-    "update-pages": "EshopApi\\Scripts::createPages",
-    "reproduce": "EshopApi\\Scripts::reproduce",
     "test": "vendor/bin/tester -C ./tests"
   },
   "config": {

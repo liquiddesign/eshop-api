@@ -1124,6 +1124,77 @@
             "time": "2022-02-28T11:07:21+00:00"
         },
         {
+            "name": "dvdoug/boxpacker",
+            "version": "3.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dvdoug/BoxPacker.git",
+                "reference": "43a42412932404c2e3b2d15b85647486c3367464"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dvdoug/BoxPacker/zipball/43a42412932404c2e3b2d15b85647486c3367464",
+                "reference": "43a42412932404c2e3b2d15b85647486c3367464",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.1||^8.0",
+                "psr/log": "^1.0||^2.0||^3.0"
+            },
+            "require-dev": {
+                "behat/behat": "^3.7",
+                "dvdoug/behat-code-coverage": "^5.0.1",
+                "friendsofphp/php-cs-fixer": "^3.7",
+                "monolog/monolog": "^1.0||^2.0",
+                "phpunit/phpunit": "^7.5.20||^8.5.21||^9.5.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DVDoug\\BoxPacker\\": "src/",
+                    "DVDoug\\BoxPacker\\Test\\": "tests/Test"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Doug Wright",
+                    "role": "Developer"
+                }
+            ],
+            "description": "An implementation of the 3D (actually 4D) bin packing/knapsack problem (aka creating parcels by putting items into boxes)",
+            "homepage": "http://boxpacker.io/",
+            "keywords": [
+                "bin packing",
+                "binpacking",
+                "box",
+                "boxes",
+                "boxpacking",
+                "container",
+                "knapsack",
+                "packaging",
+                "packing",
+                "parcel",
+                "parcelpacking",
+                "shipping"
+            ],
+            "support": {
+                "issues": "https://github.com/dvdoug/BoxPacker/issues",
+                "source": "https://github.com/dvdoug/BoxPacker/tree/3.10.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/dvdoug",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-09-10T19:38:53+00:00"
+        },
+        {
             "name": "egulias/email-validator",
             "version": "3.2.1",
             "source": {
@@ -2162,21 +2233,22 @@
         },
         {
             "name": "liquiddesign/eshop",
-            "version": "v1.0.0-beta.9",
+            "version": "v1.0.0-beta.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liquiddesign/eshop.git",
-                "reference": "3810012dc301c02775624c2c1e5fc33ab01146dd"
+                "reference": "99070289013e139f7e8b234bc834622421c11d69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liquiddesign/eshop/zipball/3810012dc301c02775624c2c1e5fc33ab01146dd",
-                "reference": "3810012dc301c02775624c2c1e5fc33ab01146dd",
+                "url": "https://api.github.com/repos/liquiddesign/eshop/zipball/99070289013e139f7e8b234bc834622421c11d69",
+                "reference": "99070289013e139f7e8b234bc834622421c11d69",
                 "shasum": ""
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^3.1",
                 "contributte/comgate": "^0.2.0",
+                "dvdoug/boxpacker": "^3.9",
                 "erusev/parsedown": "^1.7",
                 "ext-curl": "*",
                 "ext-iconv": "*",
@@ -2189,7 +2261,7 @@
                 "guzzlehttp/guzzle": "^7.0",
                 "jurosh/pdf-merge": "^2.0",
                 "league/csv": "^9.0",
-                "liquiddesign/admin": "^0.2",
+                "liquiddesign/admin": "^0.2.5",
                 "liquiddesign/common": "^0.1",
                 "liquiddesign/forms": "^0.1",
                 "liquiddesign/grid": "^0.1",
@@ -2199,6 +2271,7 @@
                 "liquiddesign/translator": "^0.1",
                 "liquiddesign/web": "^0.1",
                 "mailerlite/mailerlite-api-v2-php-sdk": "^0.3.0",
+                "markette/gopay-inline": "^2.1",
                 "mk-j/php_xlsxwriter": "^0.38.0",
                 "neitanod/forceutf8": "^2.0",
                 "nette/application": "^3.0",
@@ -2215,6 +2288,7 @@
                 "liquiddesign/codestyle": "~1.0",
                 "liquiddesign/migrator": "~1.0",
                 "nette/tester": "*",
+                "phpstan/phpstan": "^1.8",
                 "phpstan/phpstan-nette": "~1.0",
                 "tracy/tracy": "*"
             },
@@ -2231,9 +2305,9 @@
             ],
             "description": "Ⓔ Služby, entity, administrace a kontroly pro eshop",
             "support": {
-                "source": "https://github.com/liquiddesign/eshop/tree/v1.0.0-beta.9"
+                "source": "https://github.com/liquiddesign/eshop/tree/v1.0.0-beta.11"
             },
-            "time": "2022-08-31T13:18:05+00:00"
+            "time": "2022-09-29T18:22:02+00:00"
         },
         {
             "name": "liquiddesign/forms",
@@ -2800,6 +2874,89 @@
             "time": "2021-08-11T08:24:13+00:00"
         },
         {
+            "name": "markette/gopay-inline",
+            "version": "v2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/contributte/gopay-inline.git",
+                "reference": "b26ef83d89ba972c7fbf3c468f7854b15739724b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/contributte/gopay-inline/zipball/b26ef83d89ba972c7fbf3c468f7854b15739724b",
+                "reference": "b26ef83d89ba972c7fbf3c468f7854b15739724b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "moneyphp/money": "^3.0|^4.0",
+                "php": ">=7.2"
+            },
+            "conflict": {
+                "nette/di": "<3.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.3.3",
+                "nette/di": "^3.0.0",
+                "nette/utils": "^3.0.0",
+                "ninjify/nunjuck": "^0.3",
+                "ninjify/qa": "^0.14",
+                "phpstan/phpstan": "^1.8.5",
+                "phpstan/phpstan-deprecation-rules": "^1.1.0",
+                "phpstan/phpstan-nette": "^1.1.0",
+                "phpstan/phpstan-strict-rules": "^1.4.3"
+            },
+            "suggest": {
+                "nette/di": "For GopayExtension"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Contributte\\GopayInline\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Milan Felix Šulc",
+                    "email": "sulcmil@gmail.com"
+                }
+            ],
+            "description": "GoPay Inline Payment Gateway",
+            "homepage": "https://github.com/contributte/gopay-inline",
+            "keywords": [
+                "api",
+                "eshop",
+                "gopay",
+                "inline",
+                "payment"
+            ],
+            "support": {
+                "issues": "https://github.com/contributte/gopay-inline/issues",
+                "source": "https://github.com/contributte/gopay-inline/tree/v2.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://contributte.org/partners.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/f3l1x",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-09-13T13:59:02+00:00"
+        },
+        {
             "name": "mk-j/php_xlsxwriter",
             "version": "0.38",
             "source": {
@@ -2906,6 +3063,94 @@
                 "source": "https://github.com/mll-lab/graphql-php-scalars/tree/v5.4.0"
             },
             "time": "2022-01-28T09:28:10+00:00"
+        },
+        {
+            "name": "moneyphp/money",
+            "version": "v4.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/moneyphp/money.git",
+                "reference": "cee58435ff82a5de252c516e6a31beb674898985"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/moneyphp/money/zipball/cee58435ff82a5de252c516e6a31beb674898985",
+                "reference": "cee58435ff82a5de252c516e6a31beb674898985",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "ext-filter": "*",
+                "ext-json": "*",
+                "php": "~8.0.0 || ~8.1.0"
+            },
+            "require-dev": {
+                "cache/taggable-cache": "^1.1.0",
+                "doctrine/coding-standard": "^9.0",
+                "doctrine/instantiator": "^1.4.0",
+                "ext-gmp": "*",
+                "ext-intl": "*",
+                "florianv/exchanger": "^2.6.3",
+                "florianv/swap": "^4.3.0",
+                "moneyphp/iso-currencies": "^3.2.1",
+                "php-http/message": "^1.11.0",
+                "php-http/mock-client": "^1.4.1",
+                "phpbench/phpbench": "^1.2.5",
+                "phpspec/phpspec": "^7.2",
+                "phpunit/phpunit": "^9.5.4",
+                "psalm/plugin-phpunit": "^0.15.1",
+                "psr/cache": "^1.0.1",
+                "vimeo/psalm": "~4.7.0 || ^4.8.2"
+            },
+            "suggest": {
+                "ext-gmp": "Calculate without integer limits",
+                "ext-intl": "Format Money objects with intl",
+                "florianv/exchanger": "Exchange rates library for PHP",
+                "florianv/swap": "Exchange rates library for PHP",
+                "psr/cache-implementation": "Used for Currency caching"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Money\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathias Verraes",
+                    "email": "mathias@verraes.net",
+                    "homepage": "http://verraes.net"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com"
+                },
+                {
+                    "name": "Frederik Bosch",
+                    "email": "f.bosch@genkgo.nl"
+                }
+            ],
+            "description": "PHP implementation of Fowler's Money pattern",
+            "homepage": "http://moneyphp.org",
+            "keywords": [
+                "Value Object",
+                "money",
+                "vo"
+            ],
+            "support": {
+                "issues": "https://github.com/moneyphp/money/issues",
+                "source": "https://github.com/moneyphp/money/tree/v4.0.5"
+            },
+            "time": "2022-08-11T09:12:20+00:00"
         },
         {
             "name": "neitanod/forceutf8",
@@ -4667,16 +4912,16 @@
         },
         {
             "name": "php-http/client-common",
-            "version": "2.5.0",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/client-common.git",
-                "reference": "d135751167d57e27c74de674d6a30cef2dc8e054"
+                "reference": "45db684cd4e186dcdc2b9c06b22970fe123796c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/client-common/zipball/d135751167d57e27c74de674d6a30cef2dc8e054",
-                "reference": "d135751167d57e27c74de674d6a30cef2dc8e054",
+                "url": "https://api.github.com/repos/php-http/client-common/zipball/45db684cd4e186dcdc2b9c06b22970fe123796c0",
+                "reference": "45db684cd4e186dcdc2b9c06b22970fe123796c0",
                 "shasum": ""
             },
             "require": {
@@ -4736,9 +4981,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/client-common/issues",
-                "source": "https://github.com/php-http/client-common/tree/2.5.0"
+                "source": "https://github.com/php-http/client-common/tree/2.6.0"
             },
-            "time": "2021-11-26T15:01:24+00:00"
+            "time": "2022-09-29T09:59:43+00:00"
         },
         {
             "name": "php-http/discovery",
@@ -5490,16 +5735,16 @@
         },
         {
             "name": "salamek/ppl-my-api",
-            "version": "2.5",
+            "version": "2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Salamek/PplMyApi.git",
-                "reference": "8186ddeaec760e376fcd310bc222498813bbb989"
+                "reference": "160ca6692f23a471f03515c6f302566b16382b47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Salamek/PplMyApi/zipball/8186ddeaec760e376fcd310bc222498813bbb989",
-                "reference": "8186ddeaec760e376fcd310bc222498813bbb989",
+                "url": "https://api.github.com/repos/Salamek/PplMyApi/zipball/160ca6692f23a471f03515c6f302566b16382b47",
+                "reference": "160ca6692f23a471f03515c6f302566b16382b47",
                 "shasum": ""
             },
             "require": {
@@ -5534,9 +5779,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Salamek/PplMyApi/issues",
-                "source": "https://github.com/Salamek/PplMyApi/tree/2.5"
+                "source": "https://github.com/Salamek/PplMyApi/tree/2.5.1"
             },
-            "time": "2022-04-19T14:30:50+00:00"
+            "time": "2022-09-29T22:13:35+00:00"
         },
         {
             "name": "seld/jsonlint",
@@ -5955,16 +6200,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v6.1.4",
+            "version": "v6.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "7fccea8728aa2d431a6725b02b3ce759049fc84d"
+                "reference": "17524a64ebcfab68d237bbed247e9a9917747096"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/7fccea8728aa2d431a6725b02b3ce759049fc84d",
-                "reference": "7fccea8728aa2d431a6725b02b3ce759049fc84d",
+                "url": "https://api.github.com/repos/symfony/console/zipball/17524a64ebcfab68d237bbed247e9a9917747096",
+                "reference": "17524a64ebcfab68d237bbed247e9a9917747096",
                 "shasum": ""
             },
             "require": {
@@ -6031,7 +6276,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v6.1.4"
+                "source": "https://github.com/symfony/console/tree/v6.1.5"
             },
             "funding": [
                 {
@@ -6047,7 +6292,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-26T10:32:31+00:00"
+            "time": "2022-09-03T14:24:42+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -6118,16 +6363,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v6.1.4",
+            "version": "v6.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "3f39c04d2630c34019907b02f85672dac99f8659"
+                "reference": "4d216a2beef096edf040a070117c39ca2abce307"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/3f39c04d2630c34019907b02f85672dac99f8659",
-                "reference": "3f39c04d2630c34019907b02f85672dac99f8659",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/4d216a2beef096edf040a070117c39ca2abce307",
+                "reference": "4d216a2beef096edf040a070117c39ca2abce307",
                 "shasum": ""
             },
             "require": {
@@ -6161,7 +6406,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/filesystem/tree/v6.1.4"
+                "source": "https://github.com/symfony/filesystem/tree/v6.1.5"
             },
             "funding": [
                 {
@@ -6177,7 +6422,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-02T16:17:38+00:00"
+            "time": "2022-09-21T20:29:40+00:00"
         },
         {
             "name": "symfony/finder",
@@ -7113,16 +7358,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v6.1.4",
+            "version": "v6.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "290972cad7b364e3befaa74ba0ec729800fb161c"
+                "reference": "17c08b068176996a1d7db8d00ffae3c248267016"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/290972cad7b364e3befaa74ba0ec729800fb161c",
-                "reference": "290972cad7b364e3befaa74ba0ec729800fb161c",
+                "url": "https://api.github.com/repos/symfony/string/zipball/17c08b068176996a1d7db8d00ffae3c248267016",
+                "reference": "17c08b068176996a1d7db8d00ffae3c248267016",
                 "shasum": ""
             },
             "require": {
@@ -7178,7 +7423,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v6.1.4"
+                "source": "https://github.com/symfony/string/tree/v6.1.5"
             },
             "funding": [
                 {
@@ -7194,7 +7439,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-12T18:05:43+00:00"
+            "time": "2022-09-02T08:05:20+00:00"
         },
         {
             "name": "symfony/translation",
@@ -8177,5 +8422,5 @@
         "ext-soap": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
