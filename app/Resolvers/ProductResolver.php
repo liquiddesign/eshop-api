@@ -4,6 +4,7 @@ namespace EshopApi\Resolvers;
 
 use Eshop\DB\Product;
 use GraphQL\Type\Definition\ResolveInfo;
+use LqGrAphi\GraphQLContext;
 use LqGrAphi\Resolvers\CrudResolver;
 
 class ProductResolver extends CrudResolver
@@ -16,11 +17,11 @@ class ProductResolver extends CrudResolver
 	/**
 	 * @param array<mixed> $rootValue
 	 * @param array<mixed> $args
-	 * @param mixed $context
+	 * @param \LqGrAphi\GraphQLContext $context
 	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
 	 * @return array<mixed>
 	 */
-	public function getProducts(array $rootValue, array $args, mixed $context, ResolveInfo $resolveInfo): array
+	public function getProducts(array $rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
 	{
 		/** @var \Eshop\DB\ProductRepository $repository */
 		$repository = $this->getRepository();
@@ -31,6 +32,14 @@ class ProductResolver extends CrudResolver
 
 		$products = $repository->getProducts($pricelists, $customer, $selects);
 
-		return $this->fetchResult($products, $resolveInfo);
+		$customSelects = [];
+
+		foreach (['price', 'priceVat'] as $item) {
+			if (isset($products->getModifiers()['SELECT'][$item])) {
+				$customSelects[$item] = $products->getModifiers()['SELECT'][$item];
+			}
+		}
+
+		return $this->fetchResult($products, $resolveInfo, customSelects: $customSelects);
 	}
 }
