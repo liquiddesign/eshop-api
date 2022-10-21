@@ -51,7 +51,6 @@ class Scripts extends \Base\Scripts
 
 	/**
 	 * @param array<mixed> $arguments
-	 * @return \Nette\DI\Container
 	 */
 	protected static function getDIContainer(array $arguments): Container
 	{
