@@ -1,0 +1,20 @@
+services:
+  web:
+    hostname: localhost
+    build:
+      dockerfile: Dockerfile
+      target: "${ENV}"
+    expose:
+      - 80
+    ports:
+      - 8080:80
+  db:
+    image: mysql:5.7
+    expose:
+      - 3306
+    ports:
+      - 3316:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: database
