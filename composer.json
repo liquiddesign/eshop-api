@@ -38,7 +38,7 @@
     "create-database": "Migrator\\Scripts::createDatabase",
     "sync-database": [
       "EshopApi\\Scripts::clearNetteCache",
-      "Migrator\\Scripts::syncDatabase"
+      "EshopApi\\Scripts::syncDatabase"
     ],
     "deploy": [
       "@maintenance on",
