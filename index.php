@@ -16,6 +16,10 @@ $graphql = $container->getByType(\LqGrAphi\GraphQLHandler::class);
 $request = $container->getByType(\Nette\Http\Request::class);
 $response = $container->getByType(\Nette\Http\Response::class);
 
+if ($request->getMethod() === 'OPTIONS') {
+	die();
+}
+
 if ($graphql->getDebugFlag() && $request->getMethod() === 'GET') {
 	/** @var \Nette\Bridges\ApplicationLatte\LatteFactory $latteFactory */
 	$latteFactory = $container->getByType(\Nette\Bridges\ApplicationLatte\LatteFactory::class);
