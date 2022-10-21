@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "85ecb9fb4c4a31c8e6025aeee47e9347",
+    "content-hash": "4157adad45a96f0b0f7300a90b227ccb",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -2233,16 +2233,16 @@
         },
         {
             "name": "liquiddesign/eshop",
-            "version": "v1.0.0",
+            "version": "v1.0.0-beta.50",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liquiddesign/eshop.git",
-                "reference": "1e85cb0c61f8259a2ff45515d026fe2e02e50e01"
+                "reference": "26190c83fe2e820f2b69880ff5ddcd6e348ad562"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liquiddesign/eshop/zipball/1e85cb0c61f8259a2ff45515d026fe2e02e50e01",
-                "reference": "1e85cb0c61f8259a2ff45515d026fe2e02e50e01",
+                "url": "https://api.github.com/repos/liquiddesign/eshop/zipball/26190c83fe2e820f2b69880ff5ddcd6e348ad562",
+                "reference": "26190c83fe2e820f2b69880ff5ddcd6e348ad562",
                 "shasum": ""
             },
             "require": {
@@ -2306,9 +2306,9 @@
             ],
             "description": "Ⓔ Služby, entity, administrace a kontroly pro eshop",
             "support": {
-                "source": "https://github.com/liquiddesign/eshop/tree/v1.0.0"
+                "source": "https://github.com/liquiddesign/eshop/tree/v1.0.0-beta.50"
             },
-            "time": "2022-10-20T14:07:20+00:00"
+            "time": "2022-10-21T08:55:51+00:00"
         },
         {
             "name": "liquiddesign/forms",
@@ -8453,6 +8453,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "liquiddesign/eshop": 10,
         "liquiddesign/lqgraphi": 15
     },
     "prefer-stable": true,
