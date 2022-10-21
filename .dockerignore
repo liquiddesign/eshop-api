@@ -1,0 +1,6 @@
+temp/cache
+temp/log
+temp/sessions
+.gitignore
+.github
+vendor
