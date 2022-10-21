@@ -42,6 +42,7 @@
     ],
     "deploy": [
       "@maintenance on",
+      "git pull",
       "composer clear-cache",
       "composer install --no-dev --no-interaction",
       "@sync-database",
