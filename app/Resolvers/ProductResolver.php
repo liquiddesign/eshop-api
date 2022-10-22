@@ -26,11 +26,7 @@ class ProductResolver extends CrudResolver
 		/** @var \Eshop\DB\ProductRepository $repository */
 		$repository = $this->getRepository();
 
-		$pricelists = $args['pricelists'] ?? null;
-		$customer = $args['customer'] ?? null;
-		$selects = $args['selects'] ?? true;
-
-		$products = $repository->getProducts($pricelists, $customer, $selects);
+		$products = $repository->getProducts($args['pricelists'], $args['customer'], $args['selects']);
 
 		return $this->fetchResult($products, $resolveInfo);
 	}

@@ -22,9 +22,18 @@ class ProductQuery extends CrudQuery
 			"{$baseName}GetProducts" => [
 				'type' => TypeRegister::nonNull(TypeRegister::listOf($outputType)),
 				'args' => [
-					'pricelists' => TypeRegister::listOf(TypeRegister::string()),
-					'customer' => TypeRegister::string(),
-					'selects' => TypeRegister::boolean(),
+					'pricelists' => [
+						'type' => TypeRegister::listOf(TypeRegister::string()),
+						'defaultValue' => null,
+					],
+					'customer' => [
+						'type' => TypeRegister::string(),
+						'defaultValue' => null,
+					],
+					'selects' => [
+						'type' => TypeRegister::boolean(),
+						'defaultValue' => true,
+					],
 					'input' => $this->typeRegister->getManyInput(),
 				],
 			],
