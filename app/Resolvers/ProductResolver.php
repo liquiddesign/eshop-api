@@ -26,20 +26,12 @@ class ProductResolver extends CrudResolver
 		/** @var \Eshop\DB\ProductRepository $repository */
 		$repository = $this->getRepository();
 
-		$pricelists = $args['pricelists'] ?? [];
+		$pricelists = $args['pricelists'] ?? null;
 		$customer = $args['customer'] ?? null;
 		$selects = $args['selects'] ?? true;
 
 		$products = $repository->getProducts($pricelists, $customer, $selects);
 
-		$customSelects = [];
-
-		foreach (['price', 'priceVat'] as $item) {
-			if (isset($products->getModifiers()['SELECT'][$item])) {
-				$customSelects[$item] = $products->getModifiers()['SELECT'][$item];
-			}
-		}
-
-		return $this->fetchResult($products, $resolveInfo, customSelects: $customSelects);
+		return $this->fetchResult($products, $resolveInfo);
 	}
 }
