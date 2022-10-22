@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0eb997d81a4a3257c4e58d5a94a95d16",
+    "content-hash": "d117ef45c60a7d7143d2f75b8af8efe6",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -2412,16 +2412,16 @@
         },
         {
             "name": "liquiddesign/lqgraphi",
-            "version": "v0.0.9-alpha",
+            "version": "v0.0.10-alpha",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liquiddesign/lqgraphi.git",
-                "reference": "a8ec2de9a05feb82c7dbc0b385386e75d4a5bd4e"
+                "reference": "b9fe073702a0300452d670a123523fde4bde837b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liquiddesign/lqgraphi/zipball/a8ec2de9a05feb82c7dbc0b385386e75d4a5bd4e",
-                "reference": "a8ec2de9a05feb82c7dbc0b385386e75d4a5bd4e",
+                "url": "https://api.github.com/repos/liquiddesign/lqgraphi/zipball/b9fe073702a0300452d670a123523fde4bde837b",
+                "reference": "b9fe073702a0300452d670a123523fde4bde837b",
                 "shasum": ""
             },
             "require": {
@@ -2458,9 +2458,9 @@
             "description": "GraphQL API library for Liquid Design ecosystem",
             "support": {
                 "issues": "https://github.com/liquiddesign/lqgraphi/issues",
-                "source": "https://github.com/liquiddesign/lqgraphi/tree/v0.0.9-alpha"
+                "source": "https://github.com/liquiddesign/lqgraphi/tree/v0.0.10-alpha"
             },
-            "time": "2022-10-22T10:00:49+00:00"
+            "time": "2022-10-22T10:10:26+00:00"
         },
         {
             "name": "liquiddesign/messages",

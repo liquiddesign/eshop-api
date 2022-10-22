@@ -34,7 +34,7 @@ class ProductQuery extends CrudQuery
 						'type' => TypeRegister::boolean(),
 						'defaultValue' => true,
 					],
-					'input' => $this->typeRegister->getManyInput(),
+					'manyInput' => $this->typeRegister->getManyInputWithDefaultValue(),
 				],
 			],
 		];

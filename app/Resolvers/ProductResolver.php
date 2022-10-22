@@ -28,6 +28,6 @@ class ProductResolver extends CrudResolver
 
 		$products = $repository->getProducts($args['pricelists'], $args['customer'], $args['selects']);
 
-		return $this->fetchResult($products, $resolveInfo);
+		return $this->fetchResult($products, $resolveInfo, $args['manyInput']);
 	}
 }
