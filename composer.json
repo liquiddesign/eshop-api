@@ -49,7 +49,7 @@
       "@clear-nette-cache",
       "@maintenance off"
     ],
-    "test": "vendor/bin/tester -C ./tests"
+    "test": "cd tests && npm run test"
   },
   "config": {
     "allow-plugins": {
