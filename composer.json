@@ -5,8 +5,8 @@
   "license": "MIT",
   "require": {
     "php": ">=8.1",
-    "liquiddesign/eshop": "~1.0.0-beta.50",
-    "liquiddesign/lqgraphi": "~0.0.10@alpha",
+    "liquiddesign/eshop": "~1.1.0",
+    "liquiddesign/lqgraphi": "~0.1.3",
     "ext-intl": "*",
     "ext-pdo": "*",
     "ext-curl": "*",
@@ -49,7 +49,8 @@
       "@clear-nette-cache",
       "@maintenance off"
     ],
-    "test": "cd tests && npm run test"
+    "test": "cd tests && npm run test",
+    "generate": "EshopApi\\GeneratorScripts::generate"
   },
   "config": {
     "allow-plugins": {

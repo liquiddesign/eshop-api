@@ -13,7 +13,6 @@ class ProductCreateInput extends BaseInput
 	{
 		$config = [
 			'fields' => $typeRegister->createInputFieldsFromClass(Product::class, includeId: false, setDefaultValues: true, inputRelationFieldsEnum: InputRelationFieldsEnum::ONLY_ADD),
-
 		];
 
 		parent::__construct($config);

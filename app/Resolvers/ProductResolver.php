@@ -30,4 +30,15 @@ class ProductResolver extends CrudResolver
 
 		return $this->fetchResult($products, $resolveInfo, $args['manyInput']);
 	}
+
+	/**
+	 * @param array<mixed> $rootValue
+	 * @param array<mixed> $args
+	 * @param \LqGrAphi\GraphQLContext $context
+	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 */
+	public function getProductsTotalCount(array $rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): int
+	{
+		return \count($this->getProducts($rootValue, $args, $context, $resolveInfo));
+	}
 }

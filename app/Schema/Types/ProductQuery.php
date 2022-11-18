@@ -37,6 +37,24 @@ class ProductQuery extends CrudQuery
 					'manyInput' => $this->typeRegister->getManyInputWithDefaultValue(),
 				],
 			],
+			"{$baseName}GetProductsTotalCount" => [
+				'type' => TypeRegister::nonNull(TypeRegister::int()),
+				'args' => [
+					'pricelists' => [
+						'type' => TypeRegister::listOf(TypeRegister::string()),
+						'defaultValue' => null,
+					],
+					'customer' => [
+						'type' => TypeRegister::string(),
+						'defaultValue' => null,
+					],
+					'selects' => [
+						'type' => TypeRegister::boolean(),
+						'defaultValue' => true,
+					],
+					'manyInput' => $this->typeRegister->getManyInputWithDefaultValue(),
+				],
+			],
 		];
 	}
 
