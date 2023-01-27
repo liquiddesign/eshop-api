@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace EshopApi\Schema\Outputs;
 
+use GraphQL\Type\Definition\Type;
 use LqGrAphi\Schema\BaseOutput;
 use LqGrAphi\Schema\TypeRegister;
 
@@ -17,8 +18,8 @@ class ProductGetProductsOutput extends BaseOutput
 		$fields = $productOutput->config['fields'];
 
 		$fields += [
-				'price' => TypeRegister::nonNull(TypeRegister::float()),
-				'priceVat' => TypeRegister::nonNull(TypeRegister::float()),
+				'price' => Type::nonNull(Type::float()),
+				'priceVat' => Type::nonNull(Type::float()),
 			];
 
 		parent::__construct([

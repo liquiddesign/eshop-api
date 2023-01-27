@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace EshopApi\Schema\Types;
 
 use Eshop\DB\Product;
+use GraphQL\Type\Definition\Type;
 use LqGrAphi\Schema\CrudQuery;
-use LqGrAphi\Schema\TypeRegister;
 
 class ProductQuery extends CrudQuery
 {
@@ -20,36 +20,36 @@ class ProductQuery extends CrudQuery
 
 		return [
 			"{$baseName}GetProducts" => [
-				'type' => TypeRegister::nonNull(TypeRegister::listOf($outputType)),
+				'type' => Type::nonNull(Type::listOf($outputType)),
 				'args' => [
 					'pricelists' => [
-						'type' => TypeRegister::listOf(TypeRegister::string()),
+						'type' => Type::listOf(Type::string()),
 						'defaultValue' => null,
 					],
 					'customer' => [
-						'type' => TypeRegister::string(),
+						'type' => Type::string(),
 						'defaultValue' => null,
 					],
 					'selects' => [
-						'type' => TypeRegister::boolean(),
+						'type' => Type::boolean(),
 						'defaultValue' => true,
 					],
 					'manyInput' => $this->typeRegister->getManyInputWithDefaultValue(),
 				],
 			],
 			"{$baseName}GetProductsTotalCount" => [
-				'type' => TypeRegister::nonNull(TypeRegister::int()),
+				'type' => Type::nonNull(Type::int()),
 				'args' => [
 					'pricelists' => [
-						'type' => TypeRegister::listOf(TypeRegister::string()),
+						'type' => Type::listOf(Type::string()),
 						'defaultValue' => null,
 					],
 					'customer' => [
-						'type' => TypeRegister::string(),
+						'type' => Type::string(),
 						'defaultValue' => null,
 					],
 					'selects' => [
-						'type' => TypeRegister::boolean(),
+						'type' => Type::boolean(),
 						'defaultValue' => true,
 					],
 					'manyInput' => $this->typeRegister->getManyInputWithDefaultValue(),
