@@ -15,7 +15,6 @@ class ProductQuery extends CrudQuery
 	 */
 	public function addCustomFields(string $baseName): array
 	{
-		/** @var \GraphQL\Type\Definition\Type $outputType */
 		$outputType = $this->typeRegister->getOutputType("{$baseName}GetProducts");
 
 		return [

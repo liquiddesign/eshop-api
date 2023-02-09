@@ -2,8 +2,11 @@
 
 namespace EshopApi;
 
+use Eshop\DB\Cart;
+use Eshop\DB\CartItem;
 use Eshop\DB\Customer;
 use Eshop\DB\Product;
+use Eshop\DB\Purchase;
 
 class GeneratorScripts extends \LqGrAphi\GeneratorScripts
 {
@@ -12,6 +15,9 @@ class GeneratorScripts extends \LqGrAphi\GeneratorScripts
 		$types = [
 			'product' => Product::class,
 			'customer' => Customer::class,
+			'cart' => Cart::class,
+			'cartItem' => CartItem::class,
+			'purchase' => Purchase::class,
 		];
 
 		self::generateOutputs($types, __DIR__ . '/Schema/Outputs', 'EshopApi\\Schema\\Outputs');
