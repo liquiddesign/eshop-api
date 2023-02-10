@@ -12,6 +12,8 @@ class GeneratorScripts extends \LqGrAphi\GeneratorScripts
 {
 	public static function generate(\Composer\Script\Event $event): void
 	{
+		unset($event);
+
 		$types = [
 			'product' => Product::class,
 			'customer' => Customer::class,

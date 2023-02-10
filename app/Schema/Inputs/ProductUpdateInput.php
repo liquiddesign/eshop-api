@@ -11,7 +11,7 @@ class ProductUpdateInput extends BaseInput
 	public function __construct(TypeRegister $typeRegister)
 	{
 		$config = [
-			'fields' => $typeRegister->createInputFieldsFromClass(Product::class, forceAllOptional: true),
+			'fields' => $typeRegister->createCrudUpdateInputFieldsFromClass(Product::class),
 		];
 
 		parent::__construct($config);

@@ -23,6 +23,8 @@ class ProductResolver extends CrudResolver
 	 */
 	public function getProducts(array $rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
 	{
+		unset($rootValue, $context);
+
 		/** @var \Eshop\DB\ProductRepository $repository */
 		$repository = $this->getRepository();
 

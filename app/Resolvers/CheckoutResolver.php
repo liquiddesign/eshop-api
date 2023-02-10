@@ -36,8 +36,11 @@ class CheckoutResolver extends BaseResolver
 	 */
 	public function getCart(array $rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
 	{
+		unset($rootValue, $args, $context);
+
 		$cart = $this->checkoutManager->cartExists() ? $this->checkoutManager->getCart() : $this->checkoutManager->createCart();
 
+		/* @phpstan-ignore-next-line */
 		$results = $this->fetchResult($this->cartRepository->many()->where('this.' . BaseType::ID_NAME, $cart->getPK()), $resolveInfo);
 
 		return Arrays::first($results);
