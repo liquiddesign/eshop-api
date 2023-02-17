@@ -3,7 +3,7 @@
 namespace EshopApi\Schema\Types;
 
 use Eshop\DB\Cart;
-use GraphQL\Type\Definition\NullableType;
+use Eshop\DB\CartItem;
 use GraphQL\Type\Definition\Type;
 use LqGrAphi\Schema\BaseQuery;
 use LqGrAphi\Schema\TypeRegister;
@@ -15,14 +15,16 @@ class CheckoutQuery extends BaseQuery
 	{
 		$typeRegister = $this->container->getByType(TypeRegister::class);
 
-		$type = $typeRegister->getOutputType(Cart::class);
-
-		\assert($type instanceof NullableType);
+		$cartOutput = TypeRegister::getNullableType($typeRegister->getOutputType(Cart::class));
+		$cartItemOutput = TypeRegister::getNullableType($typeRegister->getOutputType(CartItem::class));
 
 		$config = [
 			'fields' => [
 				'checkoutGetCart' => [
-					'type' => Type::nonNull($type),
+					'type' => Type::nonNull($cartOutput),
+				],
+				'checkoutGetCartItems' => [
+					'type' => Type::nonNull(Type::listOf($cartItemOutput)),
 				],
 			],
 		];
