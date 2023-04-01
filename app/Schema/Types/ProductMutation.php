@@ -11,4 +11,14 @@ class ProductMutation extends CrudMutation
 	{
 		return Product::class;
 	}
+
+	public function getCreateInputName(): string
+	{
+		return 'ProductCreateInput';
+	}
+
+	public function getUpdateInputName(): string
+	{
+		return 'ProductUpdateInput';
+	}
 }

@@ -14,4 +14,14 @@ class PurchaseMutation extends \LqGrAphi\Schema\CrudMutation
 	{
 		return \Eshop\DB\Purchase::class;
 	}
+
+	public function getCreateInputName(): string
+	{
+		return 'PurchaseCreateInput';
+	}
+
+	public function getUpdateInputName(): string
+	{
+		return 'PurchaseUpdateInput';
+	}
 }

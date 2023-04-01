@@ -14,4 +14,14 @@ class CartItemMutation extends \LqGrAphi\Schema\CrudMutation
 	{
 		return \Eshop\DB\CartItem::class;
 	}
+
+	public function getCreateInputName(): string
+	{
+		return 'CartItemCreateInput';
+	}
+
+	public function getUpdateInputName(): string
+	{
+		return 'CartItemUpdateInput';
+	}
 }

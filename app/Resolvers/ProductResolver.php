@@ -18,10 +18,10 @@ class ProductResolver extends CrudResolver
 	 * @param array<mixed> $rootValue
 	 * @param array<mixed> $args
 	 * @param \LqGrAphi\GraphQLContext $context
-	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @param \GraphQL\Type\Definition\ResolveInfo|array<mixed> $resolveInfo)
 	 * @return array<mixed>
 	 */
-	public function getProducts(array $rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
+	public function getProducts(array $rootValue, array $args, GraphQLContext $context, ResolveInfo|array $resolveInfo): array
 	{
 		unset($rootValue, $context);
 
@@ -37,9 +37,9 @@ class ProductResolver extends CrudResolver
 	 * @param array<mixed> $rootValue
 	 * @param array<mixed> $args
 	 * @param \LqGrAphi\GraphQLContext $context
-	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @param \GraphQL\Type\Definition\ResolveInfo|array<mixed> $resolveInfo)
 	 */
-	public function getProductsTotalCount(array $rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): int
+	public function getProductsTotalCount(array $rootValue, array $args, GraphQLContext $context, ResolveInfo|array $resolveInfo): int
 	{
 		return \count($this->getProducts($rootValue, $args, $context, $resolveInfo));
 	}

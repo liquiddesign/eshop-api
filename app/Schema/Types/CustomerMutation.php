@@ -11,4 +11,14 @@ class CustomerMutation extends CrudMutation
 	{
 		return Customer::class;
 	}
+
+	public function getCreateInputName(): string
+	{
+		return 'CustomerCreateInput';
+	}
+
+	public function getUpdateInputName(): string
+	{
+		return 'CustomerUpdateInput';
+	}
 }

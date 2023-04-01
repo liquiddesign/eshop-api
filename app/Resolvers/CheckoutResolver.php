@@ -38,10 +38,10 @@ class CheckoutResolver extends BaseResolver
 	 * @param array<mixed> $rootValue
 	 * @param array<mixed> $args
 	 * @param \LqGrAphi\GraphQLContext $context
-	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @param \GraphQL\Type\Definition\ResolveInfo|array<mixed> $resolveInfo)
 	 * @return array<mixed>
 	 */
-	public function getCart(array $rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
+	public function getCart(array $rootValue, array $args, GraphQLContext $context, ResolveInfo|array $resolveInfo): array
 	{
 		unset($rootValue, $args, $context);
 
@@ -57,12 +57,12 @@ class CheckoutResolver extends BaseResolver
 	 * @param array<mixed> $rootValue
 	 * @param array<mixed> $args
 	 * @param \LqGrAphi\GraphQLContext $context
-	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @param \GraphQL\Type\Definition\ResolveInfo|array<mixed> $resolveInfo)
 	 * @return array<mixed>
 	 * @throws \Nette\Application\BadRequestException
 	 * @throws \LqGrAphi\Resolvers\Exceptions\NotFoundException
 	 */
-	public function addItemToCart(array $rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
+	public function addItemToCart(array $rootValue, array $args, GraphQLContext $context, ResolveInfo|array $resolveInfo): array
 	{
 		unset($rootValue, $context);
 
@@ -102,9 +102,9 @@ class CheckoutResolver extends BaseResolver
 	 * @param array<mixed> $rootValue
 	 * @param array<mixed> $args
 	 * @param \LqGrAphi\GraphQLContext $context
-	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @param \GraphQL\Type\Definition\ResolveInfo|array<mixed> $resolveInfo)
 	 */
-	public function deleteItemFromCart(array $rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): int
+	public function deleteItemFromCart(array $rootValue, array $args, GraphQLContext $context, ResolveInfo|array $resolveInfo): int
 	{
 		unset($rootValue, $context, $resolveInfo);
 
@@ -121,9 +121,9 @@ class CheckoutResolver extends BaseResolver
 	 * @param array<mixed> $rootValue
 	 * @param array<mixed> $args
 	 * @param \LqGrAphi\GraphQLContext $context
-	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @param \GraphQL\Type\Definition\ResolveInfo|array<mixed> $resolveInfo)
 	 */
-	public function changeAmountOfCartItem(array $rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): int
+	public function changeAmountOfCartItem(array $rootValue, array $args, GraphQLContext $context, ResolveInfo|array $resolveInfo): int
 	{
 		unset($rootValue, $context, $resolveInfo);
 
@@ -152,9 +152,9 @@ class CheckoutResolver extends BaseResolver
 	 * @param array<mixed> $rootValue
 	 * @param array<mixed> $args
 	 * @param \LqGrAphi\GraphQLContext $context
-	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @param \GraphQL\Type\Definition\ResolveInfo|array<mixed> $resolveInfo)
 	 */
-	public function deleteCart(array $rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): int
+	public function deleteCart(array $rootValue, array $args, GraphQLContext $context, ResolveInfo|array $resolveInfo): int
 	{
 		unset($rootValue, $args, $context, $resolveInfo);
 
@@ -171,10 +171,10 @@ class CheckoutResolver extends BaseResolver
 	 * @param array<mixed> $rootValue
 	 * @param array<mixed> $args
 	 * @param \LqGrAphi\GraphQLContext $context
-	 * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+	 * @param \GraphQL\Type\Definition\ResolveInfo|array<mixed> $resolveInfo)
 	 * @return array<mixed>
 	 */
-	public function getCartItems(array $rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
+	public function getCartItems(array $rootValue, array $args, GraphQLContext $context, ResolveInfo|array $resolveInfo): array
 	{
 		unset($rootValue, $args, $context);
 
