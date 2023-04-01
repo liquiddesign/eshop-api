@@ -178,8 +178,6 @@ class CheckoutResolver extends BaseResolver
 	{
 		unset($rootValue, $args, $context);
 
-		\bdump($this->cartItemRepository->many()->setIndex('productCode')->setSelect(['uuid', 'productCode'], keepIndex: true)->fetchArray(\stdClass::class));
-
 		return $this->fetchResult($this->checkoutManager->getItems(), $resolveInfo);
 	}
 }
