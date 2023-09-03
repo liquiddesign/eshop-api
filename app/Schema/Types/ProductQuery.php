@@ -7,6 +7,7 @@ namespace EshopApi\Schema\Types;
 use Eshop\DB\Product;
 use GraphQL\Type\Definition\Type;
 use LqGrAphi\Schema\CrudQuery;
+use Nette\Utils\Strings;
 
 class ProductQuery extends CrudQuery
 {
@@ -15,7 +16,9 @@ class ProductQuery extends CrudQuery
 	 */
 	public function addCustomFields(string $baseName): array
 	{
-		$outputType = $this->typeRegister->getOutputType("{$baseName}GetProducts");
+		$baseNameUpperFirst = Strings::firstUpper($baseName);
+
+		$outputType = $this->typeRegister->getOutputType("{$baseNameUpperFirst}GetProducts");
 
 		return [
 			"{$baseName}GetProducts" => [
