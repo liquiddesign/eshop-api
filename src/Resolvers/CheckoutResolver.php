@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace EshopApi\Resolvers;
 
 use Eshop\BuyException;
-use Eshop\CheckoutManager;
 use Eshop\DB\CartItemRepository;
 use Eshop\DB\CartRepository;
 use Eshop\DB\ProductRepository;
+use Eshop\ShopperUser;
 use GraphQL\Type\Definition\ResolveInfo;
 use LqGrAphi\GraphQLContext;
 use LqGrAphi\Resolvers\BaseResolver;
@@ -26,7 +26,7 @@ class CheckoutResolver extends BaseResolver
 		Container $container,
 		SchemaManager $schemaManager,
 		DIConnection $connection,
-		private readonly CheckoutManager $checkoutManager,
+		private readonly ShopperUser $shopperUser,
 		private readonly CartRepository $cartRepository,
 		private readonly ProductRepository $productRepository,
 		private readonly CartItemRepository $cartItemRepository
@@ -45,9 +45,8 @@ class CheckoutResolver extends BaseResolver
 	{
 		unset($rootValue, $args, $context);
 
-		$cart = $this->checkoutManager->cartExists() ? $this->checkoutManager->getCart() : $this->checkoutManager->createCart();
+		$cart = $this->shopperUser->getCheckoutManager()->cartExists() ? $this->shopperUser->getCheckoutManager()->getCart() : $this->shopperUser->getCheckoutManager()->createCart();
 
-		/* @phpstan-ignore-next-line */
 		$results = $this->fetchResult($this->cartRepository->many()->where('this.' . BaseType::ID_NAME, $cart->getPK()), $resolveInfo);
 
 		return Arrays::first($results);
@@ -80,7 +79,7 @@ class CheckoutResolver extends BaseResolver
 		}
 
 		try {
-			$cartItem = $this->checkoutManager->addItemToCart(
+			$cartItem = $this->shopperUser->getCheckoutManager()->addItemToCart(
 				product: $product,
 				variant: $input['variant'],
 				amount: $input['amount'],
@@ -94,7 +93,6 @@ class CheckoutResolver extends BaseResolver
 			throw new BadRequestException($e->getMessage());
 		}
 
-		/* @phpstan-ignore-next-line */
 		return Arrays::first($this->fetchResult($this->cartItemRepository->many()->where('this.uuid', $cartItem->getPK()), $resolveInfo));
 	}
 
@@ -114,7 +112,7 @@ class CheckoutResolver extends BaseResolver
 			throw new NotFoundException($args['item']);
 		}
 
-		return $this->cartItemRepository->deleteItem($this->checkoutManager->getCart(), $cartItem);
+		return $this->cartItemRepository->deleteItem($this->shopperUser->getCheckoutManager()->getCart(), $cartItem);
 	}
 
 	/**
@@ -143,7 +141,7 @@ class CheckoutResolver extends BaseResolver
 			throw new \LqGrAphi\Resolvers\Exceptions\BadRequestException('CartItem has no assigned Product');
 		}
 
-		$this->checkoutManager->changeCartItemAmount($product, $cartItem, $args['amount'], $args['checkInvalidAmount']);
+		$this->shopperUser->getCheckoutManager()->changeCartItemAmount($product, $cartItem, $args['amount'], $args['checkInvalidAmount']);
 
 		return 1;
 	}
@@ -158,8 +156,8 @@ class CheckoutResolver extends BaseResolver
 	{
 		unset($rootValue, $args, $context, $resolveInfo);
 
-		if ($this->checkoutManager->cartExists()) {
-			$this->checkoutManager->deleteCart();
+		if ($this->shopperUser->getCheckoutManager()->cartExists()) {
+			$this->shopperUser->getCheckoutManager()->deleteCart();
 
 			return 1;
 		}
@@ -178,6 +176,6 @@ class CheckoutResolver extends BaseResolver
 	{
 		unset($rootValue, $args, $context);
 
-		return $this->fetchResult($this->checkoutManager->getItems(), $resolveInfo);
+		return $this->fetchResult($this->shopperUser->getCheckoutManager()->getItems(), $resolveInfo);
 	}
 }

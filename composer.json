@@ -20,15 +20,15 @@
   "prefer-stable": true,
   "autoload": {
     "psr-4": {
-      "EshopApi\\": "app"
+      "EshopApi\\": "src"
     }
   },
   "scripts": {
     "fix-code": ["@phpcsfix"],
     "check-code": ["@phpcs", "@phpstan"],
     "phpstan": "phpstan analyse --memory-limit 4G -c phpstan.neon",
-    "phpcs": "phpcs --standard=ruleset.xml --ignore=*/tests/* --cache ./app",
-    "phpcsfix": "phpcbf --standard=ruleset.xml --cache ./app",
+    "phpcs": "phpcs --standard=ruleset.xml --ignore=*/tests/* --cache src",
+    "phpcsfix": "phpcbf --standard=ruleset.xml --cache src",
     "init-develop": "EshopApi\\Scripts::initDevel",
     "init-production": "EshopApi\\Scripts::initProduction",
     "clear-nette-cache": "EshopApi\\Scripts::clearNetteCache",

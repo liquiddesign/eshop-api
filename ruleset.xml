@@ -4,7 +4,7 @@
     <rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
         <properties>
             <property name="rootNamespaces" type="array">
-                <element key="app" value="EshopApi"/>
+                <element key="src" value="EshopApi"/>
             </property>
         </properties>
     </rule>

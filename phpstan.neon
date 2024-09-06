@@ -5,7 +5,7 @@ includes:
 parameters:
 	level: 8
 	paths:
-		- app
+		- src
 	excludePaths:
 		- config/*
 		- templates/*
